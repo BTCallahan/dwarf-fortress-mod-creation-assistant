@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "lib": ["es2015", "es6", "es2018", "dom", "es5"], 
+        "target": "es2015",
+        "module": "commonjs",
+        "allowJs": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "strict": true,
+        "watch": true,
+        "rootDir": "build",
+        "outDir": "assets"
+    },
+    "exclude": [
+        "exclude/*.js",
+        "assets/*.js"
+    ]
+    
+}
