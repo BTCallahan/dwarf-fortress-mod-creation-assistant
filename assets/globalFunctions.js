@@ -103,12 +103,12 @@ function enableOrDisableElements(input) {
         element.disabled = input.disable;
     });
 }
-function hideOrUnhideElements(input) {
-    input.hideClassNames.forEach(element => {
+function hideOrUnhideElements({ hideClassNames, unhideClassNames }) {
+    hideClassNames.forEach(element => {
         let ele = document.getElementsByClassName(element);
         ele.hidden = true;
     });
-    input.unhideClassNames.forEach(element => {
+    unhideClassNames.forEach(element => {
         let ele = document.getElementsByClassName(element);
         ele.hidden = false;
     });
@@ -121,53 +121,95 @@ function getSelectElementValue(inputId) {
     let input = document.getElementById(inputId);
     return input.value;
 }
-function getSingleInput(input) {
-    let input_ = document.getElementById(input.inputId);
-    pushObject.pushTo.push(pushObject.tabObject.repeat(input.numberOfTabObjects), "[", input.inputId, ":", input_.value, "]\n");
+function getSingleInput({ inputId, numberOfTabObjects, ignoreIfDisabled = true }) {
+    let input_ = document.getElementById(inputId);
+    if (!ignoreIfDisabled || !input_.disabled) {
+        pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabObjects), "[", inputId, ":", input_.value, "]\n");
+    }
     return input_;
 }
-function getSingleCheckBox(inputId, numberOfTabObjects) {
-    let input = document.getElementById(inputId);
-    if (input.checked) {
-        pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabObjects), "[", inputId, ":", input.value, "]\n");
+function getSingleCheckBox({ inputId, numberOfTabObjects, ignoreIfDisabled = true }) {
+    let input_ = document.getElementById(inputId);
+    if ((!ignoreIfDisabled || !input_.disabled) && input_.checked) {
+        pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabObjects), "[", inputId, ":", input_.value, "]\n");
     }
-    return input.checked;
+    return input_.checked;
 }
-function getMultipleInputs(input) {
-    let tabs = pushObject.tabObject.repeat(input.numberOfTabObjects);
-    input.inputIds.forEach(element => {
-        let input_ = document.getElementById(element);
-        pushObject.pushTo.push(tabs, "[", element, ":", input_.value, "]\n");
-    });
-}
-function getMultipleCheckBoxes(input) {
-    let tabs = pushObject.tabObject.repeat(input.numberOfTabObjects);
-    if (input.useClassInPlaceOfId) {
-        if (input.inputClass === undefined) {
+function getMultipleInputs({ inputIds, inputClass, useClassInPlaceOfId = false, appendClassInFrontOfId = false, numberOfTabObjects, ignoreIfDisabled = false }) {
+    let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
+    let classElements = [];
+    if (useClassInPlaceOfId) {
+        if (inputClass === undefined) {
             throw new ReferenceError("The value for input.inputClass is undefined");
         }
-        let classElements = document.getElementsByClassName(input.inputClass);
-        let classArray = Array.from(classElements);
-        if (input.appendClassInFrontOfId) {
-            classArray.forEach(element => {
-                pushObject.pushTo.push(tabs, "[", input.inputClass, ":", element.id, "]\n");
-            });
-        }
-        else {
-            classArray.forEach(element => {
-                pushObject.pushTo.push(tabs, "[", element.id, "]\n");
-            });
-        }
+        let temp = document.getElementsByClassName(inputClass);
+        classElements = Array.from(temp);
     }
     else {
-        if (input.inputIds === undefined) {
+        if (inputIds === undefined) {
             throw new ReferenceError("The value for input.inputIds is undefined");
         }
-        input.inputIds.forEach(element => {
-            let input_ = document.getElementById(element);
-            if (input_.checked) {
-                pushObject.pushTo.push(tabs, "[", element, "]\n");
-            }
+        inputIds.forEach(element => {
+            classElements.push(document.getElementById(element));
+        });
+    }
+    if (ignoreIfDisabled) {
+        let t = classElements.filter((value) => {
+            return !value.disabled;
+        });
+        classElements = t;
+    }
+    if (appendClassInFrontOfId) {
+        classElements.forEach((element) => {
+            pushObject.pushTo.push(tabs, "[", inputClass, ":", element.value, "]\n");
+        });
+    }
+    else {
+        classElements.forEach((element) => {
+            pushObject.pushTo.push(tabs, "[", element.id, ":", element.value, "]\n");
+        });
+    }
+}
+function getMultipleCheckBoxes({ inputIds = undefined, inputClass = undefined, useClassInPlaceOfId = false, appendClassInFrontOfId = false, numberOfTabObjects, ignoreIfDisabled = true, useElementValueInsteadOfId = false }) {
+    let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
+    let classElements = [];
+    if (useClassInPlaceOfId) {
+        if (inputClass === undefined) {
+            throw new ReferenceError("The value for input.inputClass is undefined");
+        }
+        let temp = document.getElementsByClassName(inputClass);
+        classElements = Array.from(temp);
+    }
+    else {
+        if (inputIds === undefined) {
+            throw new ReferenceError("The value for input.inputIds is undefined");
+        }
+        inputIds.forEach(element => {
+            classElements.push(document.getElementById(element));
+        });
+    }
+    if (ignoreIfDisabled) {
+        let t = classElements.filter((value) => {
+            return !value.disabled;
+        });
+        classElements = t;
+    }
+    let checked = classElements.filter((value) => {
+        return value.checked;
+    });
+    let ck = (useElementValueInsteadOfId ? checked.map((element) => {
+        return element.value;
+    }) : checked.map((element) => {
+        return element.id;
+    }));
+    if (appendClassInFrontOfId) {
+        ck.forEach(element => {
+            pushObject.pushTo.push(tabs, "[", inputClass, ":", element, "]\n");
+        });
+    }
+    else {
+        ck.forEach(element => {
+            pushObject.pushTo.push(tabs, "[", element, "]\n");
         });
     }
 }

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <input type="text" name="CREATURE" id="CREATURE">
+        <label for="CREATURE">The name of the creature. For naming convention, this should be in all caps.</label>
+        <fieldset>
+            <legend>Non-caste traits</legend>
+            <p>
+                NAME:
+                <input type="text" name="NAME_SINGULAR" id="NAME_SINGULAR" class="NAME" title="The singular name for this creature. Mandatory">
+                <input type="text" name="NAME_PLURAL" id="NAME_PLURAL" class="NAME" title="The plural for this creature. Mandatory">
+                <input type="text" name="NAME_ADJECTIVE" id="NAME_ADJECTIVE" class="NAME" title="The adjective for this creature. Mandatory">
+            </p>
+            <p>
+                GENERAL_BABY_NAME:
+                <input type="text" name="GENERAL_BABY_NAME_SINGULAR" id="GENERAL_BABY_NAME_SINGULAR" class="GENERAL_BABY_NAME" title="The name for baby instances of this creature">
+                <input type="text" name="GENERAL_BABY_NAME_PLURAL" id="GENERAL_BABY_NAME_PLURAL" class="GENERAL_BABY_NAME" title="The name for baby instances of this creature">
+            </p>
+            <p>
+                GENERAL_CHILD_NAME:
+                <input type="text" name="GENERAL_CHILD_NAME_SINGULAR" id="GENERAL_CHILD_NAME_SINGULAR" class="GENERAL_CHILD_NAME" title="The name for child instances of this creature.">
+                <input type="text" name="GENERAL_CHILD_NAME_PLURAL" id="GENERAL_CHILD_NAME_PLURAL" class="GENERAL_CHILD_NAME" title="The name for child instances of this creature.">
+            </p>
+            <select name="IS_FANCY" id="IS_FANCY">
+                <option value="MUNDANE" selected>Creature is from real life</option>
+                <option value="FANCIFUL">Creature is fantastic</option>
+            </select>
+            <input type="checkbox" name="DOES_NOT_EXIST" id="DOES_NOT_EXIST" title="This creature does not actually exsit in game">
+            <label for="DOES_NOT_EXIST">DOES_NOT_EXIST:</label>
+            <fieldset>
+                <legend>Prefstrings:</legend>
+
+                PREFSTRING
+            </fieldset>
+            <p>
+                <label for="CREATURE_TILE">CREATURE_TILE:</label>
+                <input type="text" name="CREATURE_TILE" id="CREATURE_TILE" maxlength="1" title="Creatures will use this tile to represent themselves.">
+            </p>
+            
+            <label for="CREATURE_SOLDIER_TILE">Creatures who are sodiers will use this tile instead:</label>
+            <input type="text" name="CREATURE_SOLDIER_TILE" id="CREATURE_SOLDIER_TILE" maxlength="1">
+            <label for="ALTTILE">Alternate Creature Tile (optional):</label>
+            <input type="text" name="ALTTILE" id="ALTTILE" maxlength="1">
+
+            <div name="COLOR" id="COLOR">
+                <p>The color of this creature in foreground, background, and brightness intigers</p>
+                <input type="number" name="foreground" id="foreground" min="0" max="7" value="0">
+                <input type="number" name="background" id="background" min="0" max="7" value="0">
+                <input type="number" name="brightness" id="brightness" min="0" max="1" value="0">
+            </div>
+
+            GLOWCOLOR
+
+            GLOWTILE
+
+            <fieldset>
+                <legend>Biome Generation:</legend>
+
+                <label for="BIOME_TYPE">Determin if creature will only be generated in savage, good, or evil biomes</label>
+                <select name="BIOME_TYPE" id="BIOME_TYPE">
+                    <option value="ANY_BIOME_TYPE" selected>Any</option>
+                    <option value="SAVAGE">Savage</option>
+                    <option value="GOOD">Good</option>
+                    <option value="EVIL">Evil</option>
+                </select>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Biomes where the creature can spawn:
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="MOUNTAIN" id="MOUNTAIN">
+                                <label for="MOUNTAIN">Mountains</label>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="GLACIER" id="GLACIER">
+                                <label for="GLACIER">Glaciers</label>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="TUNDRA" id="TUNDRA">
+                                <label for="TUNDRA">Turndras</label>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="SWAMP_TEMPERATE_FRESHWATER" id="SWAMP_TEMPERATE_FRESHWATER">
+                                <label for="SWAMP_TEMPERATE_FRESHWATER">Swamp</label>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <p>
+                    <button>Add new biome</button>
+                    <button>Delete last biome</button>
+                </p>
+
+                <div id="UNDERGROUND_DEPTH" name="UNDERGROUND_DEPTH">
+                    defines the maximun and  minimun depth 
+                    <input type="number" name="MIN_UNDERGROUND_DEPTH" id="MIN_UNDERGROUND_DEPTH" min="0" max="5" value="0">
+                    <input type="number" name="MAX_UNDERGROUND_DEPTH" id="MAX_UNDERGROUND_DEPTH" min="0" max="5" value="0">
+
+                </div>
+
+                <input type="checkbox" name="SAVAGE" id="SAVAGE">
+                <label for="SAVAGE">Creature </label>
+            </fieldset>
+
+
+
+            <input type="checkbox" name="ARTIFICIAL_HIVEABLE" id="ARTIFICIAL_HIVEABLE">
+            <label for="ARTIFICIAL_HIVEABLE">Beekeepers can construct artifical hives for this creature</label>
+
+            HIVE_PRODUCT
+
+            EQUIPMENT_WAGON
+
+            <label for="SMELL_TRIGGER">How good a creatures sence of smell is. Lower values are better.</label>
+            <input type="number" name="SMELL_TRIGGER" id="SMELL_TRIGGER" min="0" max="10000" step="1" value="50">
+
+            <fieldset>
+                <legend>Speech:</legend>
+
+                <input type="text" name="SPEECH" id="SPEECH">
+
+                <input type="text" name="SPEECH_MALE" id="SPEECH_MALE">
+
+                <input type="text" name="SPEECH_FEMALE" id="SPEECH_FEMALE">
+            </fieldset>
+
+            <fieldset>
+                <legend>Religous Spheres:</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Sphere
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </fieldset>
+
+            BIOME     biome token
+
+            EVIL
+
+            FREQUENCY
+
+            CHANGE_FREQUENCY_PERC 
+
+            CLUSTER_NUMBER 
+
+            LOOSE_CLUSTERS
+
+            LARGE_ROAMING
+
+            TRIGGERABLE_GROUP
+
+            VERMIN_EATER
+
+            VERMIN_FISH
+
+            VERMIN_GROUNDER
+
+            VERMIN_ROTTER
+
+            VERMIN_SOIL
+
+            VERMIN_SOIL_COLONY
+        </fieldset>
+        
+        
+
+        <select name="CREATURE_CLASS" id="CREATURE_CLASS">
+            <option value="MAMMAL" selected>Mammal</option>
+            <option value="EDIBLE_GROUND_BUG"></option>
+        </select>
+
+        <div name="CASTE_NAME" id="CASTE_NAME">
+            <input type="text" name="CASTE_NAME_SINGULAR" id="CASTE_NAME_SINGULAR" class="SINGULAR">
+            <input type="text" name="CASTE_NAME_PLURAL" id="CASTE_NAME_PLURAL" class="PLURAL">
+            <input type="text" name="CASTE_NAME_ADJECTIVE" id="CASTE_NAME_ADJECTIVE" class="ADJECTIVE">
+        </div>
+
+        <fieldset>
+            <legend>Creature Intelligence:</legend>
+            <input type="checkbox" name="INTELLIGENT" id="INTELLIGENT">
+            <label for="INTELLIGENT">The creature is intelligent. Prevents this creature from being butchered in fortress mode.</label>
+
+            <input type="checkbox" name="CAN_SPEAK" id="CAN_SPEAK">
+            <label for="CAN_SPEAK">The creature is able to speak. If the creature is marked as intelligent, this is reduendent.</label>
+
+            <input type="checkbox" name="CAN_LEARN" id="CAN_LEARN">
+            <label for="CAN_LEARN">The creature is able to learn. Prevents this creature from being butchered in adventure mode. If the creature is marked as intelligent, this is reduendent.</label>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Locomotion</legend>
+
+
+            <select name="LOCOMOTION" id="LOCOMOTION">
+                <option value="STANDARD" selected>Standard (may swim but needs to come up for air)</option>
+                <option value="AQUATIC">Aquatic (drowns if not underwater)</option>
+                <option value="AMPHIBIOUS">Amphibious</option>
+            </select>
+
+            <input type="checkbox" name="UNDERSWIM" id="UNDERSWIM">
+            <label for="UNDERSWIM">Creature color is blue when it is in 7/7 water</label>
+
+            <label for="BEACH_FREQUENCY">The frequency that a creature will beach itself. Ignored if 0, or if not aquatic.</label>
+            <input type="number" name="BEACH_FREQUENCY" id="BEACH_FREQUENCY" min="0" value="0" step="1">
+
+            BEACH_FREQUENCY
+        </fieldset>
+
+        <input type="checkbox" name="CANOPENDOORS" id="CANOPENDOORS">
+        <label for="CANOPENDOORS">The creature is able to open doors.</label>
+
+        <input type="checkbox" name="BENIGN" id="BENIGN">
+        <label for="BENIGN">The creature will almost allways flee from enemies.</label>
+
+        <fieldset>
+            <legend>Creature Diet:</legend>
+
+            <label for="DIET">Creature diet:</label>
+            <select name="DIET" id="DIET">
+                <option value="ALL" selected>Eats plants and meat</option>
+                <option value="CARNIVORE">Eats meat only</option>
+                <option value="BONECARN">Eats meat and bones only</option>
+                <option value="GRAZER">Grazes on pastures</option>
+                <option value="STANDARD_GRAZER"></option>
+            </select>
+
+            ROOT_AROUND
+
+            HUNTS_VERMIN
+            <label for="SPECIFIC_FOOD">A specific animal or plant that this creature will only eat. Ignored if blank.</label>
+            <input type="text" name="SPECIFIC_FOOD" id="SPECIFIC_FOOD">
+
+        </fieldset>
+
+
+
+
+        <input type="text" name="NAME_SINGULAR" id="NAME">
+        <label for="NAME">The singular, plural, and adjective. Mandatory</label>
+
+        <!--
+
+
+    [APPLY_CREATURE_VARIATION:STANDARD_CLIMBING_GAITS:9000:8900:8825:8775:9500:9900] 1 kph
+
+
+	[APPLY_CREATURE_VARIATION:STANDARD_SWIMMING_GAITS:7780:7508:7254:2925:8478:9233] 3 kph
+	[APPLY_CREATURE_VARIATION:STANDARD_CRAWLING_GAITS:5951:5419:4898:1463:6944:8233] 6 kph, NO DATA
+	[APPLY_CREATURE_VARIATION:STANDARD_CLIMBING_GAITS:5951:5419:4898:1463:6944:8233] 6 kph
+	[APPLY_CREATURE_VARIATION:STANDARD_SWIMMING_GAITS:5951:5419:4898:1463:6944:8233] 6 kph
+
+	[APPLY_CREATURE_VARIATION:STANDARD_SWIMMING_GAITS:2990:2257:1525:731:4300:6100] 12 kph
+	[APPLY_CREATURE_VARIATION:STANDARD_CRAWLING_GAITS:2990:2257:1525:731:4300:6100] 12 kph
+
+	[APPLY_CREATURE_VARIATION:STANDARD_CRAWLING_GAITS:2728:2069:1409:675:4000:5700] 13 kph
+    [APPLY_CREATURE_VARIATION:STANDARD_CLIMBING_GAITS:2206:1692:1178:585:3400:4900] 15 kph
+
+	[APPLY_CREATURE_VARIATION:STANDARD_BIPED_GAITS:900:711:521:293:1900:2900] 30 kph
+
+    [APPLY_CREATURE_VARIATION:STANDARD_FLYING_GAITS:900:691:482:251:1900:2900] 35 kph, NO DATA
+	[APPLY_CREATURE_VARIATION:STANDARD_QUADRUPED_GAITS:900:657:438:219:1900:2900] 40 kph
+    [APPLY_CREATURE_VARIATION:STANDARD_BIPED_GAITS:900:642:428:214:1900:2900] 41 kph
+    [APPLY_CREATURE_VARIATION:STANDARD_QUADRUPED_GAITS:900:432:288:144:1900:2900] 61 kph
+	[APPLY_CREATURE_VARIATION:STANDARD_QUADRUPED_GAITS:900:375:250:125:1900:2900] 70 kph
+        -->
+
+        <script src="" async defer></script>
+    </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Weapons</title>
+
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/weapon.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body onload="createNewAttack()">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="item.html">Items</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <label for="ITEM_WEAPON">ITEM_WEAPON:</label>
+        <input type="text" name="ITEM_WEAPON" id="ITEM_WEAPON" pattern="/[A-Z0-9_]/" 
+        title="The name of the weapon. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_WEAPON'">
+        <p>
+            NAME:
+            <input type="text" name="singular" id="singular" title="The singular form for the name of this weapon. Always required.">
+            <input type="text" name="plural" id="plural" title="The plural form for the name of this weapon. Always required.">
+        </p>
+        <p>
+            <label for="SIZE">SIZE:</label>
+            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" title="The size of the weapon.">
+        </p>
+        <p>
+            <label for="TWO_HANDED">TWO_HANDED:</label>
+            <input type="number" name="TWO_HANDED" id="TWO_HANDED" min="0" value="50000" step="1" 
+            title="Creatures smaller then this size will be required to use two hands to wield the weapon.">    
+        </p>
+        <p>
+            <label for="MINIMUM_SIZE">MINIMUM_SIZE:</label>
+            <input type="number" name="MINIMUM_SIZE" id="MINIMUM_SIZE" min="0" value="40000" step="1" 
+            title="Creatures smaller then this size will be unable to wield this weapon.">
+        </p>
+        <p>
+            <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
+            <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" 
+            title="The number of bars that are required to force a weapon of this kind.">
+        </p>
+        <p>
+            <input type="checkbox" name="TRAINING" id="TRAINING" title="If checked, this weapon will only be able to be constructed from wood.">
+            <label for="TRAINING">TRAINING</label>
+        </p>
+        <p>
+            <input type="checkbox" name="CAN_STONE" id="CAN_STONE" 
+            title="This weapon can be contrcuted from a log and a stone with a MAX_EDGE value of 10000 or greater.">
+            <label for="CAN_STONE">CAN_STONE</label>
+        </p>
+        <label for="SKILL">SKILL:</label>
+        <select name="SKILL" id="SKILL" title="The skill that will be use for melee attacks using this weapon.">
+            <option value="MINING">MINING - Pickaxes (this allows the weapon to be used to mine)</option>
+            <option value="AXE">AXE - Axes and halberds</option>
+            <option value="SWORD" selected>SWORD - Small, medium, and two-handed Swords</option>
+            <option value="DAGGER">DAGGER - Daggers and knives</option>
+            <option value="MACE">MACE - Maces, flails, and morningstars</option>
+            <option value="HAMMER">HAMMER - Hammers and mauls</option>
+            <option value="WHIP">WHIP - Whips and scourges</option>
+            <option value="PIKE">PIKE - Pikes</option>
+            <option value="SPEAR">SPEAR - Spears</option>
+        </select>
+        <fieldset>
+            <legend>Ranged Weapons:</legend>
+            <label for="RANGED">RANGED:</label>
+            <select name="RANGED" id="RANGED" title="The skill that will be used for ranged attacks using this weapon." onchange="activateRanged()">
+                <option value="NA" selected>N/A (This weapon is not a ranged weapon)</option>
+                <option value="BLOWGUN">BLOWGUN - Blowguns</option>
+                <option value="BOW">BOW - Bows</option>
+                <option value="CROSSBOW">CROSSBOW - Crossbows</option>
+            </select>
+            <p>
+                If N/A is selected, the weapon not be treated as a ranged weapon
+            </p>
+            <label for="amno">Amno type:</label>
+            <select name="amno" id="amno" class="ranged_weapon" disabled title="The type of amnition this weapon can fire">
+                <option value="BLOWDART">BLOWDART - Blowdarts</option>
+                <option value="ARROW" selected>ARROW - Arrows</option>
+                <option value="BOLT">BOLT - Crossbow bolts</option>
+            </select>
+            <p>
+                <label for="SHOOT_FORCE" >SHOOT_FORCE:</label>
+                <input type="number" name="SHOOT_FORCE" id="SHOOT_FORCE" min="1" value="1" step="1" class="ranged_weapon" disabled 
+                title="The amount of force imparted on a projectile when firing">
+            </p>
+            <p>
+                <label for="SHOOT_MAXVEL" >SHOOT_MAXVEL:</label>
+                <input type="number" name="SHOOT_MAXVEL" id="SHOOT_MAXVEL" min="1" value="1" step="1" class="ranged_weapon" disabled 
+                title="The maximun velocity that a projectile may achive">
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>Attacks</legend>
+            Explanation:
+            <ol>
+                <li>Edge/Blunt: Whether this weapon has a sharp surface that cuts or pierces into an opponent or not</li>
+                <li>Contact area: This is high for slashing attacks, and lower for stabbing and bludgeoning attacks</li>
+                <li>Pentration size: This is high for stabbing attacks, and low for slashing attacks. It is ignored for blunt attacks</li>
+                <li>Verb 2: The transitive verb used to describe the action</li>
+                <li>Verb 3: The indicative verb used to describe the action</li>
+                <li>Noun: The noun used to describe the part of the weapon used in the attack. Optional. If blank, 'NO_SUB' will be used instead</li>
+                <li>Velocity multiplier: How much to multiply the velocity by</li>
+                <li>Preperation time: How long it takes to prepare to execute an attack</li>
+                <li>Recovery time: How long it takes to recover from executing an attack</li>
+                <li>Multiple strike penalty: The penalty (if any) for multiple strike attacks</li>
+            </ol>
+            <table id="attacks">
+                <thead>
+                    <tr>
+                        <th>Edge/Blunt</th>
+                        <th>Contact area</th>
+                        <th>Pentration size</th>
+                        <th>Verb 2</th>
+                        <th>Verb 3</th>
+                        <th>Noun</th>
+                        <th>Velocity multiplier</th>
+                        <th>Preperation time</th>
+                        <th>Recovery time</th>
+                        <th>Multiple strike penalty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="createNewAttack()">Add new attack</button>
+            <button onclick="deleteLastAttack()">Delete last attack</button>
+        </fieldset>
+        <button onclick="createWeapon()">Create Weapon</button>
+        <fieldset>
+            <legend>Weapon Data:</legend>
+            <div id="result"></div>
+        </fieldset>
+    </body>
+</html>

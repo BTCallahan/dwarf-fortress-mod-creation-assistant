@@ -157,15 +157,15 @@ function enableOrDisableElements(input:{disable:boolean, className:string}) {
     });
 }
 
-function hideOrUnhideElements(input:{hideClassNames:string[], unhideClassNames:string[]})
+function hideOrUnhideElements({hideClassNames, unhideClassNames}:{hideClassNames:string[], unhideClassNames:string[]})
 {
-    input.hideClassNames.forEach(element => {
+    hideClassNames.forEach(element => {
         
         let ele = <HTMLElement><any> document.getElementsByClassName(element);
 
         ele.hidden = true;
     });
-    input.unhideClassNames.forEach(element => {
+    unhideClassNames.forEach(element => {
         
         let ele = <HTMLElement><any> document.getElementsByClassName(element);
 
@@ -187,84 +187,147 @@ function getSelectElementValue(inputId:string)
     return input.value;
 }
 
-function getSingleInput(input:{inputId:string, numberOfTabObjects:number})
+function getSingleInput({inputId, numberOfTabObjects, ignoreIfDisabled=true}:{
+    inputId:string, numberOfTabObjects:number, ignoreIfDisabled?:boolean})
 {
-    let input_ = <HTMLInputElement><any> document.getElementById(input.inputId);
+    let input_ = <HTMLInputElement><any> document.getElementById(inputId);
 
-    pushObject.pushTo.push(pushObject.tabObject.repeat(input.numberOfTabObjects), "[", input.inputId, ":", input_.value, "]\n" );
-
+    if (!ignoreIfDisabled || !input_.disabled)
+    {
+        pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabObjects), "[", inputId, ":", input_.value, "]\n" );
+    }
     return input_;
 }
 
-function getSingleCheckBox(inputId:string, numberOfTabObjects:number) {
+function getSingleCheckBox({inputId, numberOfTabObjects, ignoreIfDisabled=true}:{inputId:string, numberOfTabObjects:number, ignoreIfDisabled?:boolean})
+{
+    let input_ = <HTMLInputElement><any> document.getElementById(inputId);
 
-    let input = <HTMLInputElement><any> document.getElementById(inputId);
-
-    if (input.checked)
+    if ((!ignoreIfDisabled || !input_.disabled) && input_.checked)
     {
-        pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabObjects), "[", inputId, ":", input.value, "]\n" );
+        pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabObjects), "[", inputId, ":", input_.value, "]\n" );
     }
-    return input.checked;
+    return input_.checked;
 }
 
 function getMultipleInputs(
-    input:{inputIds:string[], numberOfTabObjects:number})
+    {inputIds, inputClass, useClassInPlaceOfId=false, appendClassInFrontOfId=false, 
+        numberOfTabObjects, ignoreIfDisabled=false}:{inputIds?:string[], inputClass?:string, 
+        useClassInPlaceOfId?:boolean, appendClassInFrontOfId?:boolean, 
+        numberOfTabObjects:number, ignoreIfDisabled?:boolean})
 {
-    let tabs = pushObject.tabObject.repeat(input.numberOfTabObjects);
+    let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
 
-    input.inputIds.forEach(element => {
-        let input_ = <HTMLInputElement><any> document.getElementById(element);
+    let classElements:HTMLInputElement[] = [];
 
-        pushObject.pushTo.push(tabs, "[", element, ":", input_.value, "]\n" );
-    });
-}
-
-function getMultipleCheckBoxes(
-    input:{inputIds?:string[], inputClass?:string, 
-    useClassInPlaceOfId:boolean, appendClassInFrontOfId:boolean, 
-    numberOfTabObjects:number})
-{
-    let tabs = pushObject.tabObject.repeat(input.numberOfTabObjects);
-
-    if (input.useClassInPlaceOfId)
+    if (useClassInPlaceOfId)
     {
-        if (input.inputClass === undefined)
+        if (inputClass === undefined)
         {
             throw new ReferenceError("The value for input.inputClass is undefined");
         }
-        let classElements = <HTMLCollection><any> document.getElementsByClassName(input.inputClass);
+        let temp = <HTMLCollection><any> document.getElementsByClassName(inputClass);
 
-        let classArray = <HTMLInputElement[]> Array.from(classElements);
-
-        if (input.appendClassInFrontOfId)
-        {
-            classArray.forEach(element => {
-                
-                pushObject.pushTo.push(tabs, "[", input.inputClass as string, ":", element.id, "]\n" );
-            });
-        }
-        else
-        {
-            classArray.forEach(element => {
-                
-                pushObject.pushTo.push(tabs, "[", element.id, "]\n" );
-            });
-        }
+        classElements = Array.from(temp) as HTMLInputElement[];
     }
     else
     {
-        if (input.inputIds === undefined)
+        if (inputIds === undefined)
         {
             throw new ReferenceError("The value for input.inputIds is undefined");
         }
-        input.inputIds.forEach(element => {
-            let input_ = <HTMLInputElement><any> document.getElementById(element);
-    
-            if (input_.checked)
-            {
-                pushObject.pushTo.push(tabs, "[", element, "]\n" );
-            }
+        inputIds.forEach(element => {
+            classElements.push(
+                document.getElementById(element) as HTMLInputElement
+            );
         });
+    }
+    if (ignoreIfDisabled)
+    {
+        let t = classElements.filter( (value:HTMLInputElement) => {
+            return !value.disabled;
+        });
+
+        classElements = t;
+    }
+    if (appendClassInFrontOfId)
+    {
+        classElements.forEach((element) => {
+
+            pushObject.pushTo.push(tabs, "[", inputClass as string, ":", element.value, "]\n" );
+        });
+    }
+    else
+    {
+        classElements.forEach((element) => {
+
+            pushObject.pushTo.push(tabs, "[", element.id, ":", element.value, "]\n" );
+        });
+    }
+}
+
+function getMultipleCheckBoxes(
+    {inputIds=undefined, inputClass=undefined, useClassInPlaceOfId=false, appendClassInFrontOfId=false, numberOfTabObjects, 
+        ignoreIfDisabled=true, useElementValueInsteadOfId=false
+    }:{inputIds?:string[], inputClass?:string, 
+    useClassInPlaceOfId?:boolean, appendClassInFrontOfId?:boolean, 
+    numberOfTabObjects:number, ignoreIfDisabled?:boolean, useElementValueInsteadOfId?:boolean})
+{
+    let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
+
+    let classElements:HTMLInputElement[] = [];
+
+    if (useClassInPlaceOfId)
+    {
+        if (inputClass === undefined)
+        {
+            throw new ReferenceError("The value for input.inputClass is undefined");
+        }
+        let temp = <HTMLCollection><any> document.getElementsByClassName(inputClass);
+
+        classElements = Array.from(temp) as HTMLInputElement[];
+    }
+    else
+    {
+        if (inputIds === undefined)
+        {
+            throw new ReferenceError("The value for input.inputIds is undefined");
+        }
+        inputIds.forEach(element => {
+            classElements.push(
+                document.getElementById(element) as HTMLInputElement
+            );
+        });
+    }
+    if (ignoreIfDisabled)
+    {
+        let t = classElements.filter( (value:HTMLInputElement) => {
+            return !value.disabled;
+        });
+
+        classElements = t;
+    }
+    let checked = classElements.filter((value:HTMLInputElement) => {
+        return value.checked;
+    });
+
+    let ck:string[] = (useElementValueInsteadOfId ? checked.map((element:HTMLInputElement) => {
+        return element.value;
+    }) : checked.map((element:HTMLInputElement) => {
+        return element.id;
+    }));
+
+    if (appendClassInFrontOfId)
+    {
+        ck.forEach(element => {
+            pushObject.pushTo.push(tabs, "[", inputClass as string, ":", element, "]\n" );
+        })
+    }
+    else
+    {
+        ck.forEach(element => {
+            pushObject.pushTo.push(tabs, "[", element, "]\n" );
+        })
     }
 }
 

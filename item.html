@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Misc. Items</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/item.js"></script>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="item.html">Items</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <select name="ITEM_TYPE" id="ITEM_TYPE" 
+        onchange="let it = getSelectElementValue('ITEM_TYPE');hideOrUnhideElements({unhideClassNames:[it], unhideClassNames:enableDisableDictionary[it]})">
+            <option value="ITEM_TOY" selected>ITEM_TOY - Toys</option>
+            <option value="ITEM_FOOD">ITEM_FOOD - Cooked meals</option>
+            <option value="ITEM_SIEGEAMMO">ITEM_SIEGEAMMO - Siege ammo</option>
+        </select>
+        <label for="ITEM_TYPE">ITEM_TYPE:</label>
+        <div class="ITEM_TOY">
+            <label for="ITEM_TOY">ITEM_TOY:</label>
+            <input type="text" name="ITEM_TOY" id="ITEM_TOY" pattern="/[A-Z0-9_]/" class="ITEM_TOY"
+            title="The name of the toy. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TOY'">
+        </div>
+        <div class="ITEM_FOOD">
+            <label for="ITEM_FOOD">ITEM_FOOD:</label>
+            <input type="text" name="ITEM_FOOD" id="ITEM_FOOD" pattern="/[A-Z0-9_]/" class="ITEM_FOOD"
+            title="The name of the meal. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_FOOD'">
+        </div>
+        <div class="ITEM_SIEGEAMMO">
+            <label for="ITEM_SIEGEAMMO">ITEM_SIEGEAMMO:</label>
+            <input type="text" name="ITEM_SIEGEAMMO" id="ITEM_SIEGEAMMO" pattern="/[A-Z0-9_]/" class="ITEM_SIEGEAMMO"
+            title="The name of the seige ammo. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_SIEGEAMMO'">
+        </div>
+        <p>
+            NAME:
+            <input type="text" name="singular" id="singular" title="The singular form for the name of this item. Always required.">
+            <input type="text" name="plural" id="plural" title="The plural form for the name of this item. Always required.">
+        </p>
+        <fieldset class="ITEM_TOY">
+            <legend>Materials:</legend>
+            <p>
+                <input type="checkbox" name="HARD_MAT" id="HARD_MAT" class="materials"
+                onclick="enableOrDisableElements({disable:isCheckboxChecked('HARD_MAT'), className:'HARD_MAT'})"
+                title="This tool may be made from any hard material.">
+                <label for="HARD_MAT">HARD_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="GLASS_MAT" id="GLASS_MAT" class="HARD_MAT materials" 
+                title="This tool may be made from any glass.">
+                <label for="GLASS_MAT">GLASS_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="CERAMIC_MAT" id="CERAMIC_MAT" class="HARD_MAT materials" 
+                title="This tool may be made from any ceramic.">
+                <label for="CERAMIC_MAT">CERAMIC_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="METAL_MAT" id="METAL_MAT" class="HARD_MAT materials"
+                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_MAT'), targetId:'METAL_WEAPON_MAT'})" 
+                title="This tool may be made from any metal.">
+                <label for="METAL_MAT">METAL_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="METAL_WEAPON_MAT" id="METAL_WEAPON_MAT materials" class="HARD_MAT"
+                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_WEAPON_MAT'), targetId:'METAL_MAT'})" 
+                title="This tool may be made from any metal that is used for weapons.">
+                <label for="METAL_WEAPON_MAT">METAL_WEAPON_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="STONE_MAT" id="STONE_MAT" class="HARD_MAT materials" 
+                title="This tool may be made from any stone.">
+                <label for="STONE_MAT">STONE_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="WOOD_MAT" id="WOOD_MAT" class="HARD_MAT materials" 
+                title="This tool may be made from any wood.">
+                <label for="WOOD_MAT">WOOD_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="BONE_MAT" id="BONE_MAT" class="HARD_MAT materials" 
+                title="This tool may be made from any bone.">
+                <label for="BONE_MAT">BONE_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SHELL_MAT" id="SHELL_MAT" class="HARD_MAT materials" 
+                title="This tool may be made from any shell.">
+                <label for="SHELL_MAT">SHELL_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SOFT_MAT" id="SOFT_MAT" class="materials"
+                onclick="enableOrDisableElements({disable:isCheckboxChecked('SOFT_MAT'), className:'SOFT_MAT'})" 
+                title="This tool may be made from any soft material." >
+                <label for="SOFT_MAT">SOFT_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="LEATHER_MAT" id="LEATHER_MAT" class="SOFT_MAT materials" title="This tool may be made from any leather.">
+                <label for="LEATHER_MAT">LEATHER_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SILK_MAT" id="SILK_MAT" class="SOFT_MAT materials" title="This tool may be made from any silk.">
+                <label for="SILK_MAT">SILK_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="THREAD_PLANT_MAT" id="THREAD_PLANT_MAT" class="SOFT_MAT materials" title="This tool may be made from any plant based thread.">
+                <label for="THREAD_PLANT_MAT">THREAD_PLANT_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SHEET_MAT" id="SHEET_MAT" class="SOFT_MAT materials" title="This tool may be made from any parchment or paper.">
+                <label for="SHEET_MAT">SHEET_MAT</label>
+            </p>
+        </fieldset>
+        <input type="number" name="LEVEL" id="LEVEL" min="1" value="2" class="ITEM_FOOD materials" title="How many ingredents must this meal include.">
+        <label for="LEVEL">LEVEL:</label>
+        <br>
+        <button onclick="createItem()">Create Item</button>
+        <fieldset>
+            <legend>Item Data:</legend>
+            <div id="result"></div>
+        </fieldset>
+    </body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tools</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/tool.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body onload="addNewDescription()">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="item.html">Items</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <label for="ITEM_TOOL">ITEM_TOOL:</label>
+        <input type="text" name="ITEM_TOOL" id="ITEM_TOOL" pattern="/[A-Z0-9_]/" 
+        title="The name of the tool. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TOOL'">
+        <p>
+            NAME:
+            <input type="text" name="singular" id="singular" title="The singular form for the name of this tool. Always required.">
+            <input type="text" name="plural" id="plural" title="The plural form for the name of this tool. Always required.">
+        </p>
+        <fieldset>
+            <legend>Description</legend>
+            DESCRIPTION:
+            <div id="desc">
+            </div>
+            <button onclick="addNewDescription()">Add new description paragraph</button>
+            <button onclick="deleteLastDescription()">Delete last description paragraph</button>
+        </fieldset>
+        <p>
+            <label for="SIZE">SIZE:</label>
+            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" title="The size of the tool.">
+        </p>
+        <p>
+            <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
+            <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" 
+            title="The number of bars that are required to force a tool of this kind.">
+        </p>
+        <p>
+            <label for="VALUE">VALUE:</label>
+            <input type="number" name="VALUE" id="VALUE" min="0" step="1" title="How much this tool is worth.">
+        </p>
+        <p>
+            <label for="TILE">TILE:</label>
+            <input type="number" name="TILE" id="TILE" step="1" title="The tile used to show this tool.">
+        </p>
+        <p>
+            <label for="INVERTED_TILE">INVERTED_TILE</label>
+            <input type="checkbox" name="INVERTED_TILE" id="INVERTED_TILE" title="The backgound of the tile will be colored instead of the foreground.">
+        </p>
+        <p>
+            <label for="NO_DEFAULT_JOB">NO_DEFAULT_JOB</label>
+            <input type="checkbox" name="NO_DEFAULT_JOB" id="NO_DEFAULT_JOB" title="This item can only be created by special reactions.">
+        </p>
+        <p>
+            <label for="FURNITURE">FURNITURE</label>
+            <input type="checkbox" name="FURNITURE" id="FURNITURE" title="This item can be stored in a furniture stockpile.">
+        </p>
+        <p>
+            <select name="SHAPE_CATEGORY" id="SHAPE_CATEGORY">
+                <option value="NONE" selected>No shape category</option>
+                <option value="SIMPLE">Simple</option>
+                <option value="PLATONIC">Platonic solid</option>
+                <option value="DICE">Dice</option>
+            </select>
+            <br>
+            Note: In the vanilla raws, only SHAPE_CATEGORY:DICE has been used. I do not know the effects of choosing "Platonic solid" or 
+            "Simple". Use these at your own risk. 
+        </p>
+        <fieldset>
+            <legend>Tool purpose:</legend>
+            <p>
+                <input type="checkbox" name="LIQUID_COOKING" id="LIQUID_COOKING" class="TOOL_USE" title="Used for cookpots/cauldrons">
+                <label for="LIQUID_COOKING">LIQUID_COOKING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="LIQUID_SCOOP" id="LIQUID_SCOOP" class="TOOL_USE" title="Used for serving spoons/ladles">
+                <label for="LIQUID_SCOOP">LIQUID_SCOOP</label>
+            </p>
+            <p>
+                <input type="checkbox" name="GRIND_POWDER_RECEPTACLE" id="GRIND_POWDER_RECEPTACLE" class="TOOL_USE" title="Used for motars">
+                <label for="GRIND_POWDER_RECEPTACLE">GRIND_POWDER_RECEPTACLE</label>
+            </p>
+            <p>
+                <input type="checkbox" name="GRIND_POWDER_GRINDER" id="GRIND_POWDER_GRINDER" class="TOOL_USE" title="Used for pestles">
+                <label for="GRIND_POWDER_GRINDER">GRIND_POWDER_GRINDER</label>
+            </p>
+            <p>
+                <input type="checkbox" name="MEAT_CARVING" id="MEAT_CARVING" class="TOOL_USE" title="Used for meat carving tools">
+                <label for="MEAT_CARVING">MEAT_CARVING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="MEAT_BONING" id="MEAT_BONING" class="TOOL_USE" title="Used for meat deboning tools">
+                <label for="MEAT_BONING">MEAT_BONING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="MEAT_SLICING" id="MEAT_SLICING" class="TOOL_USE" title="Used for meat slicing tools">
+                <label for="MEAT_SLICING">MEAT_SLICING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="MEAT_CLEAVING" id="MEAT_CLEAVING" class="TOOL_USE" title="Used for meat cleaving tools">
+                <label for="MEAT_CLEAVING">MEAT_CLEAVING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="HOLD_MEAT_FOR_CARVING" id="HOLD_MEAT_FOR_CARVING" class="TOOL_USE" title="Used for carving forks">
+                <label for="HOLD_MEAT_FOR_CARVING">HOLD_MEAT_FOR_CARVING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="MEAL_CONTAINER" id="MEAL_CONTAINER" class="TOOL_USE" title="Used for meal holders">
+                <label for="MEAL_CONTAINER">MEAL_CONTAINER</label>
+            </p>
+            <p>
+                <input type="checkbox" name="NEST_BOX" id="NEST_BOX" class="TOOL_USE" title="Used for bird nesting boxes">
+                <label for="NEST_BOX">NEST_BOX</label>
+            </p>
+            <p>
+                <input type="checkbox" name="LIQUID_CONTAINER" id="LIQUID_CONTAINER" class="TOOL_USE" title="Used for liquid storage">
+                <label for="LIQUID_CONTAINER">LIQUID_CONTAINER</label>
+            </p>
+            <p>
+                <input type="checkbox" name="FOOD_STORAGE" id="FOOD_STORAGE" class="TOOL_USE" title="Used for food storage">
+                <label for="FOOD_STORAGE">FOOD_STORAGE</label>
+            </p>
+            <p>
+                <input type="checkbox" name="HIVE" id="HIVE" class="TOOL_USE" title="Used for beehives">
+                <label for="HIVE">HIVE</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SMALL_OBJECT_STORAGE" id="SMALL_OBJECT_STORAGE" class="TOOL_USE" title="Used for coinpurses/pouches">
+                <label for="SMALL_OBJECT_STORAGE">SMALL_OBJECT_STORAGE</label>
+            </p>
+            <p>
+                <input type="checkbox" name="TRACK_CART" id="TRACK_CART" class="TOOL_USE" title="Used for hauling carts/minecarts">
+                <label for="TRACK_CART">TRACK_CART</label>
+            </p>
+            <p>
+                <input type="checkbox" name="HEAVY_OBJECT_HAULING" id="HEAVY_OBJECT_HAULING" class="TOOL_USE" title="Used for wheelbarrows/Better hauling carts/tools">
+                <label for="HEAVY_OBJECT_HAULING">HEAVY_OBJECT_HAULING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="STAND_AND_WORK_ABOVE" id="STAND_AND_WORK_ABOVE" class="TOOL_USE" title="Used for stepladders/tools for gathering fruit">
+                <label for="STAND_AND_WORK_ABOVE">STAND_AND_WORK_ABOVE</label>
+            </p>
+            <p>
+                <input type="checkbox" name="ROLL_UP_SHEET" id="ROLL_UP_SHEET" class="TOOL_USE" title="Used for scroll rollers">
+                <label for="ROLL_UP_SHEET">ROLL_UP_SHEET</label>
+            </p>
+            <p>
+                <input type="checkbox" name="PROTECT_FOLDED_SHEETS" id="PROTECT_FOLDED_SHEETS" class="TOOL_USE" title="Used for bookbinding">
+                <label for="PROTECT_FOLDED_SHEETS">PROTECT_FOLDED_SHEETS</label>
+            </p>
+            <p>
+                <input type="checkbox" name="CONTAIN_WRITING" id="CONTAIN_WRITING" class="TOOL_USE" title="Used for scrolls/books/quires/codexs">
+                <label for="CONTAIN_WRITING">CONTAIN_WRITING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="BOOKCASE" id="BOOKCASE" class="TOOL_USE" title="Used for bookcases">
+                <label for="BOOKCASE">BOOKCASE</label>
+            </p>
+            <p>
+                <input type="checkbox" name="DISPLAY_OBJECT" id="DISPLAY_OBJECT" class="TOOL_USE" title="Used for pedestals/display cases">
+                <label for="DISPLAY_OBJECT">DISPLAY_OBJECT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="PLACE_OFFERING" id="PLACE_OFFERING" class="TOOL_USE" title="Used for altars">
+                <label for="PLACE_OFFERING">PLACE_OFFERING</label>
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>Materials:</legend>
+            <p>
+                <input type="checkbox" name="HARD_MAT" id="HARD_MAT" 
+                onclick="enableOrDisableElements({disable:isCheckboxChecked('HARD_MAT'), className:'HARD_MAT'})"
+                title="This tool may be made from any hard material.">
+                <label for="HARD_MAT">HARD_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="GLASS_MAT" id="GLASS_MAT" class="HARD_MAT" title="This tool may be made from any glass.">
+                <label for="GLASS_MAT">GLASS_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="CERAMIC_MAT" id="CERAMIC_MAT" class="HARD_MAT" title="This tool may be made from any ceramic.">
+                <label for="CERAMIC_MAT">CERAMIC_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="METAL_MAT" id="METAL_MAT" class="HARD_MAT"
+                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_MAT'), targetId:'METAL_WEAPON_MAT'})" 
+                title="This tool may be made from any metal.">
+                <label for="METAL_MAT">METAL_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="METAL_WEAPON_MAT" id="METAL_WEAPON_MAT" class="HARD_MAT"
+                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_WEAPON_MAT'), targetId:'METAL_MAT'})" 
+                title="This tool may be made from any metal that is used for weapons.">
+                <label for="METAL_WEAPON_MAT">METAL_WEAPON_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="STONE_MAT" id="STONE_MAT" class="HARD_MAT" title="This tool may be made from any stone.">
+                <label for="STONE_MAT">STONE_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="WOOD_MAT" id="WOOD_MAT" class="HARD_MAT" title="This tool may be made from any wood.">
+                <label for="WOOD_MAT">WOOD_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="BONE_MAT" id="BONE_MAT" class="HARD_MAT" title="This tool may be made from any bone.">
+                <label for="BONE_MAT">BONE_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SHELL_MAT" id="SHELL_MAT" class="HARD_MAT" title="This tool may be made from any shell.">
+                <label for="SHELL_MAT">SHELL_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SOFT_MAT" id="SOFT_MAT" 
+                onclick="enableOrDisableElements({disable:isCheckboxChecked('SOFT_MAT'), className:'SOFT_MAT'})" 
+                title="This tool may be made from any soft material." >
+                <label for="SOFT_MAT">SOFT_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="LEATHER_MAT" id="LEATHER_MAT" class="SOFT_MAT" title="This tool may be made from any leather.">
+                <label for="LEATHER_MAT">LEATHER_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SILK_MAT" id="SILK_MAT" class="SOFT_MAT" title="This tool may be made from any silk.">
+                <label for="SILK_MAT">SILK_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="THREAD_PLANT_MAT" id="THREAD_PLANT_MAT" class="SOFT_MAT" title="This tool may be made from any plant based thread.">
+                <label for="THREAD_PLANT_MAT">THREAD_PLANT_MAT</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SHEET_MAT" id="SHEET_MAT" class="SOFT_MAT" title="This tool may be made from any parchment or paper.">
+                <label for="SHEET_MAT">SHEET_MAT</label>
+            </p>
+        </fieldset>
+        <p>
+            <input type="number" name="CONTAINER_CAPACITY" id="CONTAINER_CAPACITY" min="0" step="1" 
+            title="The maximun volume of fluids this container can store.">
+            <label for="CONTAINER_CAPACITY">CONTAINER_CAPACITY:</label>
+        </p>
+        <p>
+            <input type="checkbox" name="UNIMPROVABLE" id="UNIMPROVABLE" 
+            title="No artistic improvements, such as bands or sewn images, can be made to this tool.">
+            <label for="UNIMPROVABLE">UNIMPROVABLE</label>
+        </p>
+
+        
+        
+
+        
+        <script src="" async defer></script>
+    </body>
+</html>
