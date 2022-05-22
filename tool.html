@@ -21,7 +21,8 @@
         <![endif]-->
         <header>
             <div>
-                <a href="main.html">Main Page</a>
+                <a href="index.html">Main Page</a>
+                <a href="trap.html">Traps</a>
                 <a href="weapon.html">Weapons</a>
                 <a href="item.html">Items</a>
                 <a href="tool.html">Tools</a>
@@ -33,7 +34,7 @@
             title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
         </p>
         <label for="ITEM_TOOL">ITEM_TOOL:</label>
-        <input type="text" name="ITEM_TOOL" id="ITEM_TOOL" pattern="/[A-Z0-9_]/" 
+        <input type="text" name="ITEM_TOOL" id="ITEM_TOOL" pattern=/[A-Z0-9_]/
         title="The name of the tool. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TOOL'">
         <p>
             NAME:
@@ -264,11 +265,13 @@
             title="No artistic improvements, such as bands or sewn images, can be made to this tool.">
             <label for="UNIMPROVABLE">UNIMPROVABLE</label>
         </p>
-
-        
-        
-
-        
-        <script src="" async defer></script>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <p id="result"></p>
+        </fieldset>
     </body>
 </html>
