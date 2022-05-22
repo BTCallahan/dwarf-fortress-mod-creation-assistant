@@ -10,19 +10,21 @@
         <title>Weapons</title>
 
         <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/attack.js"></script>
         <script type="text/javascript" src="assets/weapon.js"></script>
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
     </head>
-    <body onload="createNewAttack()">
+    <body onload="createNewAttack(true)">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <header>
             <div>
                 <a href="main.html">Main Page</a>
+                <a href="trap.html">Traps</a>
                 <a href="weapon.html">Weapons</a>
                 <a href="item.html">Items</a>
                 <a href="tool.html">Tools</a>
@@ -34,7 +36,7 @@
             title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
         </p>
         <label for="ITEM_WEAPON">ITEM_WEAPON:</label>
-        <input type="text" name="ITEM_WEAPON" id="ITEM_WEAPON" pattern="/[A-Z0-9_]/" 
+        <input type="text" name="ITEM_WEAPON" id="ITEM_WEAPON" pattern=/[A-Z0-9_]/
         title="The name of the weapon. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_WEAPON'">
         <p>
             NAME:
@@ -141,18 +143,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                    </tr>
                 </tbody>
             </table>
-            <button onclick="createNewAttack()">Add new attack</button>
+            <button onclick="createNewAttack(true)">Add new attack</button>
             <button onclick="deleteLastAttack()">Delete last attack</button>
         </fieldset>
         <button onclick="createWeapon()">Create Weapon</button>
         <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
             <legend>Weapon Data:</legend>
-            <div id="result"></div>
+            <p id="result"></p>
         </fieldset>
     </body>
 </html>
