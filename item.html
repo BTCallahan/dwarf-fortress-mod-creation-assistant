@@ -20,7 +20,8 @@
         <![endif]-->
         <header>
             <div>
-                <a href="main.html">Main Page</a>
+                <a href="index.html">Main Page</a>
+                <a href="trap.html">Traps</a>
                 <a href="weapon.html">Weapons</a>
                 <a href="item.html">Items</a>
                 <a href="tool.html">Tools</a>
@@ -31,26 +32,26 @@
             <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
             title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
         </p>
+        <label for="ITEM_TYPE">ITEM_TYPE:</label>
         <select name="ITEM_TYPE" id="ITEM_TYPE" 
-        onchange="let it = getSelectElementValue('ITEM_TYPE');hideOrUnhideElements({unhideClassNames:[it], unhideClassNames:enableDisableDictionary[it]})">
+        onchange="hideElementsByItemType();">
             <option value="ITEM_TOY" selected>ITEM_TOY - Toys</option>
             <option value="ITEM_FOOD">ITEM_FOOD - Cooked meals</option>
             <option value="ITEM_SIEGEAMMO">ITEM_SIEGEAMMO - Siege ammo</option>
         </select>
-        <label for="ITEM_TYPE">ITEM_TYPE:</label>
         <div class="ITEM_TOY">
             <label for="ITEM_TOY">ITEM_TOY:</label>
-            <input type="text" name="ITEM_TOY" id="ITEM_TOY" pattern="/[A-Z0-9_]/" class="ITEM_TOY"
+            <input type="text" name="ITEM_TOY" id="ITEM_TOY" pattern=/[A-Z0-9_]/ class="ITEM_TOY"
             title="The name of the toy. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TOY'">
         </div>
-        <div class="ITEM_FOOD">
+        <div class="ITEM_FOOD" hidden>
             <label for="ITEM_FOOD">ITEM_FOOD:</label>
-            <input type="text" name="ITEM_FOOD" id="ITEM_FOOD" pattern="/[A-Z0-9_]/" class="ITEM_FOOD"
+            <input type="text" name="ITEM_FOOD" id="ITEM_FOOD" pattern=/[A-Z0-9_]/ class="ITEM_FOOD"
             title="The name of the meal. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_FOOD'">
         </div>
-        <div class="ITEM_SIEGEAMMO">
+        <div class="ITEM_SIEGEAMMO" hidden>
             <label for="ITEM_SIEGEAMMO">ITEM_SIEGEAMMO:</label>
-            <input type="text" name="ITEM_SIEGEAMMO" id="ITEM_SIEGEAMMO" pattern="/[A-Z0-9_]/" class="ITEM_SIEGEAMMO"
+            <input type="text" name="ITEM_SIEGEAMMO" id="ITEM_SIEGEAMMO" pattern=/[A-Z0-9_]/ class="ITEM_SIEGEAMMO"
             title="The name of the seige ammo. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_SIEGEAMMO'">
         </div>
         <p>
@@ -62,7 +63,7 @@
             <legend>Materials:</legend>
             <p>
                 <input type="checkbox" name="HARD_MAT" id="HARD_MAT" class="materials"
-                onclick="enableOrDisableElements({disable:isCheckboxChecked('HARD_MAT'), className:'HARD_MAT'})"
+                onclick="enableOrDisableElements({disable:isCheckboxChecked('HARD_MAT'), className:'HARD_MAT'});"
                 title="This tool may be made from any hard material.">
                 <label for="HARD_MAT">HARD_MAT</label>
             </p>
@@ -78,13 +79,13 @@
             </p>
             <p>
                 <input type="checkbox" name="METAL_MAT" id="METAL_MAT" class="HARD_MAT materials"
-                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_MAT'), targetId:'METAL_WEAPON_MAT'})" 
+                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_MAT'), targetId:'METAL_WEAPON_MAT'});" 
                 title="This tool may be made from any metal.">
                 <label for="METAL_MAT">METAL_MAT</label>
             </p>
             <p>
                 <input type="checkbox" name="METAL_WEAPON_MAT" id="METAL_WEAPON_MAT materials" class="HARD_MAT"
-                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_WEAPON_MAT'), targetId:'METAL_MAT'})" 
+                onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('METAL_WEAPON_MAT'), targetId:'METAL_MAT'});" 
                 title="This tool may be made from any metal that is used for weapons.">
                 <label for="METAL_WEAPON_MAT">METAL_WEAPON_MAT</label>
             </p>
@@ -110,7 +111,7 @@
             </p>
             <p>
                 <input type="checkbox" name="SOFT_MAT" id="SOFT_MAT" class="materials"
-                onclick="enableOrDisableElements({disable:isCheckboxChecked('SOFT_MAT'), className:'SOFT_MAT'})" 
+                onclick="enableOrDisableElements({disable:isCheckboxChecked('SOFT_MAT'), className:'SOFT_MAT'});" 
                 title="This tool may be made from any soft material." >
                 <label for="SOFT_MAT">SOFT_MAT</label>
             </p>
@@ -131,13 +132,17 @@
                 <label for="SHEET_MAT">SHEET_MAT</label>
             </p>
         </fieldset>
-        <input type="number" name="LEVEL" id="LEVEL" min="1" value="2" class="ITEM_FOOD materials" title="How many ingredents must this meal include.">
+        <input type="number" name="LEVEL" id="LEVEL" min="1" value="2" class="ITEM_FOOD materials" hidden title="How many ingredents must this meal include.">
         <label for="LEVEL">LEVEL:</label>
         <br>
-        <button onclick="createItem()">Create Item</button>
+        <button onclick="createItem();">Create Item</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
         <fieldset>
             <legend>Item Data:</legend>
-            <div id="result"></div>
+            <p id="result"></p>
         </fieldset>
     </body>
 </html>
