@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Traps</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/attack.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="index.html">Main Page</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="item.html">Items</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <p>
+            NAME:
+            <input type="text" name="singular" id="singular" title="The singular form for the name of this trap component. Always required.">
+            <input type="text" name="plural" id="plural" title="The plural form for the name of this trap component. Always required.">
+        </p>
+        <p>
+            <label for="ADJECTIVE">ADJECTIVE:</label>
+            <input type="text" name="ADJECTIVE" id="ADJECTIVE" title="The adjective for this trap component">
+        </p>
+        <p>
+            <label for="SIZE">SIZE:</label>
+            <input type="number" name="SIZE" id="SIZE" min="1" value="100" step="1" title="The size of the trap component">
+        </p>
+        <p>
+            <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
+            <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" 
+            title="How many metal bars (x3) will be needed to make a trap component">
+        </p>
+        <p>
+            <label for="HITS">HITS:</label>
+            <input type="number" name="HITS" id="HITS" min="1" value="1" step="1" 
+            title="The number of times that this trap component will strike any hapless victim">
+        </p>
+        <p>
+            <input type="checkbox" name="IS_SCREW" id="IS_SCREW" class="checks" title="If checked, this trap component may be installed in a screw press">
+            <label for="IS_SCREW">IS_SCREW</label>
+        </p>
+        <p>
+            <input type="checkbox" name="IS_SPIKE" id="IS_SPIKE" class="checks" title="If checked, this trap component may be installed in a spike trap">
+            <label for="IS_SPIKE">IS_SPIKE</label>
+        </p>
+        <p>
+            <input type="checkbox" name="WOOD" id="WOOD" class="checks" title="If checked, this trap component can be constructed out of wood">
+            <label for="WOOD">WOOD</label>
+        </p>
+        <p>
+            <input type="checkbox" name="METAL" id="METAL" class="checks" title="If checked, this trap component can be constructed out of metal">
+            <label for="METAL">METAL</label>
+        </p>
+        <fieldset>
+            <legend>Attacks</legend>
+            Explanation:
+            <ol>
+                <li>Edge/Blunt: Whether this weapon has a sharp surface that cuts or pierces into an opponent or not</li>
+                <li>Contact area: This is high for slashing attacks, and lower for stabbing and bludgeoning attacks</li>
+                <li>Pentration size: This is high for stabbing attacks, and low for slashing attacks. It is ignored for blunt attacks</li>
+                <li>Verb 2: The transitive verb used to describe the action</li>
+                <li>Verb 3: The indicative verb used to describe the action</li>
+                <li>Noun: The noun used to describe the part of the weapon used in the attack. Optional. If blank, 'NO_SUB' will be used instead</li>
+                <li>Velocity multiplier: How much to multiply the velocity by</li>
+                
+            </ol>
+            <table id="attacks">
+                <thead>
+                    <tr>
+                        <th>Edge/Blunt</th>
+                        <th>Contact area</th>
+                        <th>Pentration size</th>
+                        <th>Verb 2</th>
+                        <th>Verb 3</th>
+                        <th>Noun</th>
+                        <th>Velocity multiplier</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <button onclick="createNewAttack(false)">Add new attack</button>
+            <button onclick="deleteLastAttack()">Delete last attack</button>
+        </fieldset>
+        <button onclick="createTrap()">Create Trap</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <p id="result"></p>
+        </fieldset>
+    </body>
+</html>
