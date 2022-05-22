@@ -44,3 +44,8 @@ p#result{
     border: 2px;
     font-family: 'Courier New', Courier, monospace;
 }
+
+p#warnings{
+    border: 2px;
+    font-family: 'Courier New', Courier, monospace;
+}
