@@ -24,6 +24,7 @@ function createWeapon() {
         errorObject.errorMessages.push("ERROR: The entry for 'NAME:plural' cannot be blank");
     }
     pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", singular, ":", plural, "]\n");
+    getSingleInput({ inputId: "ADJECTIVE", ignoreIfBlank: true, numberOfTabObjects: 2 });
     getMultipleInputs({
         inputIds: ["SIZE", "TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects: 2
     });
