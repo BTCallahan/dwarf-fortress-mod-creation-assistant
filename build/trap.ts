@@ -22,7 +22,7 @@ function createTrap() {
     );
     getMultipleInputs({inputIds:["ADJECTIVE", "SIZE", "MATERIAL_SIZE", "HITS"], numberOfTabObjects:2});
 
-    getMultipleCheckBoxes({inputClass:"checks", numberOfTabObjects:2});
+    getMultipleCheckBoxes({inputClass:"checks", useClassInPlaceOfId:true, numberOfTabObjects:2});
 
     addUpAttacks(2, false);
     
