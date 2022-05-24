@@ -41,6 +41,8 @@ function createWeapon()
     pushObject.pushTo.push(
         pushObject.tabObject, pushObject.tabObject, "[NAME:", singular, ":", plural, "]\n"
     );
+    getSingleInput({inputId:"ADJECTIVE", ignoreIfBlank:true, numberOfTabObjects:2})
+
     getMultipleInputs({
         inputIds:["SIZE", "TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects:2
     });
