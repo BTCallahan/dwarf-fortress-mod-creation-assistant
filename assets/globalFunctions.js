@@ -204,7 +204,7 @@ function hideOrUnhideElements({ hideClassNames, unhideClassNames }) {
         let ele = document.getElementsByClassName(element);
         let elea = Array.from(ele);
         elea.forEach((e) => {
-            e.hidden = true;
+            e.hidden = false;
         });
     });
 }

@@ -322,7 +322,7 @@ function hideOrUnhideElements({hideClassNames, unhideClassNames}:{hideClassNames
         let elea = Array.from(ele) as HTMLElement[];
 
         elea.forEach((e)=>{
-            e.hidden = true;
+            e.hidden = false;
         });
     });
 }
