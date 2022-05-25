@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Armor</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/armor.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="index.html">Main Page</a>
+                <a href="trap.html">Traps</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="armor.html">Armor and Clothing</a>
+                <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <p>
+            <label for="armorType">Armor Type:</label>
+            <select name="armorType" id="armorType" onchange="hideOrUnhideElements({hideClassNames:['HIDE'], unhideClassNames:[getSelectElementValue('armorType')]})">
+                <option value="ITEM_ARMOR" selected>ITEM_ARMOR - Shirts, vests, mail coats, and cuirasses</option>
+                <option value="ITEM_PANTS">ITEM_PANTS - Skirts, kilts, and trousers</option>
+                <option value="ITEM_GLOVES">ITEM_GLOVES - Gloves and gauntlets</option>
+                <option value="ITEM_SHOES">ITEM_SHOES - Shoes and boots</option>
+                <option value="ITEM_SHIELD">ITEM_SHIELD - Shields and bucklers</option>
+            </select>
+        </p>
+        <div class="HIDE ITEM_ARMOR">
+            <label for="ITEM_ARMOR">ITEM_ARMOR:</label>
+            <input type="text" name="ITEM_ARMOR" id="ITEM_ARMOR" pattern=/[A-Z0-9_]/
+            title="The name of the torso armor/clothing piece. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_ARMOR'">
+        </div>
+        <div class="HIDE ITEM_PANTS" hidden>
+            <label for="ITEM_PANTS">ITEM_PANTS:</label>
+            <input type="text" name="ITEM_PANTS" id="ITEM_PANTS" pattern=/[A-Z0-9_]/
+            title="The name of the leg armor/clothing piece. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_PANTS'">
+        </div>
+        <div class="HIDE ITEM_GLOVES" hidden>
+            <label for="ITEM_GLOVES">ITEM_GLOVES:</label>
+            <input type="text" name="ITEM_GLOVES" id="ITEM_GLOVES" pattern=/[A-Z0-9_]/
+            title="The name of the hand armor/clothing piece. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_GLOVES'">
+        </div>
+        <div class="HIDE ITEM_SHOES" hidden>
+            <label for="ITEM_SHOES">ITEM_SHOES:</label>
+            <input type="text" name="ITEM_SHOES" id="ITEM_SHOES" pattern=/[A-Z0-9_]/
+            title="The name of the hand armor/clothing piece. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_SHOES'">
+        </div>
+        <div class="HIDE ITEM_SHIELD" hidden>
+            <label for="ITEM_SHIELD">ITEM_SHIELD:</label>
+            <input type="text" name="ITEM_SHIELD" id="ITEM_SHIELD" pattern=/[A-Z0-9_]/
+            title="The name of the hand armor/clothing piece. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_SHIELD'">
+        </div>
+        <p>
+            NAME:
+            <input type="text" name="singular" id="singular" title="The singular form for the name of this armor. Always required.">
+            <input type="text" name="plural" id="plural" title="The plural form for the name of this armor. Always required.">
+        </p>
+        <p>
+            <label for="ADJECTIVE">ADJECTIVE:</label>
+            <input type="text" name="ADJECTIVE" id="ADJECTIVE" title="The adjective for this armor">
+        </p>
+        <p>
+            <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
+            <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" 
+            title="The number of bars that are required to force armor of this kind.">
+        </p>
+        <p>
+            <label for="ARMORLEVEL">ARMORLEVEL:</label>
+            <select name="ARMORLEVEL" id="ARMORLEVEL" title="This is the ">
+                <option value="0" selected>0 - Clothing</option>
+                <option value="1">1 - Leather</option>
+                <option value="2">2 - Mail</option>
+                <option value="3">3 - Plate</option>
+            </select>
+        </p>
+        <p class="HIDE ITEM_ARMOR ITEM_GLOVES ITEM_PANTS ITEM_SHOES">
+            <label for="METAL_ARMOR_LEVELS">METAL_ARMOR_LEVELS</label>
+            <input type="checkbox" name="METAL_ARMOR_LEVELS" id="METAL_ARMOR_LEVELS" 
+            title="If checked, examples of this item that are made from metal will be treated as one mark higher on the ARMORLEVEL scale, so civilian won't treat this armor like clothes">
+        </p>
+        <p class="HIDE ITEM_ARMOR ITEM_GLOVES ITEM_PANTS ITEM_SHOES">
+            <label for="CHAIN_METAL_TEXT">CHAIN_METAL_TEXT</label>
+            <input type="checkbox" name="CHAIN_METAL_TEXT" id="CHAIN_METAL_TEXT" 
+            title="If checked, then metal versions of this item will have the word 'chain' appended between the name of the material and the name of the item">
+        </p>
+        <p class="HIDE ITEM_ARMOR ITEM_PANTS">
+            <label for="PREPLURAL">PREPLURAL:</label>
+            <input type="text" name="PREPLURAL" id="PREPLURAL" 
+            title="This will replace the plural form of this armor with this phrase followed by the word 'of'. For example, if the name of the item was 'leggings' and PREPLURAL was 'pairs', then a stack of this item would show as 'X pairs of leggings'. Optional">
+        </p>
+        <p class="HIDE ITEM_ARMOR ITEM_PANTS">
+            <label for="MATERIAL_PLACEHOLDER">MATERIAL_PLACEHOLDER:</label>
+            <input type="text" name="MATERIAL_PLACEHOLDER" id="MATERIAL_PLACEHOLDER" 
+            title="If not left blank, and the item does not have a material assocated with it, this will be displayed wher the material name would normaly be displayed">
+        </p>
+        <p class="HIDE ITEM_GLOVES ITEM_SHOES ITEM_SHIELD" hidden>
+            <label for="UPSTEP">UPSTEP:</label>
+            <input type="number" name="UPSTEP" id="UPSTEP" value="0" min="-1" step="1" 
+            title="This value allows gloves and shoes to cover more of the arms and legs, respectivly. A value of '-1' will be treated as 'MAX'">
+        </p>
+        <p class="HIDE ITEM_ARMOR">
+            <label for="UBSTEP">UBSTEP:</label>
+            <input type="number" name="UBSTEP" id="UBSTEP" value="0" min="-1" step="1" 
+            title="This value affects the lengths of the sleeves, allowing them to cover more of the arms. A value of '-1' will be treated as 'MAX'">
+        </p>
+        <p class="HIDE ITEM_ARMOR ITEM_PANTS">
+            <label for="LBSTEP">LBSTEP:</label>
+            <input type="number" name="LBSTEP" id="LBSTEP" value="0" min="-1" step="1" 
+            title="This value affects the lengths of the sleeves, allowing them to cover more of the arms. A value of '-1' will be treated as 'MAX'">
+        </p>
+        <p class="HIDE ITEM_SHIELD" hidden>
+            <label for="BLOCKCHANCE">BLOCKCHANCE:</label>
+            <input type="number" name="BLOCKCHANCE" id="BLOCKCHANCE" value="0" min="-1" step="1" title="The chance of blocking ">
+        </p>
+        <fieldset class="HIDE ITEM_ARMOR ITEM_GLOVES ITEM_PANTS ITEM_SHOES">
+            <legend>Materials</legend>
+            <p>
+                <label for="SOFT">SOFT</label>
+                <input type="checkbox" name="SOFT" id="SOFT" class="CKNS" title="This item can be made from cloth">
+            </p>
+            <p>
+                <label for="METAL">METAL</label>
+                <input type="checkbox" name="METAL" id="METAL" class="CKNS" title="This item can be made from metal">
+            </p>
+            <p>
+                <label for="BARRED">BARRED</label>
+                <input type="checkbox" name="BARRED" id="BARRED" class="CKNS" title="This item can be made from bone">
+            </p>
+            <p>
+                <label for="SCALED">SCALED</label>
+                <input type="checkbox" name="SCALED" id="SCALED" class="CKNS" title="This item can be made from shells">
+            </p>
+            <p>
+                <label for="LEATHER">LEATHER</label>
+                <input type="checkbox" name="LEATHER" id="LEATHER" class="CKNS" title="This item can be made from leather">
+            </p>
+            <p>
+                <label for="SCALED">SCALED</label>
+                <input type="checkbox" name="SCALED" id="SCALED" class="CKNS" title="This item can be made from shells">
+            </p>
+        </fieldset>
+        <fieldset class="HIDE ITEM_ARMOR ITEM_GLOVES ITEM_PANTS ITEM_SHOES">
+            <legend>Structural Elasticity:</legend>
+            <p>
+                <label for="STRUCTURAL_ELASTICITY_CHAIN_ALL">STRUCTURAL_ELASTICITY_CHAIN_ALL</label>
+                <input type="checkbox" name="STRUCTURAL_ELASTICITY_CHAIN_ALL" id="STRUCTURAL_ELASTICITY_CHAIN_ALL" class="CKNS"
+                title="If the material that this item is made from has a _STRAIN_AT_YIELD value of less then 50000, it will be increased to that amount">
+            </p>
+            <p>
+                <label for="STRUCTURAL_ELASTICITY_CHAIN_METAL">STRUCTURAL_ELASTICITY_CHAIN_METAL</label>
+                <input type="checkbox" name="STRUCTURAL_ELASTICITY_CHAIN_METAL" id="STRUCTURAL_ELASTICITY_CHAIN_METAL" class="CKNS"
+                title="If the material that this item is made from has a _STRAIN_AT_YIELD value of less then 50000 AND it is made from metal, it will be increased to that amount">
+            </p>
+            <p>
+                <label for="STRUCTURAL_ELASTICITY_WOVEN_THREAD">STRUCTURAL_ELASTICITY_WOVEN_THREAD</label>
+                <input type="checkbox" name="STRUCTURAL_ELASTICITY_WOVEN_THREAD" id="STRUCTURAL_ELASTICITY_WOVEN_THREAD" class="CKNS"
+                title="If the material that this item is made from has a _STRAIN_AT_YIELD value of less then 50000 AND it is made from cloth, it will be increased to that amount. However its SHEAR_YIELD and SHEAR_FRACTURE will be reduced to 20000 and 30000, respectivly">
+            </p>
+        </fieldset>
+        <fieldset class="HIDE ITEM_ARMOR ITEM_GLOVES ITEM_PANTS ITEM_SHOES">
+            <legend>Size:</legend>
+            <p>
+                <label for="SHAPED">SHAPED</label>
+                <input type="checkbox" name="SHAPED" id="SHAPED" class="CKNS" title="Only a single item with this tag can be worn on a body part at a time">
+            </p>
+            <p>
+                <label for="LAYER_SIZE">LAYER_SIZE:</label>
+                <input type="number" name="LAYER_SIZE" id="LAYER_SIZE" class="INNS" value="10" min="1" step="1" 
+                title="The bulk of a garment. This, along with the value for 'LAYER_PERMIT', determins how many of this item can be worn over a single body part">
+            </p>
+            <p>
+                <label for="LAYER_PERMIT">LAYER_PERMIT:</label>
+                <input type="number" name="LAYER_PERMIT" id="LAYER_PERMIT" class="INNS" value="10" min="1" step="1" 
+                title="The maximun combined bulk of the proceding layers on a body part. ">
+            </p>
+            <p>
+                <label for="LAYER">LAYER:</label>
+                <select name="LAYER" id="LAYER">
+                    <option value="UNDER" selected>UNDER - Undercloths, socks</option>
+                    <option value="OVER">OVER - Standard clothes</option>
+                    <option value="ARMOR">ARMOR - Armor</option>
+                    <option value="COVER">COVER - Cloaks</option>
+                </select>
+            </p>
+            <p>
+                <label for="COVERAGE">COVERAGE:</label>
+                <input type="number" name="COVERAGE" id="COVERAGE" class="INNS" min="1" max="100" value="100" step="1" 
+                title="The percentage of times that this will deflect or impede an attack. This also affects against extreme temperatures and contaminants">
+            </p>
+        </fieldset>
+        <button onclick="createArmor();">Create Armor</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <p id="result"></p>
+        </fieldset>
+    </body>
+</html>
