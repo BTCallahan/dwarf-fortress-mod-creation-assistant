@@ -13,7 +13,7 @@
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="assets/styling.css">
     </head>
     <body onload="addNewDescription()">
         <!--[if lt IE 7]>
@@ -35,12 +35,12 @@
             title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
         </p>
         <label for="ITEM_TOOL">ITEM_TOOL:</label>
-        <input type="text" name="ITEM_TOOL" id="ITEM_TOOL" pattern=/[A-Z0-9_]/
+        <input type="text" name="ITEM_TOOL" id="ITEM_TOOL" pattern="/[A-Z0-9_]/" required
         title="The name of the tool. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TOOL'">
         <p>
             NAME:
-            <input type="text" name="singular" id="singular" title="The singular form for the name of this tool. Always required.">
-            <input type="text" name="plural" id="plural" title="The plural form for the name of this tool. Always required.">
+            <input type="text" name="singular" id="singular" required title="The singular form for the name of this tool. Always required.">
+            <input type="text" name="plural" id="plural" required title="The plural form for the name of this tool. Always required.">
         </p>
         <fieldset>
             <legend>Description</legend>
@@ -52,7 +52,7 @@
         </fieldset>
         <p>
             <label for="SIZE">SIZE:</label>
-            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" title="The size of the tool.">
+            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" class="size" title="The size of the tool.">
         </p>
         <p>
             <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
@@ -65,7 +65,7 @@
         </p>
         <p>
             <label for="TILE">TILE:</label>
-            <input type="number" name="TILE" id="TILE" step="1" title="The tile used to show this tool.">
+            <input type="number" name="TILE" id="TILE" min="0" max="255" step="1" class="ch3" title="The tile used to show this tool.">
         </p>
         <p>
             <label for="INVERTED_TILE">INVERTED_TILE</label>
