@@ -24,6 +24,18 @@ input[type="number"]{
     width: 50px;
 }
 
+input.ch1[type="number"]{
+    width: 3ch;
+}
+
+input.ch3[type="number"]{
+    width: 5ch;
+}
+
+input.size[type="number"]{
+    width: 10ch;
+}
+
 input.desc[type="text"]{
     height: 4ch;
 }
