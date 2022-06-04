@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Shapes</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/shape.js"></script>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/styling.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="trap.html">Traps</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="armor.html">Armor and Clothing</a>
+                <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <p>
+            <input type="text" name="SHAPE" id="SHAPE" pattern="/[A-Z0-9_]/" required
+            title="The name of this shape. This should have only capital letter and underscores">
+            <label for="SHAME">SHAPE:</label>
+        </p>
+        <p>
+            NAME:
+            <input type="text" name="sing" id="sing" required title="The singular form of the name of this shape">
+            <input type="text" name="plur" id="plur" required title="The plural form of the name of this shape">
+        </p>
+        <p>
+            <input type="text" name="WORD" id="WORD" 
+            title="This should be a word that is defined in language_words.txt or a similar file. Optional">
+            <label for="WORD">WORD:</label>
+        </p>
+        <p>
+            <input type="number" name="TILE" id="TILE" min="0" max="255" step="1" class="ch3" required title="The tile used by this shape. Mandatory">
+            <label for="TILE">TILE:</label>
+        </p>
+        <p>
+            <input type="number" name="FACES" id="FACES" min="0" step="1" value="0" 
+            title="If this shape is a facited gem, or a die, then this shows how many faces it has. If zero, it will be ignored">
+            <label for="FACES">FACES:</label>
+        </p>
+        <fieldset>
+            <legend>Adjectives:</legend>
+            <p id="adje">
+
+            </p>
+            
+            <button onclick="createAdjective();checkAdj();">Add New Adjective</button>
+            <button onclick="removeAdjective();checkAdj();">Delete Last Adjective</button>
+        </fieldset>
+        <fieldset>
+            <legend>Categories:</legend>
+            <p id="cate">
+
+            </p>
+            <button onclick="createCategory();">Add New Category</button>
+            <button onclick="removeCategory();">Delete Last Category</button>
+
+        </fieldset>
+        <fieldset>
+            <legend>Gem Related:</legend>
+            <p>
+                <input type="checkbox" name="GEMS_USE_ADJ" id="GEMS_USE_ADJ" value="GEMS_USE_ADJ" disabled class="GEM">
+                <label for="GEMS_USE_ADJ">GEMS_USE_ADJ</label>
+            </p>
+            <p>
+                <input type="checkbox" name="GEMS_USE_ADJ_NOUN" id="GEMS_USE_ADJ_NOUN" value="GEMS_USE_ADJ_NOUN" disabled class="GEM">
+                <label for="GEMS_USE_ADJ_NOUN">GEMS_USE_ADJ_NOUN</label>
+            </p>
+            <p>
+                <input type="checkbox" name="GEMS_USE_NOUN" id="GEMS_USE_NOUN" class="GEM">
+                <label for="GEMS_USE_NOUN">GEMS_USE_NOUN</label>
+            </p>
+        </fieldset>
+        <button onclick="createShape();">Create Shape</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <p id="result"></p>
+        </fieldset>
+    </body>
+</html>
