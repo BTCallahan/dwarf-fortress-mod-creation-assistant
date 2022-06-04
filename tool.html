@@ -47,8 +47,8 @@
             DESCRIPTION:
             <div id="desc">
             </div>
-            <button onclick="addNewDescription()">Add new description paragraph</button>
-            <button onclick="deleteLastDescription()">Delete last description paragraph</button>
+            <button onclick="addNewDescription()">Add New Description Paragraph</button>
+            <button onclick="deleteLastDescription()">Delete Last Description Paragraph</button>
         </fieldset>
         <p>
             <label for="SIZE">SIZE:</label>
@@ -57,7 +57,7 @@
         <p>
             <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
             <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" 
-            title="The number of bars that are required to force a tool of this kind.">
+            title="The number of bars that are required to force a weapon of this kind. The actual number is this value divided by three">
         </p>
         <p>
             <label for="VALUE">VALUE:</label>
@@ -80,6 +80,7 @@
             <input type="checkbox" name="FURNITURE" id="FURNITURE" title="This item can be stored in a furniture stockpile.">
         </p>
         <p>
+            <label for="SHAPE_CATEGORY">SHAPE_CATEGORY:</label>
             <select name="SHAPE_CATEGORY" id="SHAPE_CATEGORY">
                 <option value="NONE" selected>No shape category</option>
                 <option value="SIMPLE">Simple</option>
@@ -266,6 +267,7 @@
             title="No artistic improvements, such as bands or sewn images, can be made to this tool.">
             <label for="UNIMPROVABLE">UNIMPROVABLE</label>
         </p>
+        <button>Create New Tool</button>
         <fieldset>
             <legend>Warnings:</legend>
             <p id="warnings"></p>

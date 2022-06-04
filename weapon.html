@@ -52,22 +52,22 @@
         </p>
         <p>
             <label for="SIZE">SIZE:</label>
-            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" title="The size of the weapon.">
+            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" class="size" title="The size of the weapon.">
         </p>
         <p>
             <label for="TWO_HANDED">TWO_HANDED:</label>
-            <input type="number" name="TWO_HANDED" id="TWO_HANDED" min="0" value="50000" step="1" 
+            <input type="number" name="TWO_HANDED" id="TWO_HANDED" min="0" value="50000" step="1" class="size"
             title="Creatures smaller then this size will be required to use two hands to wield the weapon.">    
         </p>
         <p>
             <label for="MINIMUM_SIZE">MINIMUM_SIZE:</label>
-            <input type="number" name="MINIMUM_SIZE" id="MINIMUM_SIZE" min="0" value="40000" step="1" 
+            <input type="number" name="MINIMUM_SIZE" id="MINIMUM_SIZE" min="0" value="40000" step="1" class="size"
             title="Creatures smaller then this size will be unable to wield this weapon.">
         </p>
         <p>
             <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
             <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" 
-            title="The number of bars that are required to force a weapon of this kind.">
+            title="The number of bars that are required to force a weapon of this kind. The actual number is this value divided by three">
         </p>
         <p>
             <input type="checkbox" name="TRAINING" id="TRAINING" title="If checked, this weapon will only be able to be constructed from wood.">
@@ -152,8 +152,8 @@
                 <tbody>
                 </tbody>
             </table>
-            <button onclick="createNewAttack(true)">Add new attack</button>
-            <button onclick="deleteLastAttack()">Delete last attack</button>
+            <button onclick="createNewAttack(true)">Add New Attack</button>
+            <button onclick="deleteLastAttack()">Delete Last Attack</button>
         </fieldset>
         <button onclick="createWeapon()">Create Weapon</button>
         <fieldset>

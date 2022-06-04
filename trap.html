@@ -35,6 +35,11 @@
             title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
         </p>
         <p>
+            <label for="ITEM_TRAPCOMP">ITEM_TRAPCOMP:</label>
+            <input type="text" name="ITEM_TRAPCOMP" id="ITEM_TRAPCOMP" pattern="/[A-Z0-9_]/" 
+            title="The name of the trap componant. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TRAPCOMP'">
+        </p>
+        <p>
             NAME:
             <input type="text" name="singular" id="singular" title="The singular form for the name of this trap component. Always required.">
             <input type="text" name="plural" id="plural" title="The plural form for the name of this trap component. Always required.">
@@ -50,7 +55,7 @@
         <p>
             <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
             <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="3" step="1" 
-            title="How many metal bars will be needed to make a trap component. The acutal number will be one third of this number">
+            title="The number of bars that are required to force a weapon of this kind. The actual number is this value divided by three">
         </p>
         <p>
             <label for="HITS">HITS:</label>
@@ -102,8 +107,8 @@
                 <tbody>
                 </tbody>
             </table>
-            <button onclick="createNewAttack(false)">Add new attack</button>
-            <button onclick="deleteLastAttack()">Delete last attack</button>
+            <button onclick="createNewAttack(false)">Add New Attack</button>
+            <button onclick="deleteLastAttack()">Delete Last Attack</button>
         </fieldset>
         <button onclick="createTrap()">Create Trap</button>
         <fieldset>
