@@ -15,6 +15,25 @@ function addNewDescription() {
         elementsToAppend: [createTextInput({ elementID: `DESCRIPTION_${num}`, elementName: `DESCRIPTION_${num}`, elementClass: "DESCRIPTION", maxLength: 325 })]
     }));
 }
+function checkIfIsWeapon() {
+    let weapons = Array.from(document.getElementsByClassName("weapon"));
+    let isWeapon = weapons.some(element => {
+        return element.checked;
+    });
+    if (isWeapon) {
+        let weap = document.getElementById("isWeapon");
+        weap.disabled = !weap.checked;
+    }
+    let weaponRelated = Array.from(document.getElementsByClassName("weaponRelated"));
+    weaponRelated.forEach(element => {
+        element.required = isWeapon;
+        element.disabled = !isWeapon;
+    });
+    let weaponButtons = Array.from(document.getElementsByClassName("createOrRemoveWeapon"));
+    weaponButtons.forEach(element => {
+        element.disabled = !isWeapon;
+    });
+}
 function createTool() {
     clearPastResults("spaces");
     getSingleInput({ inputId: "ITEM_TOOL", ignoreIfBlank: false, numberOfTabObjects: 1 });
@@ -40,6 +59,15 @@ function createTool() {
     getMultipleCheckBoxesByClass({ inputClass: "SOFT_MAT", numberOfTabObjects: 2, ignoreIfDisabled: true });
     getSingleInput({ inputId: "CONTAINER_CAPACITY", numberOfTabObjects: 2, ignoreIfBlank: true, valueThatWillBeIgnored: "0" });
     getSingleCheckBox({ inputId: "UNIMPROVABLE", numberOfTabObjects: 2 });
+    let weapons = Array.from(document.getElementsByClassName("weapon"));
+    let isWeapon = weapons.some(element => {
+        return element.checked;
+    });
+    if (isWeapon) {
+        getMultipleInputsById({ inputIds: ["TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects: 2 });
+        getSingleInput({ inputId: "SKILL", numberOfTabObjects: 2, ignoreIfDisabled: false, ignoreIfBlank: false });
+        addUpAttacks(2, true);
+    }
     printResults();
 }
 //# sourceMappingURL=tool.js.map

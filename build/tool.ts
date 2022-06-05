@@ -25,6 +25,35 @@ function addNewDescription()
     }));
 }
 
+function checkIfIsWeapon() 
+{
+    let weapons = Array.from(<HTMLCollectionOf<HTMLInputElement>><any> document.getElementsByClassName("weapon"));
+
+    let isWeapon = weapons.some(element => {
+        return element.checked;
+    });
+    if (isWeapon)
+    {
+        let weap = <HTMLInputElement><any> document.getElementById("isWeapon");
+
+        weap.disabled = !weap.checked;
+    }
+    let weaponRelated = Array.from(<HTMLCollectionOf<HTMLInputElement>><any> document.getElementsByClassName("weaponRelated"));
+
+    weaponRelated.forEach(element => {
+
+        element.required = isWeapon;
+
+        element.disabled = !isWeapon;
+    });
+    let weaponButtons = Array.from(<HTMLCollectionOf<HTMLButtonElement>><any> document.getElementsByClassName("createOrRemoveWeapon"));
+
+    weaponButtons.forEach(element => {
+
+        element.disabled = !isWeapon;
+    });
+}
+
 function createTool()
 {
     clearPastResults("spaces");
@@ -70,5 +99,18 @@ function createTool()
 
     getSingleCheckBox({inputId:"UNIMPROVABLE", numberOfTabObjects:2});
 
+    let weapons = Array.from(<HTMLCollectionOf<HTMLInputElement>><any> document.getElementsByClassName("weapon"));
+
+    let isWeapon = weapons.some(element => {
+        return element.checked;
+    });
+    if (isWeapon)
+    {
+        getMultipleInputsById({inputIds:["TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects:2});
+
+        getSingleInput({inputId:"SKILL", numberOfTabObjects:2, ignoreIfDisabled:false, ignoreIfBlank:false});
+
+        addUpAttacks(2, true);
+    }
     printResults();
 }
