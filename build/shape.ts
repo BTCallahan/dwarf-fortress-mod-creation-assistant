@@ -78,7 +78,7 @@ function createShape()
 
     getSingleInput({inputId:"SHAPE", numberOfTabObjects:1, ignoreIfBlank:false, ignoreIfDisabled:false});
 
-    pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", getInputElementValue("sing"), ":", getInputElementValue("plur"), "]\n");
+    pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", getInputElementValue("singular"), ":", getInputElementValue("plural"), "]\n");
 
     getSingleInput({inputId:"WORD", ignoreIfBlank:true, numberOfTabObjects:2});
 
