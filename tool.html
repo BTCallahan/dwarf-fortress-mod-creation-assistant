@@ -9,13 +9,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Tools</title>
         <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/attack.js"></script>
         <script type="text/javascript" src="assets/tool.js"></script>
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="assets/styling.css">
     </head>
-    <body onload="addNewDescription()">
+    <body onload="addNewDescription();checkIfIsWeapon();">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -111,23 +112,23 @@
                 <label for="GRIND_POWDER_GRINDER">GRIND_POWDER_GRINDER</label>
             </p>
             <p>
-                <input type="checkbox" name="MEAT_CARVING" id="MEAT_CARVING" class="TOOL_USE" title="Used for meat carving tools">
+                <input type="checkbox" name="MEAT_CARVING" id="MEAT_CARVING" class="TOOL_USE" onclick="checkIfIsWeapon();" title="Used for meat carving tools">
                 <label for="MEAT_CARVING">MEAT_CARVING</label>
             </p>
             <p>
-                <input type="checkbox" name="MEAT_BONING" id="MEAT_BONING" class="TOOL_USE" title="Used for meat deboning tools">
+                <input type="checkbox" name="MEAT_BONING" id="MEAT_BONING" class="TOOL_USE weapon" onclick="checkIfIsWeapon();" title="Used for meat deboning tools">
                 <label for="MEAT_BONING">MEAT_BONING</label>
             </p>
             <p>
-                <input type="checkbox" name="MEAT_SLICING" id="MEAT_SLICING" class="TOOL_USE" title="Used for meat slicing tools">
+                <input type="checkbox" name="MEAT_SLICING" id="MEAT_SLICING" class="TOOL_USE weapon" onclick="checkIfIsWeapon();" title="Used for meat slicing tools">
                 <label for="MEAT_SLICING">MEAT_SLICING</label>
             </p>
             <p>
-                <input type="checkbox" name="MEAT_CLEAVING" id="MEAT_CLEAVING" class="TOOL_USE" title="Used for meat cleaving tools">
+                <input type="checkbox" name="MEAT_CLEAVING" id="MEAT_CLEAVING" class="TOOL_USE weapon" onclick="checkIfIsWeapon();" title="Used for meat cleaving tools">
                 <label for="MEAT_CLEAVING">MEAT_CLEAVING</label>
             </p>
             <p>
-                <input type="checkbox" name="HOLD_MEAT_FOR_CARVING" id="HOLD_MEAT_FOR_CARVING" class="TOOL_USE" title="Used for carving forks">
+                <input type="checkbox" name="HOLD_MEAT_FOR_CARVING" id="HOLD_MEAT_FOR_CARVING" onclick="checkIfIsWeapon();" class="TOOL_USE weapon" title="Used for carving forks">
                 <label for="HOLD_MEAT_FOR_CARVING">HOLD_MEAT_FOR_CARVING</label>
             </p>
             <p>
@@ -268,6 +269,79 @@
             title="No artistic improvements, such as bands or sewn images, can be made to this tool.">
             <label for="UNIMPROVABLE">UNIMPROVABLE</label>
         </p>
+        <fieldset>
+            <legend>Weapons:</legend>
+            <p>
+                <label for="isWeapon">Is this tool a weapon?</label>
+                <input type="checkbox" name="isWeapon" id="isWeapon" class="weapon" onclick="checkIfIsWeapon();" 
+                title="Normaly, if any of the tokens 'MEAT_BONING', 'MEAT_CARVING', 'MEAT_CLEAVING', or 'MEAT_SLICING' are present the tool will be treated as a weapon. However for some tools, like 'ITEM_TOOL_STONE_AXE' in the vanilla raws are treated was weapons even though they didn't have any of those four tags. Checking this allows for it to be treated as a weapon">
+            </p>
+            <p>
+                <label for="TWO_HANDED">TWO_HANDED:</label>
+                <input type="number" name="TWO_HANDED" id="TWO_HANDED" min="0" value="50000" step="1" class="size weaponRelated"
+                title="Creatures smaller then this size will be required to use two hands to wield the weapon.">    
+            </p>
+            <p>
+                <label for="MINIMUM_SIZE">MINIMUM_SIZE:</label>
+                <input type="number" name="MINIMUM_SIZE" id="MINIMUM_SIZE" min="0" value="40000" step="1" class="size weaponRelated"
+                title="Creatures smaller then this size will be unable to wield this weapon.">
+            </p>
+            <p>
+                <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
+                <input type="number" name="MATERIAL_SIZE" id="MATERIAL_SIZE" min="1" value="1" step="1" class="weaponRelated"
+                title="The number of bars that are required to force a weapon of this kind. The actual number is this value divided by three">
+            </p>
+            <label for="SKILL">SKILL:</label>
+            <select name="SKILL" id="SKILL" class="weaponRelated" title="The skill that will be use for melee attacks using this weapon">
+                <option value="MINING">MINING - Pickaxes (this allows the weapon to be used to mine)</option>
+                <option value="AXE">AXE - Axes and halberds</option>
+                <option value="SWORD" selected>SWORD - Small, medium, and two-handed Swords</option>
+                <option value="DAGGER">DAGGER - Daggers and knives</option>
+                <option value="MACE">MACE - Maces, flails, and morningstars</option>
+                <option value="HAMMER">HAMMER - Hammers and mauls</option>
+                <option value="WHIP">WHIP - Whips and scourges</option>
+                <option value="PIKE">PIKE - Pikes</option>
+                <option value="SPEAR">SPEAR - Spears</option>
+            </select>
+            <fieldset>
+                <legend>Attacks</legend>
+                Explanation:
+                <ol>
+                    <li>Edge/Blunt: Whether this weapon has a sharp surface that cuts or pierces into an opponent or not</li>
+                    <li>Contact area: This is high for slashing attacks, and lower for stabbing and bludgeoning attacks</li>
+                    <li>Pentration size: This is high for stabbing attacks, and low for slashing attacks. It is ignored for blunt attacks</li>
+                    <li>Verb 2: The transitive verb used to describe the action</li>
+                    <li>Verb 3: The indicative verb used to describe the action</li>
+                    <li>Noun: The noun used to describe the part of the weapon used in the attack. Optional. If blank, 'NO_SUB' will be used instead</li>
+                    <li>Velocity multiplier: How much to multiply the velocity by</li>
+                    <li>Preperation time: How long it takes to prepare to execute an attack</li>
+                    <li>Recovery time: How long it takes to recover from executing an attack</li>
+                    <li>Multiple strike penalty: The penalty (if any) for multiple strike attacks</li>
+                </ol>
+                <table id="attacks">
+                    <thead>
+                        <tr>
+                            <th>Edge/Blunt</th>
+                            <th>Contact area</th>
+                            <th>Pentration size</th>
+                            <th>Verb 2</th>
+                            <th>Verb 3</th>
+                            <th>Noun</th>
+                            <th>Velocity multiplier</th>
+                            <th>Preperation time</th>
+                            <th>Recovery time</th>
+                            <th>Multiple strike penalty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <button onclick="createNewAttack(true, 'weaponRelated');" class="createOrRemoveWeapon">Add New Attack</button>
+                <button onclick="deleteLastAttack();" class="createOrRemoveWeapon">Delete Last Attack</button>
+            </fieldset>
+            
+
+        </fieldset>
         <button onclick="createTool();">Create New Tool</button>
         <fieldset>
             <legend>Warnings:</legend>
