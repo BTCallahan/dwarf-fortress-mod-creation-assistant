@@ -1,4 +1,20 @@
 "use strict";
+var armorMap = new Map();
+armorMap.set("ITEM_ARMOR", ["ITEM_PANTS", "ITEM_GLOVES", "ITEM_SHOES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_PANTS", ["ITEM_ARMOR", "ITEM_GLOVES", "ITEM_SHOES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_GLOVES", ["ITEM_ARMOR", "ITEM_PANTS", "ITEM_SHOES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_SHOES", ["ITEM_ARMOR", "ITEM_PANTS", "ITEM_GLOVES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_SHIELD", ["ITEM_ARMOR", "ITEM_PANTS", "ITEM_GLOVES", "ITEM_SHOES"]);
+function onArmorChange() {
+    let armorType = getSelectElementValue("armorType");
+    let req = document.getElementById(armorType);
+    req.required = true;
+    let notReqItems = armorMap.get(armorType);
+    notReqItems.forEach(element => {
+        let notReq = document.getElementById(element);
+        notReq.required = false;
+    });
+}
 function createArmor() {
     clearPastResults("spaces");
     let sel = getSelectElementValue("armorType");

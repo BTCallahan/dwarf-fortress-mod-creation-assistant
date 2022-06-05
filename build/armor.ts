@@ -1,3 +1,30 @@
+
+var armorMap:Map<string, string[]> = new Map<string, string[]>();
+
+armorMap.set("ITEM_ARMOR", ["ITEM_PANTS", "ITEM_GLOVES", "ITEM_SHOES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_PANTS", ["ITEM_ARMOR", "ITEM_GLOVES", "ITEM_SHOES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_GLOVES", ["ITEM_ARMOR", "ITEM_PANTS", "ITEM_SHOES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_SHOES", ["ITEM_ARMOR", "ITEM_PANTS", "ITEM_GLOVES", "ITEM_SHIELD"]);
+armorMap.set("ITEM_SHIELD", ["ITEM_ARMOR", "ITEM_PANTS", "ITEM_GLOVES", "ITEM_SHOES"]);
+
+function onArmorChange()
+{
+    let armorType = getSelectElementValue("armorType");
+
+    let req = <HTMLInputElement><any> document.getElementById(armorType);
+
+    req.required = true;
+
+    let notReqItems = armorMap.get(armorType) as string[];
+
+    notReqItems.forEach(element => {
+
+        let notReq = <HTMLInputElement><any> document.getElementById(element);
+
+        notReq.required = false;
+    });
+}
+
 function createArmor() 
 {
     clearPastResults("spaces");
