@@ -9,7 +9,20 @@ function hideElementsByItemType()
 {
     let it = getSelectElementValue("ITEM_TYPE");
 
-    hideOrUnhideElements({unhideClassNames:[it], hideClassNames:enableDisableDictionary.get(it) as string[]})
+    let hideItems = enableDisableDictionary.get(it) as string[];
+
+    hideAndUnhideElements({unhideClassNames:[it], hideClassNames:hideItems});
+
+    let req = <HTMLInputElement><any> document.getElementById(it);
+
+    req.required = true;
+
+    hideItems.forEach(element => {
+
+        let notReq = <HTMLInputElement><any> document.getElementById(element);
+
+        notReq.required = false;
+    })
 }
 
 function createItem() {
@@ -39,7 +52,7 @@ function createItem() {
 
     if (itemType === "ITEM_TOY")
     {
-        getMultipleCheckBoxes({inputClass:"materials", useClassInPlaceOfId:true, appendClassInFrontOfId:false, numberOfTabObjects:2, ignoreIfDisabled:true});
+        getMultipleCheckBoxesByClass({inputClass:"materials", elementType:PrefixValueType.id, appendClassInFrontOfId:false, numberOfTabObjects:2, ignoreIfDisabled:true});
     }
     else if (itemType === "ITEM_FOOD")
     {
