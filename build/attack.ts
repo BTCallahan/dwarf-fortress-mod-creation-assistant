@@ -1,4 +1,4 @@
-function createNewAttack(hasPrepRecoveryAndFlags:boolean) 
+function createNewAttack(hasPrepRecoveryAndFlags:boolean, classesToAdd="") 
 {
     let attackTable = <HTMLTableElement><any> document.getElementById("attacks");
 
@@ -10,7 +10,7 @@ function createNewAttack(hasPrepRecoveryAndFlags:boolean)
 
     let cell1 = newRow.insertCell();
 
-    let sel = createSelect({elementID:`weaponType_${rows}`, elementName:`weaponType_${rows}`})
+    let sel = createSelect({elementID:`weaponType_${rows}`, elementName:`weaponType_${rows}`, elementClass:classesToAdd})
 
     addOptionToSelect({value:"BLUNT", text:"Blunt", select:sel});
     addOptionToSelect({value:"EDGE", text:"Edge", select:sel});
@@ -21,57 +21,71 @@ function createNewAttack(hasPrepRecoveryAndFlags:boolean)
 
     let cell2 = newRow.insertCell();
 
-    let conArea = createNumberInput({defaultValue:"0", inputMin:"0", elementName:`contactArea_${rows}`, elementID:`contactArea_${rows}`});
-
+    let conArea = createNumberInput({
+        defaultValue:"0", inputMin:"0", elementName:`contactArea_${rows}`, elementID:`contactArea_${rows}`, elementClass:classesToAdd
+    });
     cell2.appendChild(conArea);
 
     let cell3 = newRow.insertCell();
 
-    let penSize = createNumberInput({defaultValue:"0", inputMin:"0", elementName:`penitrationSize_${rows}`, elementID:`penitrationSize_${rows}`});
-
+    let penSize = createNumberInput({
+        defaultValue:"0", inputMin:"0", elementName:`penitrationSize_${rows}`, elementID:`penitrationSize_${rows}`, elementClass:classesToAdd
+    });
     cell3.appendChild(penSize);
 
     let cell4 = newRow.insertCell();
 
-    let verb2 = createTextInput({elementName:`verb2_${rows}`, elementID:`verb2_${rows}`});
+    let verb2 = createTextInput({elementName:`verb2_${rows}`, elementID:`verb2_${rows}`, elementClass:classesToAdd});
 
     cell4.appendChild(verb2);
     
     let cell5 = newRow.insertCell();
 
-    let verb3 = createTextInput({elementName:`verb3_${rows}`, elementID:`verb3_${rows}`});
+    let verb3 = createTextInput({elementName:`verb3_${rows}`, elementID:`verb3_${rows}`, elementClass:classesToAdd});
 
     cell5.appendChild(verb3);
     
     let cell6 = newRow.insertCell();
 
-    let noun = createTextInput({elementName:`noun_${rows}`, elementID:`noun_${rows}`});
+    let noun = createTextInput({elementName:`noun_${rows}`, elementID:`noun_${rows}`, elementClass:classesToAdd, defaultValue:"NO_SUB"});
 
+    noun.onchange = function () {
+
+        let n = <HTMLInputElement><any> document.getElementById(`noun_${rows}`);
+
+        if (n.value === "")
+        {
+            n.value = "NO_SUB";
+        }
+    }
     cell6.appendChild(noun);
 
     let cell7 = newRow.insertCell();
 
-    let velMul = createNumberInput({defaultValue:"1", inputMin:"1", elementName:`velocityMultiplyer_${rows}`, elementID:`velocityMultiplyer_${rows}`});
-
+    let velMul = createNumberInput({
+        defaultValue:"1", inputMin:"1", elementName:`velocityMultiplyer_${rows}`, elementID:`velocityMultiplyer_${rows}`, elementClass:classesToAdd
+    });
     cell7.appendChild(velMul);
 
     if (hasPrepRecoveryAndFlags)
     {
         let cell8 = newRow.insertCell();
 
-        let prepTime = createNumberInput({defaultValue:"1", inputMin:"1", elementName:`preperationTime_${rows}`, elementID:`preperationTime_${rows}`});
-    
+        let prepTime = createNumberInput({
+            defaultValue:"1", inputMin:"1", elementName:`preperationTime_${rows}`, elementID:`preperationTime_${rows}`, elementClass:classesToAdd
+        });
         cell8.appendChild(prepTime);
     
         let cell9 = newRow.insertCell();
     
-        let recTime = createNumberInput({defaultValue:"1", inputMin:"1", elementName:`recoveryTime_${rows}`, elementID:`recoveryTime_${rows}`});
-    
+        let recTime = createNumberInput({
+            defaultValue:"1", inputMin:"1", elementName:`recoveryTime_${rows}`, elementID:`recoveryTime_${rows}`, elementClass:classesToAdd
+        });
         cell9.appendChild(recTime)
     
         let cell10 = newRow.insertCell();
     
-        let sel2 = createSelect({elementID:`attackFlag_${rows}`, elementName:`attackFlag_${rows}`});
+        let sel2 = createSelect({elementID:`attackFlag_${rows}`, elementName:`attackFlag_${rows}`, elementClass:classesToAdd});
     
         addOptionToSelect({value:"ATTACK_FLAG_INDEPENDENT_MULTIATTACK", text:"ATTACK_FLAG_INDEPENDENT_MULTIATTACK - No multi-strike penalty", select:sel2});
         addOptionToSelect({value:"NA", text:"Standard multi-strike penalty", select:sel2});
