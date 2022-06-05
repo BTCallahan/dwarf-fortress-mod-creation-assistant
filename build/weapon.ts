@@ -9,7 +9,6 @@ function activateRanged()
     enableOrDisableElements({disable:deactivate, className:"ranged_weapon"});
 }
 
-
 function createWeapon()
 {
     clearPastResults("spaces");
@@ -43,11 +42,11 @@ function createWeapon()
     );
     getSingleInput({inputId:"ADJECTIVE", ignoreIfBlank:true, numberOfTabObjects:2})
 
-    getMultipleInputs({
+    getMultipleInputsById({
         inputIds:["SIZE", "TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects:2
     });
 
-    getMultipleCheckBoxes({
+    getMultipleCheckBoxesById({
         inputIds:["TRAINING", "CAN_STONE"], numberOfTabObjects:2, 
     });
 

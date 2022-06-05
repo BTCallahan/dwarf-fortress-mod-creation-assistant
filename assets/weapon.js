@@ -25,10 +25,10 @@ function createWeapon() {
     }
     pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", singular, ":", plural, "]\n");
     getSingleInput({ inputId: "ADJECTIVE", ignoreIfBlank: true, numberOfTabObjects: 2 });
-    getMultipleInputs({
+    getMultipleInputsById({
         inputIds: ["SIZE", "TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects: 2
     });
-    getMultipleCheckBoxes({
+    getMultipleCheckBoxesById({
         inputIds: ["TRAINING", "CAN_STONE"], numberOfTabObjects: 2,
     });
     getSingleInput({ inputId: "SKILL", numberOfTabObjects: 2, ignoreIfDisabled: false, ignoreIfBlank: false });
