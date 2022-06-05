@@ -43,7 +43,7 @@
         </select>
         <div class="ITEM_TOY">
             <label for="ITEM_TOY">ITEM_TOY:</label>
-            <input type="text" name="ITEM_TOY" id="ITEM_TOY" pattern="/[A-Z0-9_]/" class="ITEM_TOY"
+            <input type="text" name="ITEM_TOY" id="ITEM_TOY" pattern="/[A-Z0-9_]/" class="ITEM_TOY" required
             title="The name of the toy. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_TOY'">
         </div>
         <div class="ITEM_FOOD" hidden>
@@ -58,8 +58,8 @@
         </div>
         <p>
             NAME:
-            <input type="text" name="singular" id="singular" title="The singular form for the name of this item. Always required.">
-            <input type="text" name="plural" id="plural" title="The plural form for the name of this item. Always required.">
+            <input type="text" name="singular" id="singular" class="singular_name" required title="The singular form for the name of this item. Always required.">
+            <input type="text" name="plural" id="plural" class="plural_name" required title="The plural form for the name of this item. Always required.">
         </p>
         <fieldset class="ITEM_TOY">
             <legend>Materials:</legend>
