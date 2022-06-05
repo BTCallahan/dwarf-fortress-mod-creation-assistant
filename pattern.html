@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Descriptor Patterns</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/pattern.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/styling.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="trap.html">Traps</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="armor.html">Armor and Clothing</a>
+                <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
+                <a href="tool.html">Tools</a>
+                <a href="shape.html">Shapes</a>
+                <a href="pattern.html">Descriptor Patterns</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <p>
+            <label for="COLOR_PATTERN">COLOR_PATTERN:</label>
+            <input type="text" name="COLOR_PATTERN" id="COLOR_PATTERN" required pattern="/[A-Z0-9_]/"
+            title="The identifier for this pattern. Idealy, it should start with the type of pattern, for example 'IRIS_EYE_BLUE_GREEN'">
+        </p>
+        <p>
+            <label for="PATTERN">PATTERN:</label>
+            <select name="PATTERN" id="PATTERN" 
+            title="For best results if the pattern is set to IRIS_EYE then there should be at least three color tokens. If it is set to PUPIL_EYE, then at least two tokens are recomended. If the pattern is not STRIPES or MOTTLED, then having not token will result in a crash">
+                <option value="IRIS_EYE">IRIS_EYE - Requires at least one token</option>
+                <option value="PUPIL_EYE">PUPIL_EYE - Requires at least one token</option>
+                <option value="SPOTS">SPOTS - Requires at least one token</option>
+                <option value="STRIPES">STRIPES</option>
+                <option value="MOTTLED">MOTTLED</option>
+            </select>
+        </p>
+        <fieldset>
+            <legend>Color Tokens:</legend>
+            <p id="colors">
+
+            </p>
+            <button onclick="addNewPatternColor();">Create New Color Token</button>
+            <button onclick="deletePatternColor();">Delete Last Color Token</button>
+        </fieldset>
+        <button onclick="createPattern();">Create Pattern</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <p id="result"></p>
+        </fieldset>
+        <script src="" async defer></script>
+    </body>
+</html>
