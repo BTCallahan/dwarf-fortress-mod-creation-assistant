@@ -37,7 +37,8 @@
         </p>
         <p>
             <label for="armorType">Armor Type:</label>
-            <select name="armorType" id="armorType" onchange="hideOrUnhideElements({hideClassNames:['HIDE'], unhideClassNames:[getSelectElementValue('armorType')]})">
+            <select name="armorType" id="armorType" 
+            onchange="hideOrUnhideElements({hideClassNames:['HIDE'], unhideClassNames:[getSelectElementValue('armorType')]});onArmorChange();">
                 <option value="ITEM_ARMOR" selected>ITEM_ARMOR - Shirts, vests, mail coats, and cuirasses</option>
                 <option value="ITEM_PANTS">ITEM_PANTS - Skirts, kilts, and trousers</option>
                 <option value="ITEM_GLOVES">ITEM_GLOVES - Gloves and gauntlets</option>
@@ -47,7 +48,7 @@
         </p>
         <div class="HIDE ITEM_ARMOR">
             <label for="ITEM_ARMOR">ITEM_ARMOR:</label>
-            <input type="text" name="ITEM_ARMOR" id="ITEM_ARMOR" pattern="/[A-Z0-9_]/"
+            <input type="text" name="ITEM_ARMOR" id="ITEM_ARMOR" pattern="/[A-Z0-9_]/" required
             title="The name of the torso armor/clothing piece. This should have only capital letter and underscores. Idealy, it should start with 'ITEM_ARMOR'">
         </div>
         <div class="HIDE ITEM_PANTS" hidden>
@@ -72,8 +73,10 @@
         </div>
         <p>
             NAME:
-            <input type="text" name="singular" id="singular" class="NAME" title="The singular form for the name of this armor. Always required.">
-            <input type="text" name="plural" id="plural" class="NAME" title="The plural form for the name of this armor. Always required.">
+            <input type="text" name="singular" id="singular" class="NAME singular_name" required
+            title="The singular form for the name of this armor. Always required.">
+            <input type="text" name="plural" id="plural" class="NAME plural_name" required
+            title="The plural form for the name of this armor. Always required.">
         </p>
         <p>
             <label for="ADJECTIVE">ADJECTIVE:</label>
