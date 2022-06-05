@@ -53,7 +53,7 @@
         </fieldset>
         <p>
             <label for="SIZE">SIZE:</label>
-            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" class="size" title="The size of the tool.">
+            <input type="number" name="SIZE" id="SIZE" min="1" value="1" step="1" class="size" required title="The size of the tool. Required">
         </p>
         <p>
             <label for="MATERIAL_SIZE">MATERIAL_SIZE:</label>
@@ -62,11 +62,11 @@
         </p>
         <p>
             <label for="VALUE">VALUE:</label>
-            <input type="number" name="VALUE" id="VALUE" min="0" step="1" title="How much this tool is worth.">
+            <input type="number" name="VALUE" id="VALUE" min="0" step="1" required title="How much this tool is worth. Required">
         </p>
         <p>
             <label for="TILE">TILE:</label>
-            <input type="number" name="TILE" id="TILE" min="0" max="255" step="1" class="ch3" title="The tile used to show this tool.">
+            <input type="number" name="TILE" id="TILE" min="0" max="255" step="1" class="ch3" required title="The tile used to show this tool. Required">
         </p>
         <p>
             <label for="INVERTED_TILE">INVERTED_TILE</label>
@@ -268,7 +268,7 @@
             title="No artistic improvements, such as bands or sewn images, can be made to this tool.">
             <label for="UNIMPROVABLE">UNIMPROVABLE</label>
         </p>
-        <button>Create New Tool</button>
+        <button onclick="createTool();">Create New Tool</button>
         <fieldset>
             <legend>Warnings:</legend>
             <p id="warnings"></p>
