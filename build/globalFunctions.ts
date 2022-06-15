@@ -98,8 +98,9 @@ function valueIsValid(value:any)
  * @returns A HTMLInputElement object 
  */
 function createNumberInput({
-    defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText}:{
-        defaultValue?:string, inputMin?:string, inputMax?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string
+    defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText, mouseonchange}:{
+        defaultValue?:string, inputMin?:string, inputMax?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string,
+        mouseonchange?:(this:GlobalEventHandlers, ev:Event) => any
     })
 {
     let conArea = document.createElement("input");
@@ -134,6 +135,10 @@ function createNumberInput({
     {
         conArea.title = titleText as string;
     }
+    if (valueIsValid(mouseonchange))
+    {
+        conArea.onchange = mouseonchange as (this:GlobalEventHandlers, ev:Event) => any;
+    }
     conArea.step = "1";
 
     return conArea;
@@ -151,8 +156,10 @@ function createNumberInput({
  * @returns A HTMLInputElement object 
  */
 function createTextInput({
-    defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength
-}:{defaultValue?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string, pattern?:string, maxLength?:number
+    defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength, required=false
+}:{
+    defaultValue?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string, pattern?:string, 
+    maxLength?:number, required?:boolean
 })
 {
     let textInput = document.createElement("input");
@@ -187,6 +194,8 @@ function createTextInput({
     {
         textInput.maxLength = maxLength as number;
     }
+    textInput.required = required;
+
     return textInput;
 }
 
@@ -391,6 +400,21 @@ function createButton({
     return button;
 }
 
+function createOrderedList(listItems:string[])
+{
+    let ol = document.createElement("ol");
+
+    listItems.forEach(element => {
+
+        let li = document.createElement("li");
+
+        ol.appendChild(li);
+
+        li.innerText = element;
+    });
+    return ol;
+}
+
 /**
  * Creates and returns a HTMLFieldsetElement. If legendText is defined, a HTMLLegendElement will also be created and appended to the HTMLFieldsetElement
  * @param param0 A destructable object containing two fields
@@ -399,27 +423,41 @@ function createButton({
  * elementsToAppend - A HTMLElement array of elements that will be appended to the HTMLFieldsetElement
  * @returns A HTMLFieldsetElement
  */
- function createFieldset({fieldsetId, legendText, elementsToAppend}:{fieldsetId:string, legendText?:string, elementsToAppend?:HTMLElement[]})
+ function createFieldset({
+    fieldsetId, legendText, elementsToAppend, elementToAppendTo, innerText
+}:{
+    fieldsetId?:string, legendText?:string, elementsToAppend?:HTMLElement[], elementToAppendTo?:HTMLElement, innerText?:string
+    })
  {
-     let fieldset = document.createElement("fieldset");
+    let fieldset = document.createElement("fieldset");
+
+    if (valueIsValid(innerText))
+    {
+        fieldset.innerText = innerText as string;
+    }
+    if (valueIsValid(fieldsetId))
+    {
+        fieldset.id = fieldsetId as string;
+    }
+    if (valueIsValid(legendText))
+    {
+        let legend = document.createElement("legend");
  
-     fieldset.id = fieldsetId;
+        legend.innerText = legendText as string;
  
-     if (valueIsValid(legendText))
-     {
-         let legend = document.createElement("legend");
- 
-         legend.innerText = legendText as string;
- 
-         fieldset.appendChild(legend);
-     }
-     if (valueIsValid(elementsToAppend))
-     {
-         elementsToAppend?.forEach(element => {
-             fieldset.appendChild(element);
-         });
-     }
-     return fieldset;
+        fieldset.appendChild(legend);
+    }
+    if (valueIsValid(elementsToAppend))
+    {
+        elementsToAppend?.forEach(element => {
+            fieldset.appendChild(element);
+        });
+    }
+    if (valueIsValid(elementToAppendTo))
+    {
+        elementToAppendTo?.appendChild(fieldset);
+    }
+    return fieldset;
  }
 
 /**

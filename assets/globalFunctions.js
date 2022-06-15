@@ -71,7 +71,7 @@ function valueIsValid(value) {
  * titleText - A string that is assigned to the title field
  * @returns A HTMLInputElement object
  */
-function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText }) {
+function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText, mouseonchange }) {
     let conArea = document.createElement("input");
     conArea.type = "number";
     if (valueIsValid(inputMin)) {
@@ -95,6 +95,9 @@ function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elem
     if (valueIsValid(titleText)) {
         conArea.title = titleText;
     }
+    if (valueIsValid(mouseonchange)) {
+        conArea.onchange = mouseonchange;
+    }
     conArea.step = "1";
     return conArea;
 }
@@ -109,7 +112,7 @@ function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elem
  * maxLength - A number that will be assigned to the maxLength field
  * @returns A HTMLInputElement object
  */
-function createTextInput({ defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength }) {
+function createTextInput({ defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength, required = false }) {
     let textInput = document.createElement("input");
     textInput.type = "text";
     if (valueIsValid(defaultValue)) {
@@ -133,6 +136,7 @@ function createTextInput({ defaultValue, elementName, elementID, elementClass, t
     if (valueIsValid(maxLength)) {
         textInput.maxLength = maxLength;
     }
+    textInput.required = required;
     return textInput;
 }
 /**
@@ -274,6 +278,15 @@ function createButton({ value, innerText, elementName, elementId, elementClass, 
     }
     return button;
 }
+function createOrderedList(listItems) {
+    let ol = document.createElement("ol");
+    listItems.forEach(element => {
+        let li = document.createElement("li");
+        ol.appendChild(li);
+        li.innerText = element;
+    });
+    return ol;
+}
 /**
  * Creates and returns a HTMLFieldsetElement. If legendText is defined, a HTMLLegendElement will also be created and appended to the HTMLFieldsetElement
  * @param param0 A destructable object containing two fields
@@ -282,9 +295,14 @@ function createButton({ value, innerText, elementName, elementId, elementClass, 
  * elementsToAppend - A HTMLElement array of elements that will be appended to the HTMLFieldsetElement
  * @returns A HTMLFieldsetElement
  */
-function createFieldset({ fieldsetId, legendText, elementsToAppend }) {
+function createFieldset({ fieldsetId, legendText, elementsToAppend, elementToAppendTo, innerText }) {
     let fieldset = document.createElement("fieldset");
-    fieldset.id = fieldsetId;
+    if (valueIsValid(innerText)) {
+        fieldset.innerText = innerText;
+    }
+    if (valueIsValid(fieldsetId)) {
+        fieldset.id = fieldsetId;
+    }
     if (valueIsValid(legendText)) {
         let legend = document.createElement("legend");
         legend.innerText = legendText;
@@ -294,6 +312,9 @@ function createFieldset({ fieldsetId, legendText, elementsToAppend }) {
         elementsToAppend === null || elementsToAppend === void 0 ? void 0 : elementsToAppend.forEach(element => {
             fieldset.appendChild(element);
         });
+    }
+    if (valueIsValid(elementToAppendTo)) {
+        elementToAppendTo === null || elementToAppendTo === void 0 ? void 0 : elementToAppendTo.appendChild(fieldset);
     }
     return fieldset;
 }
