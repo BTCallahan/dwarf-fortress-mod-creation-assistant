@@ -20,6 +20,16 @@ input.DESCRIPTION[type="text"]{
     width: 500px;
 }
 
+input.singular_name[type="text"]{
+    position: fixed;
+    margin-left: 350px;
+}
+
+input.plural_name[type="text"]{
+    position: fixed;
+    margin-left: 700px;
+}
+
 input[type="number"]{
     width: 50px;
 }
