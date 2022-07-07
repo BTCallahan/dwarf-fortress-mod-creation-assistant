@@ -59,8 +59,8 @@ function createArmor() {
         }
     }
     if (sel !== "ITEM_SHIELD") {
-        getMultipleCheckBoxes({ inputClass: "CKNS", useClassInPlaceOfId: true, numberOfTabObjects: 2 });
-        getMultipleInputs({ inputClass: "INNS", useClassInPlaceOfId: true, numberOfTabObjects: 2 });
+        getMultipleCheckBoxesByClass({ inputClass: "CKNS", numberOfTabObjects: 2 });
+        getMultipleInputsByClass({ inputClass: "INNS", numberOfTabObjects: 2 });
         getSingleInput({ inputId: "LAYER", ignoreIfBlank: false, numberOfTabObjects: 2 });
     }
     printResults();
