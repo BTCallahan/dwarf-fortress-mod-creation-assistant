@@ -72,6 +72,7 @@ enum PrefixValueType{
     id,
     name,
     class,
+    classCon,
     value
 }
 
@@ -98,9 +99,9 @@ function valueIsValid(value:any)
  * @returns A HTMLInputElement object 
  */
 function createNumberInput({
-    defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText, mouseonchange}:{
-        defaultValue?:string, inputMin?:string, inputMax?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string,
-        mouseonchange?:(this:GlobalEventHandlers, ev:Event) => any
+    defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText, required=false, isDisabeled=false, mouseonchange}:{
+        defaultValue?:string, inputMin?:string, inputMax?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string, 
+        required?:boolean, isDisabeled?:boolean, mouseonchange?:(this:GlobalEventHandlers, ev:Event) => any
     })
 {
     let conArea = document.createElement("input");
@@ -141,7 +142,28 @@ function createNumberInput({
     }
     conArea.step = "1";
 
+    conArea.required = required
+
     return conArea;
+}
+
+function getArrayOfElements<T extends HTMLElement>({parentElement, className}:{parentElement?:HTMLElement, className:string})
+{
+    let elements = (valueIsValid(parentElement) ? parentElement?.getElementsByClassName(className) : document.getElementsByClassName(className));
+
+    return Array.from(elements as HTMLCollectionOf<T>);
+}
+
+function getArrayOfElementValues({parentElement, className}:{parentElement?:HTMLElement, className:string})
+{
+    let elements = (valueIsValid(parentElement) ? parentElement?.getElementsByClassName(className) : document.getElementsByClassName(className));
+
+    let a = Array.from(elements as HTMLCollectionOf<HTMLInputElement | HTMLSelectElement>);
+
+    return a.map((element: HTMLInputElement | HTMLSelectElement) => {
+
+        return element.value;
+    });
 }
 
 /**
@@ -156,10 +178,10 @@ function createNumberInput({
  * @returns A HTMLInputElement object 
  */
 function createTextInput({
-    defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength, required=false
+    defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength, required=false, isDisabeled=false, mouseonchange
 }:{
     defaultValue?:string, elementName?:string, elementID?:string, elementClass?:string, titleText?:string, pattern?:string, 
-    maxLength?:number, required?:boolean
+    maxLength?:number, required?:boolean, isDisabeled?:boolean, mouseonchange?:(this:GlobalEventHandlers, ev:Event) => any
 })
 {
     let textInput = document.createElement("input");
@@ -194,6 +216,10 @@ function createTextInput({
     {
         textInput.maxLength = maxLength as number;
     }
+    if (valueIsValid(mouseonchange))
+    {
+        textInput.onchange = mouseonchange as (this:GlobalEventHandlers, ev:Event) => any;
+    }
     textInput.required = required;
 
     return textInput;
@@ -211,9 +237,9 @@ function createTextInput({
  * @returns A HTMLInputElement object 
  */
 function createCheckbox({
-    value, isActive=false, elementName, elementId, elementClass, titleText, mouseonclick
+    value, isActive=false, isDisabeled=false, elementName, elementId, elementClass, titleText, mouseonclick
 }:{
-    value?:string, isActive?:boolean, elementId?:string, elementName?:string, elementClass?:string, titleText?:string, 
+    value?:string, isActive?:boolean, isDisabeled?:boolean, elementId?:string, elementName?:string, elementClass?:string, titleText?:string, 
     mouseonclick?:(this:GlobalEventHandlers, ev:MouseEvent) => any
     })
 {
@@ -247,6 +273,8 @@ function createCheckbox({
     }
     ckbox.checked = isActive;
 
+    ckbox.disabled = isDisabeled;
+
     return ckbox;
 }
 
@@ -261,10 +289,10 @@ function createCheckbox({
  * @returns A HTMLSelectElement object 
  */
 function createSelect({
-    elementName, elementID, elementClass, titleText, options, defualtValue, mouseonchange
+    elementName, elementID, elementClass, titleText, options, defualtValue, isDisabeled=false, mouseonchange
 }:{
-    elementName?:string, elementID?:string, elementClass?:string, titleText?:string, options?:HTMLOptionElement[], 
-    defualtValue?:string, mouseonchange?:(this:GlobalEventHandlers, ev:Event) => any
+    elementName?:string, elementID?:string, elementClass?:string, titleText?:string, options?:HTMLOptionElement[]|HTMLOptGroupElement[], 
+    defualtValue?:string, isDisabeled?:boolean, mouseonchange?:(this:GlobalEventHandlers, ev:Event) => any
 })
 {
     let select = document.createElement("select");
@@ -299,7 +327,21 @@ function createSelect({
     {
         select.onchange = mouseonchange as (this:GlobalEventHandlers, ev:Event) => any;
     }
+    select.disabled = isDisabeled;
+
     return select;
+}
+
+function createSelectOptionGroup({label, options}:{label:string, options:HTMLOptionElement[]})
+{
+    let og = document.createElement("optgroup");
+
+    og.label = label;
+
+    options.forEach(element => {
+        og.appendChild(element);
+    });
+    return og;
 }
 
 function createSelectOption({value, text}:{value:string, text:string})
@@ -311,6 +353,15 @@ function createSelectOption({value, text}:{value:string, text:string})
     blunt.innerText = text;
 
     return blunt;
+}
+
+function* createArrayOfOptionsFromStringArray(stringArray:string[])
+{
+    for (let index = 0; index < stringArray.length; index++) {
+        let element = stringArray[index];
+        
+        yield createSelectOption({text:element, value:element});
+    }
 }
 
 /**
@@ -330,8 +381,6 @@ function addOptionToSelect({value, text, select}:{value:string, text:string, sel
     
     select.appendChild(blunt);
 }
-
-
 
 /**
  * Creates and returns a HTMLLabelElement
@@ -364,10 +413,10 @@ function createLabel({targetId, labelText}:{targetId:string, labelText:string})
  * @returns HTMLButtonElement
  */
 function createButton({
-    value, innerText, elementName, elementId, elementClass, titleText, mouseonclick
+    value, innerText, elementName, elementId, elementClass, titleText, isDisabeled=false, mouseonclick
 }:{
     value?:string, innerText:string, elementName?:string, elementId?:string, elementClass?:string, titleText?:string, 
-    mouseonclick?:(this:GlobalEventHandlers, ev:MouseEvent) => any
+    isDisabeled?:boolean, mouseonclick?:(this:GlobalEventHandlers, ev:MouseEvent) => any
 }) {
     let button = document.createElement("button");
 
@@ -397,6 +446,8 @@ function createButton({
     {
         button.title = titleText as string;
     }
+    button.disabled = isDisabeled;
+
     return button;
 }
 
@@ -583,7 +634,7 @@ function enableOrDisableElements({disable, className}:{disable:boolean, classNam
     });
 }
 
-function hideOrUnhideElements({hide, className}:{hide:boolean, className:string})
+function hideOrUnhideElements({hide, className, parentElement}:{hide:boolean, className:string, parentElement?:HTMLElement})
 {
     let ranged = <HTMLCollection><any> document.getElementsByClassName(className);
 
@@ -596,11 +647,13 @@ function hideOrUnhideElements({hide, className}:{hide:boolean, className:string}
     });
 }
 
-function hideAndUnhideElements({hideClassNames, unhideClassNames}:{hideClassNames:string[], unhideClassNames:string[]})
+function hideAndUnhideElements({hideClassNames, unhideClassNames, parentElement}:{hideClassNames:string[], unhideClassNames:string[], parentElement?:HTMLElement})
 {
+    let parent = parentElement || document;
+
     hideClassNames.forEach(element => {
         
-        let ele = <HTMLCollection><any> document.getElementsByClassName(element);
+        let ele = <HTMLCollection><any> parent.getElementsByClassName(element);
 
         let elea = Array.from(ele) as HTMLElement[];
 
@@ -610,7 +663,7 @@ function hideAndUnhideElements({hideClassNames, unhideClassNames}:{hideClassName
     });
     unhideClassNames.forEach(element => {
         
-        let ele = <HTMLCollection><any> document.getElementsByClassName(element);
+        let ele = <HTMLCollection><any> parent.getElementsByClassName(element);
 
         let elea = Array.from(ele) as HTMLElement[];
 
@@ -620,11 +673,28 @@ function hideAndUnhideElements({hideClassNames, unhideClassNames}:{hideClassName
     });
 }
 
+function ifInputElementValueIsBlankSetValue(elementId:string, newValue:string)
+{
+    let element = <HTMLInputElement><any> document.getElementById(elementId);
+
+    if (element.value === "")
+    {
+        element.value = newValue;
+    }
+}
+
 function getInputElementValue(inputId:string) 
 {
     let input = <HTMLInputElement><any> document.getElementById(inputId);
 
     return input.value;
+}
+
+function getCheckBoxIsChecked(inputId:string)
+{
+    let checkbox = <HTMLInputElement><any> document.getElementById(inputId);
+
+    return checkbox.checked;
 }
 
 function getSelectElementValue(inputId:string) 
@@ -647,7 +717,7 @@ function getSelectElementValue(inputId:string)
 function getSingleInput({
     inputId, numberOfTabObjects, ignoreIfDisabled=true, ignoreIfBlank=true, prefixType=PrefixValueType.id, valueThatWillBeIgnored
 }:{
-    inputId:string, numberOfTabObjects:number, ignoreIfDisabled?:boolean, ignoreIfBlank:boolean, prefixType?:PrefixValueType, valueThatWillBeIgnored?:string
+    inputId:string, numberOfTabObjects:number, ignoreIfDisabled?:boolean, ignoreIfBlank?:boolean, prefixType?:PrefixValueType, valueThatWillBeIgnored?:string
 })
 {
     let input_ = <HTMLInputElement><any> document.getElementById(inputId);
@@ -708,7 +778,7 @@ function getSingleCheckBox({
  */
  function getMultipleInputsById({
     inputIds, 
-        numberOfTabObjects, ignoreIfDisabled=false, ignoreIfBlank=false, prefixType=PrefixValueType.id
+        numberOfTabObjects, ignoreIfDisabled=true, ignoreIfBlank=true, prefixType=PrefixValueType.id
 }:{inputIds:string[], 
         numberOfTabObjects:number, ignoreIfDisabled?:boolean, ignoreIfBlank?:boolean, prefixType?:PrefixValueType})
 {
@@ -758,7 +828,7 @@ function getSingleCheckBox({
  */
 function getMultipleInputs({
     inputIds, inputClass, useClassInPlaceOfId=false, appendClassInFrontOfId=false, parentElement,
-        numberOfTabObjects, ignoreIfDisabled=false, ignoreIfBlank=false, prefixType=PrefixValueType.id
+        numberOfTabObjects, ignoreIfDisabled=true, ignoreIfBlank=true, prefixType=PrefixValueType.id
 }:{inputIds?:string[], inputClass?:string, 
         useClassInPlaceOfId?:boolean, appendClassInFrontOfId?:boolean, parentElement?:HTMLElement,
         numberOfTabObjects:number, ignoreIfDisabled?:boolean, ignoreIfBlank?:boolean, prefixType?:PrefixValueType})
@@ -851,13 +921,12 @@ function getMultipleInputs({
  * ignoreIfDisabled - Boolean. If true, and the field is disabled, it will be ignored. Optional, defualts to true
  * ignoreIfBlank - Boolean. If true, and the field has a value of "", nothing will be pushed to the array
  * prefixType - An PrefixValueType enum. This determins the if the prefix that is appended before the element value will be the elements id, name, or class
- * appendClassInFrontOfId - Boolean. If true, and prefixType is not PrefixValueType.class, the class will be appende infront of the prefix. Optional, defualts to false
  */
 function getMultipleInputsByClass({
-    inputClass, parentElement, numberOfTabObjects, ignoreIfDisabled=false, ignoreIfBlank=true, appendClassInFrontOfId=false, concitrateInFrontOfClassName=false,
+    inputClass, parentElement, numberOfTabObjects, ignoreIfDisabled=true, ignoreIfBlank=true, appendClassInFrontOfId=false, requireNoBlanks=false,
     prefixType=PrefixValueType.id, valueThatWillBeIgnored
 }:{inputClass:string, parentElement?:HTMLElement,
-    numberOfTabObjects:number, ignoreIfDisabled?:boolean, ignoreIfBlank?:boolean, appendClassInFrontOfId?:boolean, concitrateInFrontOfClassName?:boolean,
+    numberOfTabObjects:number, ignoreIfDisabled?:boolean, ignoreIfBlank?:boolean, appendClassInFrontOfId?:boolean, requireNoBlanks?:boolean,
     prefixType?:PrefixValueType, valueThatWillBeIgnored?:string})
 {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
@@ -897,6 +966,25 @@ function getMultipleInputsByClass({
             pushObject.pushTo.push(tabs, "[", inputClass as string, ":", element.value, "]\n" );
         });
     }
+    else if (prefixType === PrefixValueType.classCon)
+    {
+        let prefixes = classElements.map(value => {
+            return value.value;
+        });
+        if (!requireNoBlanks || prefixes.every(element => {
+            return element !== "";
+        }))
+        {
+            if (appendClassInFrontOfId)
+            {  
+                pushObject.pushTo.push(tabs, "[", inputClass, prefixes.join(":"), "]\n");
+            }
+            else
+            {
+                pushObject.pushTo.push(tabs, "[", prefixes.join(":"), "]\n");
+            }
+        }
+    }
     else
     {
         let prefixes:string[] = (prefixType === PrefixValueType.name ? 
@@ -908,17 +996,10 @@ function getMultipleInputsByClass({
         );
         if (appendClassInFrontOfId)
         {
-            if (concitrateInFrontOfClassName)
-            {
-                pushObject.pushTo.push(tabs, "[", prefixes.join(":"), "]\n")
-            }
-            else
-            {
-                prefixes.forEach((element) => {
+            prefixes.forEach((element) => {
     
-                    pushObject.pushTo.push(tabs, "[", inputClass as string, ":", element, "]\n" );
-                });
-            }
+                pushObject.pushTo.push(tabs, "[", inputClass as string, ":", element, "]\n" );
+            });
         }
         else
         {
@@ -1043,15 +1124,17 @@ function getMultipleCheckBoxes(
 }
 
 function getMultipleCheckBoxesByClass(
-    {inputClass,  appendClassInFrontOfId=false, numberOfTabObjects, 
+    {inputClass, parentElement, appendClassInFrontOfId=false, numberOfTabObjects, 
         ignoreIfDisabled=true, elementType=PrefixValueType.id
-    }:{inputClass:string, 
+    }:{inputClass:string, parentElement?:HTMLElement,
     appendClassInFrontOfId?:boolean, 
     numberOfTabObjects:number, ignoreIfDisabled?:boolean, elementType?:PrefixValueType})
 {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
 
-    let classElements:HTMLInputElement[] = Array.from(<HTMLCollection><any> document.getElementsByClassName(inputClass)) as HTMLInputElement[];;
+    let classElements:HTMLInputElement[] = Array.from(valueIsValid(parentElement) ? 
+    <HTMLCollection><any> parentElement?.getElementsByClassName(inputClass) : 
+    <HTMLCollection><any> document.getElementsByClassName(inputClass)) as HTMLInputElement[];
 
     if (ignoreIfDisabled)
     {
@@ -1121,11 +1204,56 @@ function getMultipleCheckBoxesByClass(
     }
 }
 
+function appendColor<T extends HTMLElement>({
+    className, foregroundId, backgroundId, brightnessId, required=false, parentElement
+}:{
+    className:string, prefText?:string, foregroundId:string, backgroundId:string, brightnessId:string, required?:boolean, parentElement:T
+}){
+
+    parentElement.appendChild(createNumberInput({
+        elementID:foregroundId, inputMax:"7", inputMin:"0", elementClass:`ch1 foreground ${className}`, required:required, 
+        titleText:"The foreground value for this color. Ranges from 0 to 7"
+    }));
+    parentElement.appendChild(createNumberInput({
+        elementID:backgroundId, inputMax:"7", inputMin:"0", elementClass:`ch1 background ${className}`, required:required,
+        titleText:"The background value for this color. Ranges from 0 to 7"
+    }));
+    parentElement.appendChild(createNumberInput({
+        elementID:brightnessId, inputMax:"1", inputMin:"0", elementClass:`ch1 brightness ${className}`, required:required,
+        titleText:"The brigntness value for this color. The only choices are 0 and 1"
+    }));
+    
+    return parentElement;
+}
+
+function createColor({
+    className, prefText, foregroundId, backgroundId, brightnessId, required=false
+}:{
+    className:string, prefText?:string, foregroundId:string, backgroundId:string, brightnessId:string, required?:boolean
+}){
+    let pf = prefText || `${className}:`;
+    
+    let par = createParagraph({elementId:className, innerText:pf, elementsToAppend:[
+        createNumberInput({
+            elementID:foregroundId, inputMax:"7", inputMin:"0", elementClass:`ch1 foreground ${className}`, required:required, 
+            titleText:"The foreground value for this color. Ranges from 0 to 7"
+        }),
+        createNumberInput({
+            elementID:backgroundId, inputMax:"7", inputMin:"0", elementClass:`ch1 background ${className}`, required:required,
+            titleText:"The background value for this color. Ranges from 0 to 7"
+        }),
+        createNumberInput({
+            elementID:brightnessId, inputMax:"1", inputMin:"0", elementClass:`ch1 brightness ${className}`, required:required,
+            titleText:"The brigntness value for this color. The only choices are 0 and 1"
+        })
+    ]});
+    return par;
+}
+
 function getColor({
-    colorContainterId, numberOfTabObjects, itemOrder
-}:{colorContainterId:string, numberOfTabObjects:number, itemOrder:number
-})
-{
+    colorContainterId, numberOfTabObjects, itemOrder=0
+}:{colorContainterId:string, numberOfTabObjects:number, itemOrder?:number
+}){
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
 
     let p = <HTMLParagraphElement><any> document.getElementById(colorContainterId);
@@ -1138,9 +1266,12 @@ function getColor({
     let bg2 = <HTMLInputElement><any> bg.item(itemOrder);
     let br2 = <HTMLInputElement><any> br.item(itemOrder);
 
-    pushObject.pushTo.push(
-        tabs, "[", colorContainterId, ":", fg2.value, ":", bg2.value, ":", br2.value, "]\n"
-    );
+    if (fg2.value !== "" && bg2.value !== "" && br2.value !== "")
+    {
+        pushObject.pushTo.push(
+            tabs, "[", colorContainterId, ":", fg2.value, ":", bg2.value, ":", br2.value, "]\n"
+        );
+    }
 }
 
 function isCheckboxChecked(inputId:string)

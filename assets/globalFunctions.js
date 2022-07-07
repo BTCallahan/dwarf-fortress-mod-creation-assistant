@@ -49,7 +49,8 @@ var PrefixValueType;
     PrefixValueType[PrefixValueType["id"] = 0] = "id";
     PrefixValueType[PrefixValueType["name"] = 1] = "name";
     PrefixValueType[PrefixValueType["class"] = 2] = "class";
-    PrefixValueType[PrefixValueType["value"] = 3] = "value";
+    PrefixValueType[PrefixValueType["classCon"] = 3] = "classCon";
+    PrefixValueType[PrefixValueType["value"] = 4] = "value";
 })(PrefixValueType || (PrefixValueType = {}));
 /**
  * Checks if the value is not undefined or is not null
@@ -71,7 +72,7 @@ function valueIsValid(value) {
  * titleText - A string that is assigned to the title field
  * @returns A HTMLInputElement object
  */
-function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText, mouseonchange }) {
+function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elementID, elementClass, titleText, required = false, isDisabeled = false, mouseonchange }) {
     let conArea = document.createElement("input");
     conArea.type = "number";
     if (valueIsValid(inputMin)) {
@@ -99,7 +100,19 @@ function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elem
         conArea.onchange = mouseonchange;
     }
     conArea.step = "1";
+    conArea.required = required;
     return conArea;
+}
+function getArrayOfElements({ parentElement, className }) {
+    let elements = (valueIsValid(parentElement) ? parentElement === null || parentElement === void 0 ? void 0 : parentElement.getElementsByClassName(className) : document.getElementsByClassName(className));
+    return Array.from(elements);
+}
+function getArrayOfElementValues({ parentElement, className }) {
+    let elements = (valueIsValid(parentElement) ? parentElement === null || parentElement === void 0 ? void 0 : parentElement.getElementsByClassName(className) : document.getElementsByClassName(className));
+    let a = Array.from(elements);
+    return a.map((element) => {
+        return element.value;
+    });
 }
 /**
  * Creates and returns a text HTMLInputElement object
@@ -112,7 +125,7 @@ function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elem
  * maxLength - A number that will be assigned to the maxLength field
  * @returns A HTMLInputElement object
  */
-function createTextInput({ defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength, required = false }) {
+function createTextInput({ defaultValue, elementName, elementID, elementClass, titleText, pattern, maxLength, required = false, isDisabeled = false, mouseonchange }) {
     let textInput = document.createElement("input");
     textInput.type = "text";
     if (valueIsValid(defaultValue)) {
@@ -136,6 +149,9 @@ function createTextInput({ defaultValue, elementName, elementID, elementClass, t
     if (valueIsValid(maxLength)) {
         textInput.maxLength = maxLength;
     }
+    if (valueIsValid(mouseonchange)) {
+        textInput.onchange = mouseonchange;
+    }
     textInput.required = required;
     return textInput;
 }
@@ -150,7 +166,7 @@ function createTextInput({ defaultValue, elementName, elementID, elementClass, t
  * titleText - A string that is assigned to the title field
  * @returns A HTMLInputElement object
  */
-function createCheckbox({ value, isActive = false, elementName, elementId, elementClass, titleText, mouseonclick }) {
+function createCheckbox({ value, isActive = false, isDisabeled = false, elementName, elementId, elementClass, titleText, mouseonclick }) {
     let ckbox = document.createElement("input");
     ckbox.type = "checkbox";
     if (valueIsValid(value)) {
@@ -172,6 +188,7 @@ function createCheckbox({ value, isActive = false, elementName, elementId, eleme
         ckbox.onclick = mouseonclick;
     }
     ckbox.checked = isActive;
+    ckbox.disabled = isDisabeled;
     return ckbox;
 }
 /**
@@ -184,7 +201,7 @@ function createCheckbox({ value, isActive = false, elementName, elementId, eleme
  * elementClass - A string that is assigned to the className field
  * @returns A HTMLSelectElement object
  */
-function createSelect({ elementName, elementID, elementClass, titleText, options, defualtValue, mouseonchange }) {
+function createSelect({ elementName, elementID, elementClass, titleText, options, defualtValue, isDisabeled = false, mouseonchange }) {
     let select = document.createElement("select");
     if (valueIsValid(elementID)) {
         select.id = elementID;
@@ -209,13 +226,28 @@ function createSelect({ elementName, elementID, elementClass, titleText, options
     if (valueIsValid(mouseonchange)) {
         select.onchange = mouseonchange;
     }
+    select.disabled = isDisabeled;
     return select;
+}
+function createSelectOptionGroup({ label, options }) {
+    let og = document.createElement("optgroup");
+    og.label = label;
+    options.forEach(element => {
+        og.appendChild(element);
+    });
+    return og;
 }
 function createSelectOption({ value, text }) {
     let blunt = document.createElement("option");
     blunt.value = value;
     blunt.innerText = text;
     return blunt;
+}
+function* createArrayOfOptionsFromStringArray(stringArray) {
+    for (let index = 0; index < stringArray.length; index++) {
+        let element = stringArray[index];
+        yield createSelectOption({ text: element, value: element });
+    }
 }
 /**
  * Creates a HTMLOptionElement object and appends it to a HTMLSelectElement
@@ -255,7 +287,7 @@ function createLabel({ targetId, labelText }) {
  * mouseonclick - A function that will be assigned to the onclick field of the button
  * @returns HTMLButtonElement
  */
-function createButton({ value, innerText, elementName, elementId, elementClass, titleText, mouseonclick }) {
+function createButton({ value, innerText, elementName, elementId, elementClass, titleText, isDisabeled = false, mouseonclick }) {
     let button = document.createElement("button");
     button.innerText = innerText;
     if (valueIsValid(mouseonclick)) {
@@ -276,6 +308,7 @@ function createButton({ value, innerText, elementName, elementId, elementClass, 
     if (valueIsValid(titleText)) {
         button.title = titleText;
     }
+    button.disabled = isDisabeled;
     return button;
 }
 function createOrderedList(listItems) {
@@ -404,7 +437,7 @@ function enableOrDisableElements({ disable, className }) {
         element.disabled = disable;
     });
 }
-function hideOrUnhideElements({ hide, className }) {
+function hideOrUnhideElements({ hide, className, parentElement }) {
     let ranged = document.getElementsByClassName(className);
     let ranged2 = Array.from(ranged);
     console.log(ranged2);
@@ -412,25 +445,36 @@ function hideOrUnhideElements({ hide, className }) {
         element.hidden = hide;
     });
 }
-function hideAndUnhideElements({ hideClassNames, unhideClassNames }) {
+function hideAndUnhideElements({ hideClassNames, unhideClassNames, parentElement }) {
+    let parent = parentElement || document;
     hideClassNames.forEach(element => {
-        let ele = document.getElementsByClassName(element);
+        let ele = parent.getElementsByClassName(element);
         let elea = Array.from(ele);
         elea.forEach((e) => {
             e.hidden = true;
         });
     });
     unhideClassNames.forEach(element => {
-        let ele = document.getElementsByClassName(element);
+        let ele = parent.getElementsByClassName(element);
         let elea = Array.from(ele);
         elea.forEach((e) => {
             e.hidden = false;
         });
     });
 }
+function ifInputElementValueIsBlankSetValue(elementId, newValue) {
+    let element = document.getElementById(elementId);
+    if (element.value === "") {
+        element.value = newValue;
+    }
+}
 function getInputElementValue(inputId) {
     let input = document.getElementById(inputId);
     return input.value;
+}
+function getCheckBoxIsChecked(inputId) {
+    let checkbox = document.getElementById(inputId);
+    return checkbox.checked;
 }
 function getSelectElementValue(inputId) {
     let input = document.getElementById(inputId);
@@ -486,7 +530,7 @@ function getSingleCheckBox({ inputId, numberOfTabObjects, ignoreIfDisabled = tru
  * ignoreIfBlank - Boolean. If true, and the field has a value of "", nothing will be pushed to the array
  * prefixType - An PrefixValueType enum. This determins the if the prefix that is appended before the element value will be the elements id, name, or class
  */
-function getMultipleInputsById({ inputIds, numberOfTabObjects, ignoreIfDisabled = false, ignoreIfBlank = false, prefixType = PrefixValueType.id }) {
+function getMultipleInputsById({ inputIds, numberOfTabObjects, ignoreIfDisabled = true, ignoreIfBlank = true, prefixType = PrefixValueType.id }) {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
     let classElements = inputIds.map(element => {
         return document.getElementById(element);
@@ -526,7 +570,7 @@ function getMultipleInputsById({ inputIds, numberOfTabObjects, ignoreIfDisabled 
  * prefixType - An PrefixValueType enum. This determins the if the prefix that is appended before the element value will be the elements id, name, or class
  * appendClassInFrontOfId - Boolean. If true, and prefixType is not PrefixValueType.class, the class will be appende infront of the prefix. Optional, defualts to false
  */
-function getMultipleInputs({ inputIds, inputClass, useClassInPlaceOfId = false, appendClassInFrontOfId = false, parentElement, numberOfTabObjects, ignoreIfDisabled = false, ignoreIfBlank = false, prefixType = PrefixValueType.id }) {
+function getMultipleInputs({ inputIds, inputClass, useClassInPlaceOfId = false, appendClassInFrontOfId = false, parentElement, numberOfTabObjects, ignoreIfDisabled = true, ignoreIfBlank = true, prefixType = PrefixValueType.id }) {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
     let classElements = [];
     if (useClassInPlaceOfId) {
@@ -593,9 +637,8 @@ function getMultipleInputs({ inputIds, inputClass, useClassInPlaceOfId = false, 
  * ignoreIfDisabled - Boolean. If true, and the field is disabled, it will be ignored. Optional, defualts to true
  * ignoreIfBlank - Boolean. If true, and the field has a value of "", nothing will be pushed to the array
  * prefixType - An PrefixValueType enum. This determins the if the prefix that is appended before the element value will be the elements id, name, or class
- * appendClassInFrontOfId - Boolean. If true, and prefixType is not PrefixValueType.class, the class will be appende infront of the prefix. Optional, defualts to false
  */
-function getMultipleInputsByClass({ inputClass, parentElement, numberOfTabObjects, ignoreIfDisabled = false, ignoreIfBlank = true, appendClassInFrontOfId = false, concitrateInFrontOfClassName = false, prefixType = PrefixValueType.id, valueThatWillBeIgnored }) {
+function getMultipleInputsByClass({ inputClass, parentElement, numberOfTabObjects, ignoreIfDisabled = true, ignoreIfBlank = true, appendClassInFrontOfId = false, requireNoBlanks = false, prefixType = PrefixValueType.id, valueThatWillBeIgnored }) {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
     let classElements = Array.from(valueIsValid(parentElement) ?
         parentElement === null || parentElement === void 0 ? void 0 : parentElement.getElementsByClassName(inputClass) :
@@ -623,6 +666,21 @@ function getMultipleInputsByClass({ inputClass, parentElement, numberOfTabObject
             pushObject.pushTo.push(tabs, "[", inputClass, ":", element.value, "]\n");
         });
     }
+    else if (prefixType === PrefixValueType.classCon) {
+        let prefixes = classElements.map(value => {
+            return value.value;
+        });
+        if (!requireNoBlanks || prefixes.every(element => {
+            return element !== "";
+        })) {
+            if (appendClassInFrontOfId) {
+                pushObject.pushTo.push(tabs, "[", inputClass, prefixes.join(":"), "]\n");
+            }
+            else {
+                pushObject.pushTo.push(tabs, "[", prefixes.join(":"), "]\n");
+            }
+        }
+    }
     else {
         let prefixes = (prefixType === PrefixValueType.name ?
             classElements.map((value) => {
@@ -631,14 +689,9 @@ function getMultipleInputsByClass({ inputClass, parentElement, numberOfTabObject
             return `${value.id}:${value.value}`;
         }));
         if (appendClassInFrontOfId) {
-            if (concitrateInFrontOfClassName) {
-                pushObject.pushTo.push(tabs, "[", prefixes.join(":"), "]\n");
-            }
-            else {
-                prefixes.forEach((element) => {
-                    pushObject.pushTo.push(tabs, "[", inputClass, ":", element, "]\n");
-                });
-            }
+            prefixes.forEach((element) => {
+                pushObject.pushTo.push(tabs, "[", inputClass, ":", element, "]\n");
+            });
         }
         else {
             prefixes.forEach((element) => {
@@ -726,10 +779,11 @@ function getMultipleCheckBoxes({ inputIds = undefined, inputClass = undefined, u
         });
     }
 }
-function getMultipleCheckBoxesByClass({ inputClass, appendClassInFrontOfId = false, numberOfTabObjects, ignoreIfDisabled = true, elementType = PrefixValueType.id }) {
+function getMultipleCheckBoxesByClass({ inputClass, parentElement, appendClassInFrontOfId = false, numberOfTabObjects, ignoreIfDisabled = true, elementType = PrefixValueType.id }) {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
-    let classElements = Array.from(document.getElementsByClassName(inputClass));
-    ;
+    let classElements = Array.from(valueIsValid(parentElement) ?
+        parentElement === null || parentElement === void 0 ? void 0 : parentElement.getElementsByClassName(inputClass) :
+        document.getElementsByClassName(inputClass));
     if (ignoreIfDisabled) {
         let t = classElements.filter((value) => {
             return !value.disabled;
@@ -791,7 +845,40 @@ function getMultipleCheckBoxesByClass({ inputClass, appendClassInFrontOfId = fal
         });
     }
 }
-function getColor({ colorContainterId, numberOfTabObjects, itemOrder }) {
+function appendColor({ className, foregroundId, backgroundId, brightnessId, required = false, parentElement }) {
+    parentElement.appendChild(createNumberInput({
+        elementID: foregroundId, inputMax: "7", inputMin: "0", elementClass: `ch1 foreground ${className}`, required: required,
+        titleText: "The foreground value for this color. Ranges from 0 to 7"
+    }));
+    parentElement.appendChild(createNumberInput({
+        elementID: backgroundId, inputMax: "7", inputMin: "0", elementClass: `ch1 background ${className}`, required: required,
+        titleText: "The background value for this color. Ranges from 0 to 7"
+    }));
+    parentElement.appendChild(createNumberInput({
+        elementID: brightnessId, inputMax: "1", inputMin: "0", elementClass: `ch1 brightness ${className}`, required: required,
+        titleText: "The brigntness value for this color. The only choices are 0 and 1"
+    }));
+    return parentElement;
+}
+function createColor({ className, prefText, foregroundId, backgroundId, brightnessId, required = false }) {
+    let pf = prefText || `${className}:`;
+    let par = createParagraph({ elementId: className, innerText: pf, elementsToAppend: [
+            createNumberInput({
+                elementID: foregroundId, inputMax: "7", inputMin: "0", elementClass: `ch1 foreground ${className}`, required: required,
+                titleText: "The foreground value for this color. Ranges from 0 to 7"
+            }),
+            createNumberInput({
+                elementID: backgroundId, inputMax: "7", inputMin: "0", elementClass: `ch1 background ${className}`, required: required,
+                titleText: "The background value for this color. Ranges from 0 to 7"
+            }),
+            createNumberInput({
+                elementID: brightnessId, inputMax: "1", inputMin: "0", elementClass: `ch1 brightness ${className}`, required: required,
+                titleText: "The brigntness value for this color. The only choices are 0 and 1"
+            })
+        ] });
+    return par;
+}
+function getColor({ colorContainterId, numberOfTabObjects, itemOrder = 0 }) {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
     let p = document.getElementById(colorContainterId);
     let fg = p.getElementsByClassName("foreground");
@@ -800,7 +887,9 @@ function getColor({ colorContainterId, numberOfTabObjects, itemOrder }) {
     let fg2 = fg.item(itemOrder);
     let bg2 = bg.item(itemOrder);
     let br2 = br.item(itemOrder);
-    pushObject.pushTo.push(tabs, "[", colorContainterId, ":", fg2.value, ":", bg2.value, ":", br2.value, "]\n");
+    if (fg2.value !== "" && bg2.value !== "" && br2.value !== "") {
+        pushObject.pushTo.push(tabs, "[", colorContainterId, ":", fg2.value, ":", bg2.value, ":", br2.value, "]\n");
+    }
 }
 function isCheckboxChecked(inputId) {
     let input_ = document.getElementById(inputId);
