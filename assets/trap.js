@@ -13,8 +13,8 @@ function createTrap() {
         errorObject.errorMessages.push("ERROR: The entry for 'NAME:plural' cannot be blank");
     }
     pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", singular, ":", plural, "]\n");
-    getMultipleInputs({ inputIds: ["ADJECTIVE", "SIZE", "MATERIAL_SIZE", "HITS"], numberOfTabObjects: 2 });
-    getMultipleCheckBoxes({ inputClass: "checks", useClassInPlaceOfId: true, numberOfTabObjects: 2 });
+    getMultipleInputsById({ inputIds: ["ADJECTIVE", "SIZE", "MATERIAL_SIZE", "HITS"], numberOfTabObjects: 2 });
+    getMultipleCheckBoxesByClass({ inputClass: "checks", numberOfTabObjects: 2 });
     addUpAttacks(2, false);
     printResults();
 }
