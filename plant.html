@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/prefstring.js"></script>
+        <script type="text/javascript" src="assets/plant.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/styling.css">
+    </head>
+    <body onload="createPrefstring();checkPlantType();">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="trap.html">Traps</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="armor.html">Armor and Clothing</a>
+                <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
+                <a href="tool.html">Tools</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="0" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <p>
+            <label for="PLANT">PLANT:</label>
+            <input type="text" name="PLANT" id="PLANT" pattern=/[A-Z0-9_]/ 
+            title="The name of the plant. This should have only capital letter and underscores'">
+        </p>
+        <p>
+            <input type="text" name="NAME" id="NAME" class="NAME" title="The singular name for this plant">
+            <label for="NAME">NAME:</label>
+        </p>
+        <p>
+            <input type="text" name="NAME_PLURAL" id="NAME_PLURAL" class="NAME" title="The plural for this plant">
+            <label for="NAME_PLURAL">NAME_PLURAL:</label>
+        </p>
+        <p>
+            <input type="text" name="ADJ" id="ADJ" class="NAME" title="The adjective for this plant">
+            <label for="ADJ">ADJ:</label>
+        </p>
+        <p>
+            <input type="text" name="ALL_NAMES" id="ALL_NAMES" 
+            onchange="enableOrDisableElements({disable:getInputElementValue('ALL_NAMES')!=='', className:'NAME'});"
+            title="If no blank, this will override NAME, NAME_PLURAL and ADJ">
+            <label for="ALL_NAMES">ALL_NAMES:</label>
+        </p>
+        <fieldset>
+            <legend>Prefstrings:</legend>
+            <p id="PREFSTRING">
+
+            </p>
+            <button onclick="createPrefstring();">Create Prefstring</button>
+            <button onclick="deletePrefstring();">Delete Last Prefstring</button>
+        </fieldset>
+        <fieldset>
+            <legend>Materials:</legend>
+            <p id="materialTemplates">
+
+            </p>
+            <button onclick="createMaterialTemplate();">Create New Material</button>
+            <button onclick="deleteMaterialTemplate();">Delete Last Material</button>
+            <p>
+                BASIC_MAT:
+                <input type="text" name="BASIC_MAT" id="BASIC_MAT" value="LOCAL_PLANT_MAT" class="BASIC_MAT"
+                title="The basic material of the plant. It is theoreticly possible to have materials that are not plant materials, but that may have unwanted affects. All vanilla plants have 'LOCAL_PLANT_MAT'">
+                <input type="text" name="BASIC_STRUCT" id="BASIC_STRUCT" value="STRUCTURAL" class="BASIC_MAT"
+                title="The effects of values other then 'STRUCTURAL' are unkown">
+            </p>
+
+        </fieldset>
+        <fieldset>
+            <legend>Enviroment:</legend>
+            <p>
+                UNDERGROUND_DEPTH:
+                <input type="number" name="UNDERGROUND_DEPTH_MIN" id="UNDERGROUND_DEPTH_MIN" class="UNDERGROUND_DEPTH">
+                <input type="number" name="UNDERGROUND_DEPTH_MAX" id="UNDERGROUND_DEPTH_MAX" class="UNDERGROUND_DEPTH">
+            </p>
+            <p>
+                <input type="checkbox" name="GOOD" id="GOOD">
+                <label for="GOOD">GOOD</label>
+            </p>
+            <p>
+                <input type="checkbox" name="EVIL" id="EVIL">
+                <label for="EVIL">EVIL</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SAVAGE" id="SAVAGE">
+                <label for="SAVAGE">SAVAGE</label>
+            </p>
+            <p>
+                <label for="FREQUENCY">FREQUENCY:</label>
+                <input type="number" name="FREQUENCY" id="FREQUENCY" min="0" value="50" step="1">
+            </p>
+            <p>
+                <input type="checkbox" name="WET" id="WET">
+                <label for="WET">WET</label>
+            </p>
+            <p>
+                <input type="checkbox" name="DRY" id="DRY">
+                <label for="DRY">DRY</label>
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>Growth:</legend>
+            <p id="growth">
+
+            </p>
+            <button onclick="createGrowth();">Create New Growth</button>
+            <button onclick="removeGrowth();">Delete Last Growth</button>
+        </fieldset>
+        <select name="plantType" id="plantType" onchange="checkPlantType();">
+            <option value="TREE_TYPE" selected>TREE</option>
+            <option value="SHRUB_TYPE">SHRUB</option>
+            <option value="GRASS_TYPE">GRASS</option>
+        </select>
+        <fieldset id="TREE_TYPE">
+            <legend>Tree</legend>
+            <p>
+                <label for="TREE">TREE:</label>
+                <input type="text" name="TREE" id="TREE" class="TREE" onchange="ifInputElementValueIsBlankSetValue('TREE', 'NONE');"
+                title="The material this tree is made from. If left blank, then NONE will be used, meaning this tree will drop no logs">
+            </p>
+            <p>
+                <label for="TREE_TILE">TREE_TILE:</label>
+                <input type="number" name="TREE_TILE" id="TREE_TILE" min="0" max="255" step="1" value="24" class="TREE" 
+                title="The tile that will be used for this tree when viewed on the world map">
+            </p>
+            <p>
+                <label for="DEAD_TREE_TILE">DEAD_TREE_TILE:</label>
+                <input type="number" name="DEAD_TREE_TILE" id="DEAD_TREE_TILE" min="0" max="255" step="1" value="198" class="TREE" 
+                title="The tile that will be used for dead and wintering (if deciduous) instances of this tree">
+            </p>
+            <p>
+                <label for="SAPLING_TILE">SAPLING_TILE:</label>
+                <input type="number" name="SAPLING_TILE" id="SAPLING_TILE" min="0" max="255" step="1" value="231" class="TREE" 
+                title="The tile that will be used for sapling instances of this tree">
+            </p>
+            <p>
+                <label for="DEAD_SAPLING_TILE">DEAD_SAPLING_TILE:</label>
+                <input type="number" name="DEAD_SAPLING_TILE" id="DEAD_SAPLING_TILE" min="0" max="255" step="1" value="231" class="TREE" 
+                title="The tile that will be used for dead sapling instances of this tree">
+            </p>
+            <div name="TREE_COLOR" id="TREE_COLOR">
+                <p>The color of this tree in foreground, background, and brightness intigers</p>
+                TREE_COLOR:
+                <input type="number" name="foregroundTree" id="foregroundTree" min="0" max="7" value="2" class="ch3 TREE_COLOR">
+                <input type="number" name="backgroundTree" id="backgroundTree" min="0" max="7" value="0" class="ch3 TREE_COLOR">
+                <input type="number" name="brightnessTree" id="brightnessTree" min="0" max="1" value="0" class="ch3 TREE_COLOR">
+            </div>
+            <div name="DEAD_TREE_COLOR" id="DEAD_TREE_COLOR">
+                <p>The color of this tree (when dead) in foreground, background, and brightness intigers</p>
+                DEAD_TREE_COLOR:
+                <input type="number" name="foregroundTreeDead" id="foregroundTreeDead" min="0" max="7" value="0" class="ch3 DEAD_TREE_COLOR">
+                <input type="number" name="backgroundTreeDead" id="backgroundTreeDead" min="0" max="7" value="0" class="ch3 DEAD_TREE_COLOR">
+                <input type="number" name="brightnessTreeDead" id="brightnessTreeDead" min="0" max="1" value="1" class="ch3 DEAD_TREE_COLOR">
+            </div>
+            <div name="SAPLING_COLOR" id="SAPLING_COLOR">
+                <p>The color of this sapling in foreground, background, and brightness intigers</p>
+                SAPLING_COLOR:
+                <input type="number" name="foregroundSapling" id="foregroundSapling" min="0" max="7" value="2" class="ch3 SAPLING_COLOR">
+                <input type="number" name="backgroundSapling" id="backgroundSapling" min="0" max="7" value="0" class="ch3 SAPLING_COLOR">
+                <input type="number" name="brightnessSapling" id="brightnessSapling" min="0" max="1" value="0" class="ch3 SAPLING_COLOR">
+            </div>
+            <div name="DEAD_SAPLING_COLOR" id="DEAD_SAPLING_COLOR">
+                <p>The color of this sapling (when dead) in foreground, background, and brightness intigers</p>
+                DEAD_SAPLING_COLOR:
+                <input type="number" name="foregroundSaplingDead" id="foregroundSaplingDead" min="0" max="7" value="2" class="ch3 DEAD_SAPLING_COLOR">
+                <input type="number" name="backgroundSaplingDead" id="backgroundSaplingDead" min="0" max="7" value="0" class="ch3 DEAD_SAPLING_COLOR">
+                <input type="number" name="brightnessSaplingDead" id="brightnessSaplingDead" min="0" max="1" value="0" class="ch3 DEAD_SAPLING_COLOR">
+            </div>
+            <p>
+                <label for="SAPLING_DROWN_LEVEL">SAPLING_DROWN_LEVEL</label>
+                <input type="number" name="SAPLING_DROWN_LEVEL" id="SAPLING_DROWN_LEVEL" min="0" max="7" value="4" step="1" 
+                title="Water levels equal to or higher than this level will kill the sapling">
+            </p>
+            <p>
+                <label for="TREE_DROWN_LEVEL">TREE_DROWN_LEVEL</label>
+                <input type="number" name="TREE_DROWN_LEVEL" id="TREE_DROWN_LEVEL" min="0" max="7" value="7" step="1" 
+                title="Water levels equal to or higher than this level will kill the tree">
+            </p>
+            <p>
+                <input type="checkbox" name="SAPLING" id="SAPLING" 
+                title="If checked, young instances of this tree will be called '[x] sapling' instead of 'young [x]'">
+                <label for="SAPLING">SAPLING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="STANDARD_TILE_NAMES" id="STANDARD_TILE_NAMES" onchange=""
+                title="The standard names will be used for this trees trunk, branches, twigs, and roots">
+                <label for="STANDARD_TILE_NAMES">STANDARD_TILE_NAMES</label>
+            </p>
+            <fieldset>
+                <legend>Trunk:</legend>
+                <p>
+                    <label for="TRUNK_NAME">TRUNK_NAME:</label>
+                    <input type="text" name="TRUNK_NAME" id="TRUNK_NAME" class="STANDARD_TILE_NAMES" title="The name of the trunk. Optional">
+                </p>
+                <p>
+                    <label for="MAX_TRUNK_HEIGHT">MAX_TRUNK_HEIGHT:</label>
+                    <input type="number" name="MAX_TRUNK_HEIGHT" id="MAX_TRUNK_HEIGHT" min="1" max="8" step="1"  
+                    title="The maximum z-level height that this tree can grow to">
+                </p>
+                <p>
+                    <label for="MAX_TRUNK_DIAMETER">MAX_TRUNK_DIAMETER:</label>
+                    <input type="number" name="MAX_TRUNK_DIAMETER" id="MAX_TRUNK_DIAMETER" min="1" max="3" step="1"  
+                    title="The maximum diameter that the trunk of this tree can grow to, in tiles">
+                </p>
+                <p>
+                    <label for="TRUNK_PERIOD">TRUNK_PERIOD:</label>
+                    <input type="number" name="TRUNK_PERIOD" id="TRUNK_PERIOD" min="1" step="1"  
+                    title="The number of years it takes for the trunk to grow one z-level">
+                </p>
+                <p>
+                    <label for="TRUNK_WIDTH_PERIOD">TRUNK_WIDTH_PERIOD:</label>
+                    <input type="number" name="TRUNK_WIDTH_PERIOD" id="TRUNK_WIDTH_PERIOD" min="1" step="1"  
+                    title="The number of years it takes for the trunk to grow one tile wider">
+                </p>
+                <p>
+                    <label for="TRUNK_BRANCHING">TRUNK_BRANCHING:</label>
+                    <input type="number" name="TRUNK_BRANCHING" id="TRUNK_BRANCHING" min="0" step="1"  
+                    title="This determins how much the tree trunk will branch out. If 0, the truck will grow striaght">
+                </p>
+            </fieldset>
+            <fieldset>
+                <legend>Branches:</legend>
+                <p>
+                    <label for="LIGHT_BRANCHES_NAME">LIGHT_BRANCHES_NAME:</label>
+                    <input type="text" name="LIGHT_BRANCHES_NAME" id="LIGHT_BRANCHES_NAME" class="STANDARD_TILE_NAMES" 
+                    title="The name that will be used for light branches. Optional">
+                </p>
+                <p>
+                    <label for="HEAVY_BRANCHES_NAME">HEAVY_BRANCHES_NAME:</label>
+                    <input type="text" name="HEAVY_BRANCHES_NAME" id="HEAVY_BRANCHES_NAME" class="STANDARD_TILE_NAMES" 
+                    title="The name that will be used for heavy branches. Optional">
+                </p>
+                <p>
+                    <label for="DIRECTED_BRANCHES_NAME">DIRECTED_BRANCHES_NAME:</label>
+                    <input type="text" name="DIRECTED_BRANCHES_NAME" id="DIRECTED_BRANCHES_NAME" class="STANDARD_TILE_NAMES" 
+                    title="The name that will be used for directed branches. Optional">
+                </p>
+                <p>
+                    <label for="BRANCH_DENSITY">BRANCH_DENSITY:</label>
+                    <input type="number" name="BRANCH_DENSITY" id="BRANCH_DENSITY" min="0" step="1" class="TREE" 
+                    title="The density of branches">
+                </p>
+                <p>
+                    <label for="LIGHT_BRANCHES_DENSITY">LIGHT_BRANCHES_DENSITY:</label>
+                    <input type="number" name="LIGHT_BRANCHES_DENSITY" id="LIGHT_BRANCHES_DENSITY" min="0" step="1" class="TREE" 
+                    title="The density of light branches. Optional">
+                </p>
+                <p>
+                    <label for="HEAVY_BRANCH_DENSITY">HEAVY_BRANCH_DENSITY:</label>
+                    <input type="number" name="HEAVY_BRANCH_DENSITY" id="HEAVY_BRANCH_DENSITY" min="0" step="1" class="TREE" 
+                    title="The density of heavy branches. WARNING: Values greater the 3 may cause crashes">
+                </p>
+                <p>
+                    <label for="DIRECTED_BRANCHES_DENSITY">DIRECTED_BRANCHES_DENSITY:</label>
+                    <input type="number" name="DIRECTED_BRANCHES_DENSITY" id="DIRECTED_BRANCHES_DENSITY" min="0" step="1" class="TREE" 
+                    title="The density of directed branches. Optional. WARNING: Values greater the 3 may cause crashes">
+                </p>
+                <p>
+                    <label for="BRANCH_RADIUS">BRANCH_RADIUS:</label>
+                    <input type="number" name="BRANCH_RADIUS" id="BRANCH_RADIUS" min="0" step="1" class="TREE" 
+                    title="This determins the radius that branches can reach. WARNING: Values greater the 3 may cause crashes">
+                </p>
+                <p>
+                    <label for="LIGHT_BRANCH_RADIUS">LIGHT_BRANCH_RADIUS:</label>
+                    <input type="number" name="LIGHT_BRANCH_RADIUS" id="LIGHT_BRANCH_RADIUS" min="0" step="1" class="TREE" 
+                    title="This determins the radius that light branches can reach. Optional. WARNING: Values greater the 3 may cause crashes">
+                </p>
+                <p>
+                    <label for="HEAVY_BRANCH_RADIUS">HEAVY_BRANCH_RADIUS:</label>
+                    <input type="number" name="HEAVY_BRANCH_RADIUS" id="HEAVY_BRANCH_RADIUS" min="0" step="1" class="TREE" 
+                    title="This determins the radius that heavy branches can reach. Optional">
+                </p>
+                <p>
+                    <label for="DIRECTED_BRANCH_RADIUS">DIRECTED_BRANCH_RADIUS:</label>
+                    <input type="number" name="DIRECTED_BRANCH_RADIUS" id="DIRECTED_BRANCH_RADIUS" min="0" step="1" class="TREE" 
+                    title="This determins the radius that directed branches can reach. Optional">
+                </p>
+            </fieldset>
+            <fieldset>
+                <legend>Roots:</legend>
+                <p>
+                    <label for="ROOT_NAME">ROOT_NAME:</label>
+                    <input type="text" name="ROOT_NAME" id="ROOT_NAME" class="STANDARD_TILE_NAMES" title="The name of the root. Optional">
+                </p>
+                <p>
+                    <label for="ROOT_RADIUS">ROOT_RADIUS:</label>
+                    <input type="number" name="ROOT_RADIUS" id="ROOT_RADIUS" min="0" step="1" value="3" class="TREE" 
+                    title="The radius that the roots can spread out to">
+                </p>
+                <p>
+                    <label for="ROOT_DENSITY">ROOT_DENSITY:</label>
+                    <input type="number" name="ROOT_DENSITY" id="ROOT_DENSITY" min="0" step="1" value="5" class="TREE" 
+                    title="The density of the roots">
+                </p>
+            </fieldset>
+            <fieldset>
+                <legend>Twigs:</legend>
+                <p>
+                    <label for="TWIGS_NAME">TWIGS_NAME:</label>
+                    <input type="text" name="TWIGS_NAME" id="TWIGS_NAME" class="STANDARD_TILE_NAMES" title="The name for the twigs on this tree. Optional">
+                </p>
+                <p>
+                    <label for="TWIGS_SIDE_BRANCHES">TWIGS_SIDE_BRANCHES:</label>
+                    <input type="number" name="TWIGS_SIDE_BRANCHES" id="TWIGS_SIDE_BRANCHES" min="0" max="1" step="1" value="1" 
+                    title="Twigs will grow on the sides of branches">
+                </p>
+                <p>
+                    <label for="TWIGS_ABOVE_BRANCHES">TWIGS_ABOVE_BRANCHES:</label>
+                    <input type="number" name="TWIGS_ABOVE_BRANCHES" id="TWIGS_ABOVE_BRANCHES" min="0" max="1" step="1" value="1" 
+                    title="Twigs will grow on the tops of branches">
+                </p>
+                <p>
+                    <label for="TWIGS_BELOW_BRANCHES">TWIGS_BELOW_BRANCHES:</label>
+                    <input type="number" name="TWIGS_BELOW_BRANCHES" id="TWIGS_BELOW_BRANCHES" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the bottoms of branches">
+                </p>
+                <p>
+                    <label for="TWIGS_SIDE_HEAVY_BRANCHES">TWIGS_SIDE_HEAVY_BRANCHES:</label>
+                    <input type="number" name="TWIGS_SIDE_HEAVY_BRANCHES" id="TWIGS_SIDE_HEAVY_BRANCHES" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the sides of heavy branches">
+                </p>
+                <p>
+                    <label for="TWIGS_ABOVE_HEAVY_BRANCHES">TWIGS_ABOVE_HEAVY_BRANCHES:</label>
+                    <input type="number" name="TWIGS_ABOVE_HEAVY_BRANCHES" id="TWIGS_ABOVE_HEAVY_BRANCHES" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the tops of heavy branches">
+                </p>
+                <p>
+                    <label for="TWIGS_BELOW_HEAVY_BRANCHES">TWIGS_BELOW_HEAVY_BRANCHES:</label>
+                    <input type="number" name="TWIGS_BELOW_HEAVY_BRANCHES" id="TWIGS_BELOW_HEAVY_BRANCHES" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the bottoms of heavy branches">
+                </p>
+                <p>
+                    <label for="TWIGS_SIDE_TRUNK">TWIGS_SIDE_TRUNK:</label>
+                    <input type="number" name="TWIGS_SIDE_TRUNK" id="TWIGS_SIDE_TRUNK" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the sides of the trunk">
+                </p>
+                <p>
+                    <label for="TWIGS_ABOVE_TRUNK">TWIGS_ABOVE_TRUNK:</label>
+                    <input type="number" name="TWIGS_ABOVE_TRUNK" id="TWIGS_ABOVE_TRUNK" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the tops of the trunk">
+                </p>
+                <p>
+                    <label for="TWIGS_BELOW_TRUNK">TWIGS_BELOW_TRUNK:</label>
+                    <input type="number" name="TWIGS_BELOW_TRUNK" id="TWIGS_BELOW_TRUNK" min="0" max="1" step="1" value="0" 
+                    title="Twigs will grow on the bottoms of the trunk">
+                </p>
+                
+            </fieldset>
+        </fieldset>
+        <fieldset id="SHRUB_TYPE" hidden>
+            <legend>Shrub:</legend>
+            <p>Note: Underground plants can be planted (and will grow in the wild) in all seasons, so the seasons tags will only affect shrubs that can grow above ground</p>
+            <p>
+                <input type="checkbox" name="SPRING" id="SPRING" class="SEASONS" title="This shrub can be planted during Spring. It will also grow in the wild during Spring">
+                <label for="SPRING">SPRING</label>
+            </p>
+            <p>
+                <input type="checkbox" name="SUMMER" id="SUMMER" class="SEASONS" title="This shrub can be planted during Summer. It will also grow in the wild during Summer">
+                <label for="SUMMER">SUMMER</label>
+            </p>
+            <p>
+                <input type="checkbox" name="AUTUMN" id="AUTUMN" class="SEASONS" title="This shrub can be planted during Autumn. It will also grow in the wild during Autumn">
+                <label for="AUTUMN">AUTUMN</label>
+            </p>
+            <p>
+                <input type="checkbox" name="WINTER" id="WINTER" class="SEASONS" title="This shrub can be planted during Winter. It will also grow in the wild during Winter">
+                <label for="WINTER">WINTER</label>
+            </p>
+            <p>
+                <label for="GROWDUR">GROWDUR:</label>
+                <input type="number" name="GROWDUR" id="GROWDUR" min="1" value="300" step="1" 
+                title="The length of time (measured in hundreds of ticks). A season lasts 1008 GROWDUR units">
+            </p>
+            <p>
+                <label for="CLUSTERSIZE">CLUSTERSIZE:</label>
+                <input type="number" name="CLUSTERSIZE" id="CLUSTERSIZE" min="1" value="5" step="1" 
+                title="The maximum of of the stack when harvested from a wild plant">
+            </p>
+            <p>
+                <label for="PICKED_TILE">PICKED_TILE:</label>
+                <input type="number" name="PICKED_TILE" id="PICKED_TILE" class="ch3" min="0" value="231" step="1" 
+                title="The tile used to represent the plant when it has been harvested or is ready to be harvested from a farming plot">
+            </p>
+            <p>
+                <label for="DEAD_PICKED_TILE">DEAD_PICKED_TILE:</label>
+                <input type="number" name="DEAD_PICKED_TILE" id="DEAD_PICKED_TILE" class="ch3" min="0" value="169" step="1" 
+                title="The tile used to represent the plant when it is ready to be harvested from a farming plot but has died">
+            </p>
+            <p>
+                <label for="SHRUB_TILE">SHRUB_TILE:</label>
+                <input type="number" name="SHRUB_TILE" id="SHRUB_TILE" class="ch3" min="0" value="34" step="1" 
+                title="The tile used to represent the plant when it is growing in the wild and lacks growths">
+            </p>
+            <p>
+                <label for="DEAD_SHRUB_TILE">DEAD_SHRUB_TILE:</label>
+                <input type="number" name="DEAD_SHRUB_TILE" id="DEAD_SHRUB_TILE" class="ch3" min="0" value="34" step="1" 
+                title="The tile used to represent the plant when it is growing in the wild but has died">
+            </p>
+            <p name="PICKED_COLOR" id="PICKED_COLOR">
+                <p>The color of this plant when it has been harvested or is ready to be harvested from a farming plot, in foreground, background, and brightness intigers</p>
+                <input type="number" name="foregroundPicked" id="foregroundPicked" class="foreground ch1" min="0" max="7" value="2">
+                <input type="number" name="backgroundPicked" id="backgroundPicked" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="brightnessPicked" id="brightnessPicked" class="brightness ch1" min="0" max="1" value="0">
+            </p>
+            <p name="DEAD_PICKED_COLOR" id="DEAD_PICKED_COLOR">
+                <p>The color of this plant when it has been harvested but has died, in foreground, background, and brightness intigers</p>
+                <input type="number" name="foregroundDeadPicked" id="foregroundDeadPicked" class="foreground ch1" min="0" max="7" value="0">
+                <input type="number" name="backgroundDeadPicked" id="backgroundDeadPicked" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="brightnessDeadPicked" id="brightnessDeadPicked" class="brightness ch1" min="0" max="1" value="1">
+            </p>
+            <p name="SHRUB_COLOR" id="SHRUB_COLOR">
+                <p>The color of this plant when it is growing in the wild and lacks growths, in foreground, background, and brightness intigers</p>
+                <input type="number" name="foregroundShrub" id="foregroundShrub" class="foreground ch1" min="0" max="7" value="2">
+                <input type="number" name="backgroundShrub" id="backgroundShrub" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="brightnessShrub" id="brightnessShrub" class="brightness ch1" min="0" max="1" value="0">
+            </p>
+            <p name="DEAD_SHRUB_COLOR" id="DEAD_SHRUB_COLOR">
+                <p>The color of this plant when it is growing in the wild but has died, in foreground, background, and brightness intigers</p>
+                <input type="number" name="foregroundDeadShrub" id="foregroundDeadShrub" class="foreground ch1" min="0" max="7" value="6">
+                <input type="number" name="backgroundDeadShrub" id="backgroundDeadShrub" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="brightnessDeadShrub" id="brightnessDeadShrub" class="brightness ch1" min="0" max="1" value="0">
+            </p>
+            <p>
+                <label for="SHRUB_DROWN_LEVEL">SHRUB_DROWN_LEVEL</label>
+                <input type="number" name="SHRUB_DROWN_LEVEL" id="SHRUB_DROWN_LEVEL" class="ch1" min="0" max="7" value="4" step="1" 
+                title="Water levels equal to or higher than this level will kill the plant">
+            </p>
+            <p>
+                DRINK:
+                <input type="text" name="drinkMaterial" id="drinkMaterial" title="The material for this drink">
+            </p>
+            todo DRINK MILL THREAD SEED EXTRACT_STILL_VIAL EXTRACT_VIAL EXTRACT_BARREL
+
+        </fieldset>
+        <fieldset id="GRASS_TYPE" hidden>
+            <legend>Grass:</legend>
+            <p>
+                GRASS_TILES:
+                <input type="number" name="gt1" id="gt1" min="0" step="1" value="46" class="GRASS_TILES ch3">
+                <input type="number" name="gt2" id="gt2" min="0" step="1" value="44" class="GRASS_TILES ch3">
+                <input type="number" name="gt3" id="gt3" min="0" step="1" value="96" class="GRASS_TILES ch3">
+                <input type="number" name="gt4" id="gt4" min="0" step="1" value="39" class="GRASS_TILES ch3">
+            </p>
+            <p>
+                ALT_PERIOD:
+                <input type="number" name="ap1" id="ap1" min="0" step="1" class="ALT_PERIOD">
+                <input type="number" name="ap2" id="ap2" min="0" step="1" class="ALT_PERIOD">
+            </p>
+            <p>
+                ALT_GRASS_TILES:
+                <input type="number" name="agt1" id="agt1" min="0" step="1" value="46" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt2" id="agt2" min="0" step="1" value="44" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt3" id="agt3" min="0" step="1" value="96" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt4" id="agt4" min="0" step="1" value="39" class="ALT_GRASS_TILES ch3">
+            </p>
+            <p>
+                GRASS_COLORS:
+                <input type="number" name="gfg1" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
+                <input type="number" name="gbg1" id="gbg1" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="gbr1" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
+                <input type="number" name="gfg2" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
+                <input type="number" name="gbg2" id="gbg1" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="gbr2" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
+                <input type="number" name="gfg3" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
+                <input type="number" name="gbg3" id="gbg1" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="gbr3" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
+                <input type="number" name="gfg4" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
+                <input type="number" name="gbg4" id="gbg1" class="background ch1" min="0" max="7" value="0">
+                <input type="number" name="gbr4" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
+            </p>
+        </fieldset>
+        <button onclick="createPlant();">Create Plant</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <p id="result"></p>
+        </fieldset>
+    </body>
+</html>
