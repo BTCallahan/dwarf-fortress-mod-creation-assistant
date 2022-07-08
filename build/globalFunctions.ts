@@ -621,9 +621,12 @@ function createTable({elementId, headerTextItems}:{elementId:string, headerTextI
  * disable - A boolean. If true, then all HTMLInputElements will be disabled. If false, all HTMLInputElements will be enabled
  * className - A string that will be used to in a getElementsByClassName function call to creae the array of HTMLInputElements that will be itterated over
  */
-function enableOrDisableElements({disable, className}:{disable:boolean, className:string}) 
-{
-    let ranged = <HTMLCollection><any> document.getElementsByClassName(className);
+function enableOrDisableElements({
+    disable, className, parentElement, parentElementId}:{disable:boolean, className:string, parentElement?:HTMLElement, parentElementId?:string
+}){
+    let doc = (parentElement || document.getElementById(parentElementId as string)) || document;
+
+    let ranged = <HTMLCollection><any> doc.getElementsByClassName(className);
 
     let ranged2 = <HTMLInputElement[]> Array.from(ranged);
 
@@ -634,9 +637,12 @@ function enableOrDisableElements({disable, className}:{disable:boolean, classNam
     });
 }
 
-function hideOrUnhideElements({hide, className, parentElement}:{hide:boolean, className:string, parentElement?:HTMLElement})
-{
-    let ranged = <HTMLCollection><any> document.getElementsByClassName(className);
+function hideOrUnhideElements({
+    hide, className, parentElement, parentElementId}:{hide:boolean, className:string, parentElement?:HTMLElement, parentElementId?:string
+}){
+    let doc = (parentElement || document.getElementById(parentElementId as string)) || document;
+
+    let ranged = <HTMLCollection><any> doc.getElementsByClassName(className);
 
     let ranged2 = <HTMLInputElement[]> Array.from(ranged);
 
@@ -647,9 +653,12 @@ function hideOrUnhideElements({hide, className, parentElement}:{hide:boolean, cl
     });
 }
 
-function hideAndUnhideElements({hideClassNames, unhideClassNames, parentElement}:{hideClassNames:string[], unhideClassNames:string[], parentElement?:HTMLElement})
-{
-    let parent = parentElement || document;
+function hideAndUnhideElements({
+    hideClassNames, unhideClassNames, parentElement, parentElementId
+}:{
+    hideClassNames:string[], unhideClassNames:string[], parentElement?:HTMLElement, parentElementId?:string
+}){
+    let parent = (parentElement || document.getElementById(parentElementId as string)) || document;
 
     hideClassNames.forEach(element => {
         

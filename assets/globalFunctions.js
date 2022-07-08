@@ -429,24 +429,26 @@ function createTable({ elementId, headerTextItems }) {
  * disable - A boolean. If true, then all HTMLInputElements will be disabled. If false, all HTMLInputElements will be enabled
  * className - A string that will be used to in a getElementsByClassName function call to creae the array of HTMLInputElements that will be itterated over
  */
-function enableOrDisableElements({ disable, className }) {
-    let ranged = document.getElementsByClassName(className);
+function enableOrDisableElements({ disable, className, parentElement, parentElementId }) {
+    let doc = (parentElement || document.getElementById(parentElementId)) || document;
+    let ranged = doc.getElementsByClassName(className);
     let ranged2 = Array.from(ranged);
     console.log(ranged2);
     ranged2.forEach(element => {
         element.disabled = disable;
     });
 }
-function hideOrUnhideElements({ hide, className, parentElement }) {
-    let ranged = document.getElementsByClassName(className);
+function hideOrUnhideElements({ hide, className, parentElement, parentElementId }) {
+    let doc = (parentElement || document.getElementById(parentElementId)) || document;
+    let ranged = doc.getElementsByClassName(className);
     let ranged2 = Array.from(ranged);
     console.log(ranged2);
     ranged2.forEach(element => {
         element.hidden = hide;
     });
 }
-function hideAndUnhideElements({ hideClassNames, unhideClassNames, parentElement }) {
-    let parent = parentElement || document;
+function hideAndUnhideElements({ hideClassNames, unhideClassNames, parentElement, parentElementId }) {
+    let parent = (parentElement || document.getElementById(parentElementId)) || document;
     hideClassNames.forEach(element => {
         let ele = parent.getElementsByClassName(element);
         let elea = Array.from(ele);
