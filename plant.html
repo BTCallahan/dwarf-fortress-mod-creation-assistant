@@ -28,6 +28,8 @@
                 <a href="armor.html">Armor and Clothing</a>
                 <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
                 <a href="tool.html">Tools</a>
+                <a href="shape.html">Shapes</a>
+                <a href="pattern.html">Descriptor Patterns</a>
             </div>
         </header>
         <p>
@@ -37,7 +39,7 @@
         </p>
         <p>
             <label for="PLANT">PLANT:</label>
-            <input type="text" name="PLANT" id="PLANT" pattern=/[A-Z0-9_]/ 
+            <input type="text" name="PLANT" id="PLANT" pattern=/[A-Z0-9_]/ required
             title="The name of the plant. This should have only capital letter and underscores'">
         </p>
         <p>
@@ -55,7 +57,7 @@
         <p>
             <input type="text" name="ALL_NAMES" id="ALL_NAMES" 
             onchange="enableOrDisableElements({disable:getInputElementValue('ALL_NAMES')!=='', className:'NAME'});"
-            title="If no blank, this will override NAME, NAME_PLURAL and ADJ">
+            title="If not blank, this will override NAME, NAME_PLURAL and ADJ">
             <label for="ALL_NAMES">ALL_NAMES:</label>
         </p>
         <fieldset>
@@ -68,11 +70,12 @@
         </fieldset>
         <fieldset>
             <legend>Materials:</legend>
+            Currently, material templates are non functional
             <p id="materialTemplates">
 
             </p>
-            <button onclick="createMaterialTemplate();">Create New Material</button>
-            <button onclick="deleteMaterialTemplate();">Delete Last Material</button>
+            <button onclick="createMaterialTemplate();" disabled>Create New Material</button>
+            <button onclick="deleteMaterialTemplate();" disabled>Delete Last Material</button>
             <p>
                 BASIC_MAT:
                 <input type="text" name="BASIC_MAT" id="BASIC_MAT" value="LOCAL_PLANT_MAT" class="BASIC_MAT"
@@ -80,21 +83,22 @@
                 <input type="text" name="BASIC_STRUCT" id="BASIC_STRUCT" value="STRUCTURAL" class="BASIC_MAT"
                 title="The effects of values other then 'STRUCTURAL' are unkown">
             </p>
-
         </fieldset>
         <fieldset>
             <legend>Enviroment:</legend>
             <p>
                 UNDERGROUND_DEPTH:
-                <input type="number" name="UNDERGROUND_DEPTH_MIN" id="UNDERGROUND_DEPTH_MIN" class="UNDERGROUND_DEPTH">
-                <input type="number" name="UNDERGROUND_DEPTH_MAX" id="UNDERGROUND_DEPTH_MAX" class="UNDERGROUND_DEPTH">
+                <input type="number" name="UNDERGROUND_DEPTH_MIN" id="UNDERGROUND_DEPTH_MIN" class="UNDERGROUND_DEPTH" 
+                title="If this plant grows in an underground biome, then it will not appear below this depth">
+                <input type="number" name="UNDERGROUND_DEPTH_MAX" id="UNDERGROUND_DEPTH_MAX" class="UNDERGROUND_DEPTH" 
+                title="If this plant grows in an underground biome, then it will not appear above this depth">
             </p>
             <p>
-                <input type="checkbox" name="GOOD" id="GOOD">
+                <input type="checkbox" name="GOOD" id="GOOD" onclick="uncheckCheckbox(isCheckboxChecked('GOOD'),'EVIL');">
                 <label for="GOOD">GOOD</label>
             </p>
             <p>
-                <input type="checkbox" name="EVIL" id="EVIL">
+                <input type="checkbox" name="EVIL" id="EVIL" onclick="uncheckCheckbox(isCheckboxChecked('EVIL'),'GOOD');">
                 <label for="EVIL">EVIL</label>
             </p>
             <p>
@@ -103,14 +107,15 @@
             </p>
             <p>
                 <label for="FREQUENCY">FREQUENCY:</label>
-                <input type="number" name="FREQUENCY" id="FREQUENCY" min="0" value="50" step="1">
+                <input type="number" name="FREQUENCY" id="FREQUENCY" min="0" value="50" step="1" 
+                title="The higher this number, the more frequently the plant will be encountered in the wild">
             </p>
             <p>
-                <input type="checkbox" name="WET" id="WET">
+                <input type="checkbox" name="WET" id="WET" title="This plant will only grow near natural water features">
                 <label for="WET">WET</label>
             </p>
             <p>
-                <input type="checkbox" name="DRY" id="DRY">
+                <input type="checkbox" name="DRY" id="DRY" title="This plant will grow away from natural water features">
                 <label for="DRY">DRY</label>
             </p>
         </fieldset>
@@ -129,10 +134,50 @@
         </select>
         <fieldset id="TREE_TYPE">
             <legend>Tree</legend>
-            <p>
-                <label for="TREE">TREE:</label>
-                <input type="text" name="TREE" id="TREE" class="TREE" onchange="ifInputElementValueIsBlankSetValue('TREE', 'NONE');"
-                title="The material this tree is made from. If left blank, then NONE will be used, meaning this tree will drop no logs">
+            <p id="treeMatParagraph" hidden>
+                TREE:
+                <select name="treeMaterial" id="treeMaterial" class="productMaterials" onchange="checkProductMaterial('tree');"
+                title="The material this tree is made from. If NONE is selected, this tree will drop no logs">
+                    <option value="NONE">NONE</option>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="treeCoalType" id="treeCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="treeCreaturePlantId" id="treeCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="treeMaterialName" id="treeMaterialName" title="The material for this tree">
+                <input type="text" name="treeReagentId" id="treeReagentId" disabled>
+                <input type="text" name="treeReactionId" id="treeReactionId" disabled>
+                <select name="treeHardcoded" id="treeHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
             </p>
             <p>
                 <label for="TREE_TILE">TREE_TILE:</label>
@@ -367,19 +412,23 @@
             <legend>Shrub:</legend>
             <p>Note: Underground plants can be planted (and will grow in the wild) in all seasons, so the seasons tags will only affect shrubs that can grow above ground</p>
             <p>
-                <input type="checkbox" name="SPRING" id="SPRING" class="SEASONS" title="This shrub can be planted during Spring. It will also grow in the wild during Spring">
+                <input type="checkbox" name="SPRING" id="SPRING" class="SEASONS" 
+                title="This shrub can be planted during Spring. It will also grow in the wild during Spring">
                 <label for="SPRING">SPRING</label>
             </p>
             <p>
-                <input type="checkbox" name="SUMMER" id="SUMMER" class="SEASONS" title="This shrub can be planted during Summer. It will also grow in the wild during Summer">
+                <input type="checkbox" name="SUMMER" id="SUMMER" class="SEASONS" 
+                title="This shrub can be planted during Summer. It will also grow in the wild during Summer">
                 <label for="SUMMER">SUMMER</label>
             </p>
             <p>
-                <input type="checkbox" name="AUTUMN" id="AUTUMN" class="SEASONS" title="This shrub can be planted during Autumn. It will also grow in the wild during Autumn">
+                <input type="checkbox" name="AUTUMN" id="AUTUMN" class="SEASONS" 
+                title="This shrub can be planted during Autumn. It will also grow in the wild during Autumn">
                 <label for="AUTUMN">AUTUMN</label>
             </p>
             <p>
-                <input type="checkbox" name="WINTER" id="WINTER" class="SEASONS" title="This shrub can be planted during Winter. It will also grow in the wild during Winter">
+                <input type="checkbox" name="WINTER" id="WINTER" class="SEASONS" 
+                title="This shrub can be planted during Winter. It will also grow in the wild during Winter">
                 <label for="WINTER">WINTER</label>
             </p>
             <p>
@@ -413,16 +462,22 @@
                 title="The tile used to represent the plant when it is growing in the wild but has died">
             </p>
             <p name="PICKED_COLOR" id="PICKED_COLOR">
-                <p>The color of this plant when it has been harvested or is ready to be harvested from a farming plot, in foreground, background, and brightness intigers</p>
-                <input type="number" name="foregroundPicked" id="foregroundPicked" class="foreground ch1" min="0" max="7" value="2">
-                <input type="number" name="backgroundPicked" id="backgroundPicked" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="brightnessPicked" id="brightnessPicked" class="brightness ch1" min="0" max="1" value="0">
+                <p>PICKED_COLOR:</p>
+                <input type="number" name="foregroundPicked" id="foregroundPicked" class="foreground ch1 PICKED_COLOR" min="0" max="7" value="2" 
+                title="The foreground color of this plant when it has been harvested or is ready to be harvested from a farming plot">
+                <input type="number" name="backgroundPicked" id="backgroundPicked" class="background ch1 PICKED_COLOR" min="0" max="7" value="0" 
+                title="The background color of this plant when it has been harvested or is ready to be harvested from a farming plot">
+                <input type="number" name="brightnessPicked" id="brightnessPicked" class="brightness ch1 PICKED_COLOR" min="0" max="1" value="0" 
+                title="The brighness of this plant when it has been harvested or is ready to be harvested from a farming plot">
             </p>
             <p name="DEAD_PICKED_COLOR" id="DEAD_PICKED_COLOR">
                 <p>The color of this plant when it has been harvested but has died, in foreground, background, and brightness intigers</p>
-                <input type="number" name="foregroundDeadPicked" id="foregroundDeadPicked" class="foreground ch1" min="0" max="7" value="0">
-                <input type="number" name="backgroundDeadPicked" id="backgroundDeadPicked" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="brightnessDeadPicked" id="brightnessDeadPicked" class="brightness ch1" min="0" max="1" value="1">
+                <input type="number" name="foregroundDeadPicked" id="foregroundDeadPicked" class="foreground ch1 DEAD_PICKED_COLOR" min="0" max="7" value="0" 
+                title="The foreground color of this plant when it has been harvested but has died">
+                <input type="number" name="backgroundDeadPicked" id="backgroundDeadPicked" class="background ch1 DEAD_PICKED_COLOR" min="0" max="7" value="0" 
+                title="The background color of this plant when it has been harvested but has died">
+                <input type="number" name="brightnessDeadPicked" id="brightnessDeadPicked" class="brightness ch1 DEAD_PICKED_COLOR" min="0" max="1" value="1" 
+                title="The brightness of this plant when it has been harvested but has died">
             </p>
             <p name="SHRUB_COLOR" id="SHRUB_COLOR">
                 <p>The color of this plant when it is growing in the wild and lacks growths, in foreground, background, and brightness intigers</p>
@@ -441,11 +496,355 @@
                 <input type="number" name="SHRUB_DROWN_LEVEL" id="SHRUB_DROWN_LEVEL" class="ch1" min="0" max="7" value="4" step="1" 
                 title="Water levels equal to or higher than this level will kill the plant">
             </p>
+        </fieldset>
+        <fieldset>
+            <legend>Extracts:</legend>
             <p>
-                DRINK:
-                <input type="text" name="drinkMaterial" id="drinkMaterial" title="The material for this drink">
+                <input type="checkbox" name="drinkMat" id="drinkMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('drinkMat'), 'drinkMatParagraph');">
+                <label for="drinkMat">Enable Drink Material</label>
             </p>
-            todo DRINK MILL THREAD SEED EXTRACT_STILL_VIAL EXTRACT_VIAL EXTRACT_BARREL
+            <p id="drinkMatParagraph" hidden>
+                DRINK:
+                <select name="drinkMaterial" id="drinkMaterial" class="productMaterials" onchange="checkProductMaterial('drink');"
+                title="The type of material used for drinks made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="drinkCoalType" id="drinkCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="drinkCreaturePlantId" id="drinkCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="drinkMaterialName" id="drinkMaterialName" title="The material for this drink">
+                <input type="text" name="drinkReagentId" id="drinkReagentId" disabled>
+                <input type="text" name="drinkReactionId" id="drinkReactionId" disabled>
+                <select name="drinkHardcoded" id="drinkHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
+            <p>
+                <input type="checkbox" name="millMat" id="millMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('millMat'), 'millMatParagraph');">
+                <label for="millMat">Enable Milled Material</label>
+            </p>
+            <p id="millMatParagraph" hidden>
+                MILL:
+                <select name="millMaterial" id="millMaterial" class="productMaterials" onchange="checkProductMaterial('mill');"
+                title="The type of material used for milled powders made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="millCoalType" id="millCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="millCreaturePlantId" id="millCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="millMaterialName" id="millMaterialName" title="The material for this mill">
+                <input type="text" name="millReagentId" id="millReagentId" disabled>
+                <input type="text" name="millReactionId" id="millReactionId" disabled>
+                <select name="millHardcoded" id="millHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
+            <p>
+                <input type="checkbox" name="threadMat" id="threadMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('threadMat'), 'threadMatParagraph');">
+                <label for="threadMat">Enable Thread Material</label>
+            </p>
+            <p id="threadMatParagraph">
+                THREAD:
+                <select name="threadMaterial" id="threadMaterial" class="productMaterials" onchange="checkProductMaterial('thread');"
+                title="The type of material used for threads made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="threadCoalType" id="threadCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="threadCreaturePlantId" id="threadCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="threadMaterialName" id="threadMaterialName" title="The material for this thread">
+                <input type="text" name="threadReagentId" id="threadReagentId" disabled>
+                <input type="text" name="threadReactionId" id="threadReactionId" disabled>
+                <select name="threadHardcoded" id="threadHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
+            <p>
+                <input type="checkbox" name="stillVialMat" id="stillVialMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('stillVialMat'), 'stillVialMatParagraph');">
+                <label for="stillVialMat">Enable Still Vial Material</label>
+            </p>
+            <p id="stillVialMatParagraph" hidden>
+                EXTRACT_STILL_VIAL:
+                <select name="stillVialMaterial" id="stillVialMaterial" class="productMaterials" onchange="checkProductMaterial('stillVial');"
+                title="The type of material used for stillVials made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="stillVialCoalType" id="stillVialCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="stillVialCreaturePlantId" id="stillVialCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="stillVialMaterialName" id="stillVialMaterialName" title="The material for this stillVial">
+                <input type="text" name="stillVialReagentId" id="stillVialReagentId" disabled>
+                <input type="text" name="stillVialReactionId" id="stillVialReactionId" disabled>
+                <select name="stillVialHardcoded" id="stillVialHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
+            <p>
+                <input type="checkbox" name="vialMat" id="vialMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('vialMat'), 'vialMatParagraph');">
+                <label for="vialMat">Enable Vial Material</label>
+            </p>
+            <p id="vialMatParagraph" hidden>
+                EXTRACT_VIAL:
+                <select name="vialMaterial" id="vialMaterial" class="productMaterials" onchange="checkProductMaterial('vial');"
+                title="The type of material used for vials made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="vialCoalType" id="vialCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="vialCreaturePlantId" id="vialCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="vialMaterialName" id="vialMaterialName" title="The material for this vial">
+                <input type="text" name="vialReagentId" id="vialReagentId" disabled>
+                <input type="text" name="vialReactionId" id="vialReactionId" disabled>
+                <select name="vialHardcoded" id="vialHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
+            <p>
+                <input type="checkbox" name="barrelMat" id="barrelMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('barrelMat'), 'barrelMatParagraph');">
+                <label for="barrelMat">Enable Barrel Material</label>
+            </p>
+            <p id="barrelMatParagraph" hidden>
+                EXTRACT_BARREL:
+                <select name="barrelMaterial" id="barrelMaterial" class="productMaterials" onchange="checkProductMaterial('barrel');"
+                title="The type of material used for barrel extractions made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="barrelCoalType" id="barrelCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="barrelCreaturePlantId" id="barrelCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="barrelMaterialName" id="barrelMaterialName" title="The material for this barrel">
+                <input type="text" name="barrelReagentId" id="barrelReagentId" disabled>
+                <input type="text" name="barrelReactionId" id="barrelReactionId" disabled>
+                <select name="barrelHardcoded" id="barrelHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
+
+            <p>
+                <input type="checkbox" name="seedMat" id="seedMat" 
+                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('seedMat'), 'seedMatParagraph');">
+                <label for="seedMat">Enable Thread Material</label>
+            </p>
+            <p id="seedMatParagraph">
+                SEED:
+                <input type="text" name="seedName" id="seedName" >
+                <input type="text" name="seedPluralName" id="seedPluralName">
+                <select name="seedMaterial" id="seedMaterial" class="productMaterials" onchange="checkProductMaterial('seed');"
+                title="The type of material used for seeds made from this plant">
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="COAL">COAL</option>
+                    <option value="CREATURE_MAT">CREATURE_MAT</option>
+                    <option value="LOCAL_CREATURE_MAT">LOCAL_CREATURE_MAT</option>
+                    <option value="PLANT_MAT">PLANT_MAT</option>
+                    <option value="LOCAL_PLANT_MAT" selected>LOCAL_PLANT_MAT</option>
+                    <option value="GET_MATERIAL_FROM_REAGENT">GET_MATERIAL_FROM_REAGENT</option>
+                    <option value="MATERIAL_NAME">MATERIAL_NAME</option>
+                </select>
+                <select name="seedCoalType" id="seedCoalType" disabled>
+                    <option value="CHARCOAL" selected>CHARCOAL</option>
+                    <option value="COKE">COKE</option>
+                    <option value="NO_MATGLOSS">NO_MATGLOSS - This covers charcoal, coke, and generic coal</option>
+                </select>
+                <input type="text" name="seedCreaturePlantId" id="seedCreaturePlantId" disabled 
+                title="If the material comes from a specific creature or plant, enter the identifier of that creature/plant here">
+                <input type="text" name="seedMaterialName" id="seedMaterialName" title="The material for this seed">
+                <input type="text" name="seedReagentId" id="seedReagentId" disabled>
+                <input type="text" name="seedReactionId" id="seedReactionId" disabled>
+                <select name="seedHardcoded" id="seedHardcoded" disabled>
+                    <option value="INORGANIC">INORGANIC</option>
+                    <option value="AMBER">AMBER</option>
+                    <option value="CORAL">CORAL</option>
+                    <option value="GLASS_GREEN">GLASS_GREEN</option>
+                    <option value="GLASS_CLEAR">GLASS_CLEAR</option>
+                    <option value="GLASS_CRYSTAL">GLASS_CRYSTAL</option>
+                    <option value="WATER">WATER</option>
+                    <option value="COAL">COAL</option>
+                    <option value="POTASH">POTASH</option>
+                    <option value="ASH">ASH</option>
+                    <option value="PEARLASH">PEARLASH</option>
+                    <option value="LYE">LYE</option>
+                    <option value="MUD">MUD</option>
+                    <option value="VOMET">VOMET</option>
+                    <option value="FILTH_B">FILTH_B</option>
+                    <option value="FILTH_Y">FILTH_Y</option>
+                    <option value="UNKNOWN_SUBSTANCE">UNKNOWN_SUBSTANCE</option>
+                    <option value="GRIME">GRIME</option>
+                </select>
+            </p>
 
         </fieldset>
         <fieldset id="GRASS_TYPE" hidden>
@@ -471,18 +870,18 @@
             </p>
             <p>
                 GRASS_COLORS:
-                <input type="number" name="gfg1" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
-                <input type="number" name="gbg1" id="gbg1" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="gbr1" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
-                <input type="number" name="gfg2" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
-                <input type="number" name="gbg2" id="gbg1" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="gbr2" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
-                <input type="number" name="gfg3" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
-                <input type="number" name="gbg3" id="gbg1" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="gbr3" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
-                <input type="number" name="gfg4" id="gfg1" class="foreground ch1" min="0" max="7" value="2">
-                <input type="number" name="gbg4" id="gbg1" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="gbr4" id="gbr1" class="brightness ch1" min="0" max="1" value="0">
+                <input type="number" name="gfg1" id="gfg1" class="foreground ch1 GRASS_COLORS" min="0" max="7" value="2">
+                <input type="number" name="gbg1" id="gbg1" class="background ch1 GRASS_COLORS" min="0" max="7" value="0">
+                <input type="number" name="gbr1" id="gbr1" class="brightness ch1 GRASS_COLORS" min="0" max="1" value="0">
+                <input type="number" name="gfg2" id="gfg1" class="foreground ch1 GRASS_COLORS" min="0" max="7" value="2">
+                <input type="number" name="gbg2" id="gbg1" class="background ch1 GRASS_COLORS" min="0" max="7" value="0">
+                <input type="number" name="gbr2" id="gbr1" class="brightness ch1 GRASS_COLORS" min="0" max="1" value="0">
+                <input type="number" name="gfg3" id="gfg1" class="foreground ch1 GRASS_COLORS" min="0" max="7" value="2">
+                <input type="number" name="gbg3" id="gbg1" class="background ch1 GRASS_COLORS" min="0" max="7" value="0">
+                <input type="number" name="gbr3" id="gbr1" class="brightness ch1 GRASS_COLORS" min="0" max="1" value="0">
+                <input type="number" name="gfg4" id="gfg1" class="foreground ch1 GRASS_COLORS" min="0" max="7" value="2">
+                <input type="number" name="gbg4" id="gbg1" class="background ch1 GRASS_COLORS" min="0" max="7" value="0">
+                <input type="number" name="gbr4" id="gbr1" class="brightness ch1 GRASS_COLORS" min="0" max="1" value="0">
             </p>
         </fieldset>
         <button onclick="createPlant();">Create Plant</button>

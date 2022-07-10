@@ -3,6 +3,75 @@ var plantTypeMap = new Map();
 plantTypeMap.set("TREE_TYPE", ["GRASS_TYPE", "SHRUB_TYPE"]);
 plantTypeMap.set("GRASS_TYPE", ["TREE_TYPE", "SHRUB_TYPE"]);
 plantTypeMap.set("SHRUB_TYPE", ["GRASS_TYPE", "TREE_TYPE"]);
+const LOCAL_MAT = new Set(["LOCAL_CREATURE_MAT", "LOCAL_PLANT_MAT"]);
+const NO_MAT_NAME = new Set(["COAL", "GET_MATERIAL_FROM_REAGENT", "MATERIAL_NAME", "NONE"]);
+function addProductMaterial(parentElement, growthPrefix) {
+    parentElement.appendChild(createSelect({
+        elementID: `${growthPrefix}Material`, options: Array.from(createArrayOfOptionsFromStringArray(MATERIAL_TYPES)), defualtValue: "LOCAL_PLANT_MAT",
+        mouseonchange: () => {
+            checkProductMaterial(growthPrefix.toString());
+        }
+    }));
+    parentElement.appendChild(createSelect({
+        elementID: `${growthPrefix}CoalType`, options: Array.from(createArrayOfOptionsFromStringArray(["CHARCOAL", "COKE", "NO_MATGLOSS"])), isDisabeled: true
+    }));
+    parentElement.appendChild(createTextInput({
+        elementID: `${growthPrefix}CreaturePlantId`, isDisabeled: true,
+        titleText: "If the material comes from a specific creature or plant, enter the identifier of that creature/plant here"
+    }));
+    parentElement.appendChild(createTextInput({ elementID: `${growthPrefix}MaterialName` }));
+    parentElement.appendChild(createTextInput({ elementID: `${growthPrefix}ReagentId`, isDisabeled: true }));
+    parentElement.appendChild(createTextInput({ elementID: `${growthPrefix}ReactionId`, isDisabeled: true }));
+    parentElement.appendChild(createSelect({
+        elementID: `${growthPrefix}Hardcoded`, isDisabeled: true, options: Array.from(createArrayOfOptionsFromStringArray(HARDCODED_MATERIALS))
+    }));
+}
+function checkProductMaterial(idType) {
+    let material = getSelectElementValue(`${idType}Material`);
+    let coalType = document.getElementById(`${idType}CoalType`);
+    let creaturePlantId = document.getElementById(`${idType}CreaturePlantId`);
+    let materialName = document.getElementById(`${idType}MaterialName`);
+    let reagentId = document.getElementById(`${idType}ReagentId`);
+    let reactionId = document.getElementById(`${idType}ReactionId`);
+    let hardcoded = document.getElementById(`${idType}Hardcoded`);
+    coalType.disabled = material === "COAL";
+    creaturePlantId.disabled = !LOCAL_MAT.has(material);
+    materialName.disabled = !NO_MAT_NAME.has(material);
+    reagentId.disabled = material !== "GET_MATERIAL_FROM_REAGENT";
+    reactionId.disabled = material !== "GET_MATERIAL_FROM_REAGENT";
+    hardcoded.disabled = material === "MATERIAL_NAME";
+}
+function readProductMaterial(idType, numberOfTabs) {
+    let material = getSelectElementValue(`${idType}Material`);
+    switch (material) {
+        case "MATERIAL_NAME":
+            let hardcoded = getSelectElementValue(`${idType}Hardcoded`);
+            pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabs), "[", hardcoded, ":NONE]\n");
+            break;
+        case "COAL":
+            let coalType = getInputElementValue(`${idType}CoalType`);
+            pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabs), "[", idType.toUpperCase(), ":", coalType, "]\n");
+            break;
+        case "GET_MATERIAL_FROM_REAGENT":
+            let reagentId = getInputElementValue(`${idType}ReagentId`);
+            let reactionId = getInputElementValue(`${idType}ReactionId`);
+            pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabs), "[", idType.toUpperCase(), ":", reagentId, ":", reactionId, "]\n");
+            break;
+        case "PLANT_MAT":
+        case "CREATURE_MAT":
+            let creaturePlantId = getInputElementValue(`${idType}CreaturePlantId`);
+            let materialName = getInputElementValue(`${idType}MaterialName`);
+            pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabs), "[", idType.toUpperCase(), ":", creaturePlantId, ":", materialName, "]\n");
+            break;
+        case "NONE":
+            pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabs), "[", idType.toUpperCase(), ":NONE]\n");
+            break;
+        default:
+            let materialName2 = getInputElementValue(`${idType}MaterialName`);
+            pushObject.pushTo.push(pushObject.tabObject.repeat(numberOfTabs), "[", idType.toUpperCase(), ":", materialName2, "]\n");
+            break;
+    }
+}
 function checkPlantType() {
     let plantType = document.getElementById("plantType");
     let hide = plantTypeMap.get(plantType.value);
@@ -41,6 +110,11 @@ function createGrowth() {
                     })
                 ] }),
             createParagraph({ innerText: "GROWTH_ITEM:", elementsToAppend: [
+                    createSelect({
+                        elementID: `growthItem_${growthchildren}`,
+                        options: Array.from(createArrayOfOptionsFromStringArray(GROWTH_ITEMS)), defualtValue: "PLANT_GROWTH",
+                        titleText: "This is the type of item that will be used for the growth"
+                    }),
                     createTextInput({
                         elementID: `growthItem_${growthchildren}`, defaultValue: "PLANT_GROWTH",
                         titleText: "Item token. I don't quite understand how this works, so you should probably not change the default value",
@@ -378,11 +452,14 @@ function createPlant() {
     getMultipleCheckBoxesByClass({ inputClass: "NAME", numberOfTabObjects: 2, appendClassInFrontOfId: false, ignoreIfDisabled: true });
     getSingleInput({ inputId: "ALL_NAMES", numberOfTabObjects: 2, ignoreIfBlank: true });
     getMultipleCheckBoxesByClass({ inputClass: "PREFSTRING", numberOfTabObjects: 2, ignoreIfDisabled: true });
+    /*
     readMaterialTemplate();
-    let basicMat = getArrayOfElements({ className: "BASIC_MAT" }).map(value => {
+
+    let basicMat = getArrayOfElements<HTMLInputElement>({className:"BASIC_MAT"}).map(value => {
         return value.value;
     });
-    getMultipleInputsByClass({ inputClass: "BASIC_MAT", appendClassInFrontOfId: true, numberOfTabObjects: 1, prefixType: PrefixValueType.classCon });
+    getMultipleInputsByClass({inputClass:"BASIC_MAT", appendClassInFrontOfId:true, numberOfTabObjects:1, prefixType:PrefixValueType.classCon});
+    */
     readGrowth();
     let undergroundDepth = getArrayOfElements({ className: "UNDERGROUND_DEPTH" }).map(value => {
         return value.value;
@@ -398,7 +475,7 @@ function createPlant() {
     let plantType = getSelectElementValue("plantType");
     switch (plantType) {
         case "TREE_TYPE":
-            getSingleInput({ inputId: "TREE", numberOfTabObjects: 1, ignoreIfBlank: false });
+            readProductMaterial("tree", 1);
             getMultipleInputsById({ inputIds: ["TREE_TILE", "DEAD_TREE_TILE", "SAPLING_TILE", "DEAD_SAPLING_TILE"], numberOfTabObjects: 1 });
             let tree_color = getArrayOfElementValues({ className: "TREE_COLOR" });
             if (tree_color.every(element => {
@@ -448,6 +525,11 @@ function createPlant() {
             getSingleInput({ inputId: "SHRUB_DROWN_LEVEL", numberOfTabObjects: 1 });
             break;
         default:
+            pushObject.pushTo.push(pushObject.tabObject, "[GRASS]\n");
+            getMultipleInputsByClass({ inputClass: "GRASS_TILES", numberOfTabObjects: 1, prefixType: PrefixValueType.classCon });
+            getMultipleInputsByClass({ inputClass: "ALT_PERIOD", numberOfTabObjects: 1, requireNoBlanks: true, prefixType: PrefixValueType.classCon });
+            getMultipleInputsByClass({ inputClass: "ALT_GRASS_TILES", numberOfTabObjects: 1, prefixType: PrefixValueType.classCon });
+            getMultipleInputsByClass({ inputClass: "GRASS_COLORS", numberOfTabObjects: 1, prefixType: PrefixValueType.classCon });
             break;
     }
     printResults();
