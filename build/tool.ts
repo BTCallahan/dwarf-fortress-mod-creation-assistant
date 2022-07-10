@@ -58,6 +58,8 @@ function createTool()
 {
     clearPastResults("spaces");
 
+    pushObject.pushTo.push("[OBJECT:ITEM]\n\n");
+
     getSingleInput({inputId:"ITEM_TOOL", ignoreIfBlank:false, numberOfTabObjects:1});
 
     let singular = getInputElementValue("singular");

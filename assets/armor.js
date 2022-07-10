@@ -17,6 +17,7 @@ function onArmorChange() {
 }
 function createArmor() {
     clearPastResults("spaces");
+    pushObject.pushTo.push("[OBJECT:ITEM]\n\n");
     let sel = getSelectElementValue("armorType");
     getSingleInput({ inputId: sel, numberOfTabObjects: 2, ignoreIfBlank: false });
     let singular = getInputElementValue("singular");

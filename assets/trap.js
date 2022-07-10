@@ -1,6 +1,7 @@
 "use strict";
 function createTrap() {
     clearPastResults("spaces");
+    pushObject.pushTo.push("[OBJECT:ITEM]\n\n");
     getSingleInput({ inputId: "ITEM_TRAP", numberOfTabObjects: 2, ignoreIfBlank: false });
     let singular = getInputElementValue("singular");
     let plural = getInputElementValue("plural");

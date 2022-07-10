@@ -7,6 +7,7 @@ function activateRanged() {
 }
 function createWeapon() {
     clearPastResults("spaces");
+    pushObject.pushTo.push("[OBJECT:ITEM]\n\n");
     let weaponName = getInputElementValue("ITEM_WEAPON");
     if (weaponName == "") {
         errorObject.errorThrown = true;

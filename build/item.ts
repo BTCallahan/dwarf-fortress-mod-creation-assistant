@@ -29,6 +29,8 @@ function createItem() {
 
     clearPastResults("spaces");
 
+    pushObject.pushTo.push("[OBJECT:ITEM]\n\n");
+
     let itemType = getSelectElementValue("ITEM_TYPE");
 
     getSingleInput({inputId:itemType, numberOfTabObjects:2, ignoreIfBlank:false});
