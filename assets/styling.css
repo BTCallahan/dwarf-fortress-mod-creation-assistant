@@ -35,15 +35,19 @@ input[type="number"]{
 }
 
 input.ch1[type="number"]{
-    width: 3ch;
+    width: 4ch;
 }
 
 input.ch3[type="number"]{
-    width: 5ch;
+    width: 6ch;
+}
+
+input.growthTime[type="number"]{
+    width: 18;
 }
 
 input.size[type="number"]{
-    width: 10ch;
+    width: 14ch;
 }
 
 input.desc[type="text"]{
@@ -59,6 +63,10 @@ select:disabled + label{
 }
 
 input:disabled{
+    color: slategray;
+}
+
+button:disabled{
     color: slategray;
 }
 
