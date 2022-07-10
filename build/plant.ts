@@ -149,8 +149,8 @@ function createGrowth()
                         createTextInput({
                             elementID:`GROWTH_NAME_singular_${growthchildren}`, titleText:"The singular name for this growth", elementClass:"GROWTH_NAME"
                         }),
-                        createTextInput({elementID:`GROWTH_NAME_plural_${growthchildren}`, elementClass:"GROWTH_NAME",
-                            titleText:"The plural name for this growth. If lenk blank, 'STP' will be used instead", mouseonchange:() => {
+                        createTextInput({elementID:`GROWTH_NAME_plural_${growthchildren}`, elementClass:"GROWTH_NAME", defaultValue:"STP",
+                            titleText:"The plural name for this growth. If this is blank, 'STP' will be used instead", mouseonchange:() => {
                                 
                                 let growth = <HTMLInputElement><any> document.getElementById(`GROWTH_NAME_plural_${growthchildren}`);
 
@@ -248,11 +248,11 @@ function createGrowth()
                     ]}),
                     createParagraph({innerText:"GROWTH_TIMING:",elementsToAppend:[
                         createNumberInput({
-                            inputMin:"0", inputMax:"403200", elementID:`GROWTH_TIMING_A_${growthchildren} GROWTH_TIMING`, 
+                            inputMin:"0", inputMax:"403200", elementID:`GROWTH_TIMING_A_${growthchildren}`, elementClass:"GROWTH_TIMING growthTime", 
                             titleText:"This determins the begining of the range of a year in which this growth will exist. For example, flowers will bloom from 60000 to 119999, fruit will rippen from 120000 to 200000, and deciduous leaves will show from 0 to 300000"
                         }),
                         createNumberInput({
-                            inputMin:"0", inputMax:"403200", elementID:`GROWTH_TIMING_B_${growthchildren} GROWTH_TIMING`, 
+                            inputMin:"0", inputMax:"403200", elementID:`GROWTH_TIMING_B_${growthchildren}`, elementClass:"GROWTH_TIMING growthTime", 
                             titleText:"This determins the end of the range of a year in which this growth will exist. For example, flowers will bloom from 60000 to 119999, fruit will rippen from 120000 to 200000, and deciduous leaves will show from 0 to 300000"
                         })
                     ]}),
@@ -310,13 +310,13 @@ function createGrowth()
                                     let c5 = row.insertCell();
 
                                     c5.appendChild(createNumberInput({
-                                        inputMin:"-1", inputMax:"403200", elementClass:"ch1", elementID:`GROWTH_PRINT_start_${growthchildren}_${numberOfRows}`,
+                                        inputMin:"-1", inputMax:"403200", elementClass:"growthTime", elementID:`GROWTH_PRINT_start_${growthchildren}_${numberOfRows}`,
                                         titleText:"This is the start time value for the growth print. If this value is -1, then ALL will be used as the value for "
                                     }));
                                     let c6 = row.insertCell();
 
                                     c6.appendChild(createNumberInput({
-                                        inputMin:"0", inputMax:"403200", elementClass:"ch1", elementID:`GROWTH_PRINT_end_${growthchildren}_${numberOfRows}`,
+                                        inputMin:"0", inputMax:"403200", elementClass:"growthTime", elementID:`GROWTH_PRINT_end_${growthchildren}_${numberOfRows}`,
                                         titleText:"This is the end time value for the growth print"
                                     }));
                                     let c7 = row.insertCell();
@@ -575,6 +575,8 @@ function createPlant()
 {
     clearPastResults("spaces");
 
+    pushObject.pushTo.push("[OBJECT:PLANT]\n\n");
+
     getSingleInput({inputId:"PLANT", numberOfTabObjects:1, ignoreIfBlank:false});
 
     getMultipleCheckBoxesByClass({inputClass:"NAME", numberOfTabObjects:2, appendClassInFrontOfId:false, ignoreIfDisabled:true});
@@ -608,6 +610,81 @@ function createPlant()
     getMultipleCheckBoxesById({inputIds:["WET", "DRY"], numberOfTabObjects:1, elementType:PrefixValueType.id});
 
     let plantType = getSelectElementValue("plantType");
+
+    if (isCheckboxChecked("drinkMat"))
+    {
+        readProductMaterial("drink", 1);
+    }
+    if (isCheckboxChecked("millMat"))
+    {
+        readProductMaterial("mill", 1);
+    }
+    if (isCheckboxChecked("threadMat"))
+    {
+        readProductMaterial("thread", 1);
+    }
+    if (isCheckboxChecked("stillVialMat"))
+    {
+        readProductMaterial("stillVial", 1);
+    }
+    if (isCheckboxChecked("vialMat"))
+    {
+        readProductMaterial("vial", 1);
+    }
+    if (isCheckboxChecked("barrelMat"))
+    {
+        readProductMaterial("barrel", 1);
+    }
+    if (isCheckboxChecked("seedMat"))
+    {
+        let s = [
+            getInputElementValue("seedName"), 
+            getInputElementValue("seedPluralName"),
+            getInputElementValue("foregroundSeed"),
+            getInputElementValue("backgroundSeed"),
+            getInputElementValue("brightnessSeed")
+        ];
+
+        let idType = "seed";
+
+        let material = getSelectElementValue(`${idType}Material`);
+
+        switch (material) {
+            case "MATERIAL_NAME":
+
+                s.push(getSelectElementValue(`${idType}Hardcoded`), "NONE");
+                
+                break;
+            case "COAL":
+
+                s.push(getInputElementValue(`${idType}CoalType`));
+                
+                break;
+            case "GET_MATERIAL_FROM_REAGENT":
+
+                s.push(getInputElementValue(`${idType}ReagentId`), getInputElementValue(`${idType}ReactionId`));
+                
+                break;
+            case "PLANT_MAT":
+            case "CREATURE_MAT":
+
+                s.push(getInputElementValue(`${idType}CreaturePlantId`), getInputElementValue(`${idType}MaterialName`));
+                
+                break;
+            case "NONE":
+
+                s.push("NONE");
+                
+                break;
+            default:
+
+                s.push(getInputElementValue(`${idType}MaterialName`));
+                
+                break;
+        }
+        pushObject.pushTo.push(pushObject.tabObject, "[", s.join(":"), "]\n");
+
+    }
 
     switch (plantType) {
         case "TREE_TYPE":
@@ -670,13 +747,13 @@ function createPlant()
             getMultipleInputsById({inputIds:[
                 "GROWDUR", "CLUSTERSIZE", "PICKED_TILE", "DEAD_PICKED_TILE", "SHRUB_TILE", "DEAD_SHRUB_TILE"
             ], numberOfTabObjects:1});
-            getColor({colorContainterId:"PICKED_COLOR", numberOfTabObjects:1});
+            getColorByContainerId({colorContainterId:"PICKED_COLOR", numberOfTabObjects:1});
 
-            getColor({colorContainterId:"DEAD_PICKED_COLOR", numberOfTabObjects:1});
+            getColorByContainerId({colorContainterId:"DEAD_PICKED_COLOR", numberOfTabObjects:1});
 
-            getColor({colorContainterId:"SHRUB_COLOR", numberOfTabObjects:1});
+            getColorByContainerId({colorContainterId:"SHRUB_COLOR", numberOfTabObjects:1});
 
-            getColor({colorContainterId:"DEAD_SHRUB_COLOR", numberOfTabObjects:1});
+            getColorByContainerId({colorContainterId:"DEAD_SHRUB_COLOR", numberOfTabObjects:1});
 
             getSingleInput({inputId:"SHRUB_DROWN_LEVEL", numberOfTabObjects:1});
 
