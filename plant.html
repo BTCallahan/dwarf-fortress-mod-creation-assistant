@@ -9,6 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
         <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/constantValues.js"></script>
         <script type="text/javascript" src="assets/prefstring.js"></script>
         <script type="text/javascript" src="assets/plant.js"></script>
 
@@ -16,7 +17,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="assets/styling.css">
     </head>
-    <body onload="createPrefstring();checkPlantType();">
+    <body onload="enableOrDisableElements({disable:getInputElementValue('ALL_NAMES')!=='', className:'NAME'});
+    createPrefstring();checkPlantType();
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('drinkMat'), id:'drinkMatParagraph'});
+    checkProductMaterial('drink');
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('millMat'), id:'millMatParagraph'});
+    checkProductMaterial('mill');
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('seedMat'), id:'seedMatParagraph'});
+    checkProductMaterial('seed');
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('vialMat'), id:'vialMatParagraph'});
+    checkProductMaterial('vial');
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('stillVialMat'), id:'stillVialMatParagraph'});
+    checkProductMaterial('stillVial');
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('barrelMat'), id:'barrelMatParagraph'});
+    checkProductMaterial('barrel');
+    hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('threadMat'), id:'threadMatParagraph'});
+    checkProductMaterial('thread');">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -70,7 +86,7 @@
         </fieldset>
         <fieldset>
             <legend>Materials:</legend>
-            Currently, material templates are non functional
+            Currently, automatic material template creation is non functional, any material templates/materials must be manualy created
             <p id="materialTemplates">
 
             </p>
@@ -94,11 +110,11 @@
                 title="If this plant grows in an underground biome, then it will not appear above this depth">
             </p>
             <p>
-                <input type="checkbox" name="GOOD" id="GOOD" onclick="uncheckCheckbox(isCheckboxChecked('GOOD'),'EVIL');">
+                <input type="checkbox" name="GOOD" id="GOOD" onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('GOOD'), targetId:'EVIL'});">
                 <label for="GOOD">GOOD</label>
             </p>
             <p>
-                <input type="checkbox" name="EVIL" id="EVIL" onclick="uncheckCheckbox(isCheckboxChecked('EVIL'),'GOOD');">
+                <input type="checkbox" name="EVIL" id="EVIL" onclick="uncheckCheckbox({uncheckTarget:isCheckboxChecked('EVIL'), targetId:'GOOD'});">
                 <label for="EVIL">EVIL</label>
             </p>
             <p>
@@ -200,32 +216,40 @@
                 title="The tile that will be used for dead sapling instances of this tree">
             </p>
             <div name="TREE_COLOR" id="TREE_COLOR">
-                <p>The color of this tree in foreground, background, and brightness intigers</p>
                 TREE_COLOR:
-                <input type="number" name="foregroundTree" id="foregroundTree" min="0" max="7" value="2" class="ch3 TREE_COLOR">
-                <input type="number" name="backgroundTree" id="backgroundTree" min="0" max="7" value="0" class="ch3 TREE_COLOR">
-                <input type="number" name="brightnessTree" id="brightnessTree" min="0" max="1" value="0" class="ch3 TREE_COLOR">
+                <input type="number" name="foregroundTree" id="foregroundTree" min="0" max="7" value="2" class="ch3 TREE_COLOR foreground" 
+                title="The foreground color of this tree">
+                <input type="number" name="backgroundTree" id="backgroundTree" min="0" max="7" value="0" class="ch3 TREE_COLOR background" 
+                title="The background color of this tree">
+                <input type="number" name="brightnessTree" id="brightnessTree" min="0" max="1" value="0" class="ch3 TREE_COLOR brightness" 
+                title="The brightness of this tree">
             </div>
             <div name="DEAD_TREE_COLOR" id="DEAD_TREE_COLOR">
-                <p>The color of this tree (when dead) in foreground, background, and brightness intigers</p>
                 DEAD_TREE_COLOR:
-                <input type="number" name="foregroundTreeDead" id="foregroundTreeDead" min="0" max="7" value="0" class="ch3 DEAD_TREE_COLOR">
-                <input type="number" name="backgroundTreeDead" id="backgroundTreeDead" min="0" max="7" value="0" class="ch3 DEAD_TREE_COLOR">
-                <input type="number" name="brightnessTreeDead" id="brightnessTreeDead" min="0" max="1" value="1" class="ch3 DEAD_TREE_COLOR">
+                <input type="number" name="foregroundTreeDead" id="foregroundTreeDead" min="0" max="7" value="0" class="ch3 DEAD_TREE_COLOR foreground" 
+                title="The foreground color of this tree (when dead)">
+                <input type="number" name="backgroundTreeDead" id="backgroundTreeDead" min="0" max="7" value="0" class="ch3 DEAD_TREE_COLOR background" 
+                title="The background color of this tree (when dead)">
+                <input type="number" name="brightnessTreeDead" id="brightnessTreeDead" min="0" max="1" value="1" class="ch3 DEAD_TREE_COLOR brightness" 
+                title="The brightness of this tree (when dead)">
             </div>
             <div name="SAPLING_COLOR" id="SAPLING_COLOR">
-                <p>The color of this sapling in foreground, background, and brightness intigers</p>
                 SAPLING_COLOR:
-                <input type="number" name="foregroundSapling" id="foregroundSapling" min="0" max="7" value="2" class="ch3 SAPLING_COLOR">
-                <input type="number" name="backgroundSapling" id="backgroundSapling" min="0" max="7" value="0" class="ch3 SAPLING_COLOR">
-                <input type="number" name="brightnessSapling" id="brightnessSapling" min="0" max="1" value="0" class="ch3 SAPLING_COLOR">
+                <input type="number" name="foregroundSapling" id="foregroundSapling" min="0" max="7" value="2" class="ch3 SAPLING_COLOR foreground" 
+                title="The foreground color of this sapling">
+                <input type="number" name="backgroundSapling" id="backgroundSapling" min="0" max="7" value="0" class="ch3 SAPLING_COLOR background" 
+                title="The background color of this sapling">
+                <input type="number" name="brightnessSapling" id="brightnessSapling" min="0" max="1" value="0" class="ch3 SAPLING_COLOR brightness" 
+                title="The brightness of this sapling">
             </div>
             <div name="DEAD_SAPLING_COLOR" id="DEAD_SAPLING_COLOR">
-                <p>The color of this sapling (when dead) in foreground, background, and brightness intigers</p>
                 DEAD_SAPLING_COLOR:
-                <input type="number" name="foregroundSaplingDead" id="foregroundSaplingDead" min="0" max="7" value="2" class="ch3 DEAD_SAPLING_COLOR">
-                <input type="number" name="backgroundSaplingDead" id="backgroundSaplingDead" min="0" max="7" value="0" class="ch3 DEAD_SAPLING_COLOR">
-                <input type="number" name="brightnessSaplingDead" id="brightnessSaplingDead" min="0" max="1" value="0" class="ch3 DEAD_SAPLING_COLOR">
+                <input type="number" name="foregroundSaplingDead" id="foregroundSaplingDead" min="0" max="7" value="2" 
+                class="ch3 DEAD_SAPLING_COLOR foreground" title="The foreground color of this sapling (when dead)">
+                <input type="number" name="backgroundSaplingDead" id="backgroundSaplingDead" min="0" max="7" value="0" 
+                class="ch3 DEAD_SAPLING_COLOR background" title="The backgrounf color of this sapling (when dead)">
+                <input type="number" name="brightnessSaplingDead" id="brightnessSaplingDead" min="0" max="1" value="0" 
+                class="ch3 DEAD_SAPLING_COLOR brightness" title="The brightness of this sapling (when dead)">
             </div>
             <p>
                 <label for="SAPLING_DROWN_LEVEL">SAPLING_DROWN_LEVEL</label>
@@ -462,16 +486,16 @@
                 title="The tile used to represent the plant when it is growing in the wild but has died">
             </p>
             <p name="PICKED_COLOR" id="PICKED_COLOR">
-                <p>PICKED_COLOR:</p>
+                PICKED_COLOR:
                 <input type="number" name="foregroundPicked" id="foregroundPicked" class="foreground ch1 PICKED_COLOR" min="0" max="7" value="2" 
                 title="The foreground color of this plant when it has been harvested or is ready to be harvested from a farming plot">
                 <input type="number" name="backgroundPicked" id="backgroundPicked" class="background ch1 PICKED_COLOR" min="0" max="7" value="0" 
                 title="The background color of this plant when it has been harvested or is ready to be harvested from a farming plot">
                 <input type="number" name="brightnessPicked" id="brightnessPicked" class="brightness ch1 PICKED_COLOR" min="0" max="1" value="0" 
-                title="The brighness of this plant when it has been harvested or is ready to be harvested from a farming plot">
+                title="The brightness of this plant when it has been harvested or is ready to be harvested from a farming plot">
             </p>
             <p name="DEAD_PICKED_COLOR" id="DEAD_PICKED_COLOR">
-                <p>The color of this plant when it has been harvested but has died, in foreground, background, and brightness intigers</p>
+                DEAD_PICKED_COLOR:
                 <input type="number" name="foregroundDeadPicked" id="foregroundDeadPicked" class="foreground ch1 DEAD_PICKED_COLOR" min="0" max="7" value="0" 
                 title="The foreground color of this plant when it has been harvested but has died">
                 <input type="number" name="backgroundDeadPicked" id="backgroundDeadPicked" class="background ch1 DEAD_PICKED_COLOR" min="0" max="7" value="0" 
@@ -480,16 +504,22 @@
                 title="The brightness of this plant when it has been harvested but has died">
             </p>
             <p name="SHRUB_COLOR" id="SHRUB_COLOR">
-                <p>The color of this plant when it is growing in the wild and lacks growths, in foreground, background, and brightness intigers</p>
-                <input type="number" name="foregroundShrub" id="foregroundShrub" class="foreground ch1" min="0" max="7" value="2">
-                <input type="number" name="backgroundShrub" id="backgroundShrub" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="brightnessShrub" id="brightnessShrub" class="brightness ch1" min="0" max="1" value="0">
+                SHRUB_COLOR:
+                <input type="number" name="foregroundShrub" id="foregroundShrub" class="foreground ch1 SHRUB_COLOR" min="0" max="7" value="2" 
+                title="The foreground color of this plant when it is growing in the wild and lacks growths">
+                <input type="number" name="backgroundShrub" id="backgroundShrub" class="background ch1 SHRUB_COLOR" min="0" max="7" value="0" 
+                title="The background color of this plant when it is growing in the wild and lacks growths">
+                <input type="number" name="brightnessShrub" id="brightnessShrub" class="brightness ch1 SHRUB_COLOR" min="0" max="1" value="0" 
+                title="The brightness of this plant when it is growing in the wild and lacks growths">
             </p>
             <p name="DEAD_SHRUB_COLOR" id="DEAD_SHRUB_COLOR">
-                <p>The color of this plant when it is growing in the wild but has died, in foreground, background, and brightness intigers</p>
-                <input type="number" name="foregroundDeadShrub" id="foregroundDeadShrub" class="foreground ch1" min="0" max="7" value="6">
-                <input type="number" name="backgroundDeadShrub" id="backgroundDeadShrub" class="background ch1" min="0" max="7" value="0">
-                <input type="number" name="brightnessDeadShrub" id="brightnessDeadShrub" class="brightness ch1" min="0" max="1" value="0">
+                DEAD_SHRUB_COLOR:
+                <input type="number" name="foregroundDeadShrub" id="foregroundDeadShrub" class="foreground ch1 DEAD_SHRUB_COLOR" min="0" max="7" value="6" 
+                title="The foreground color of this plant when it is growing in the wild but has died">
+                <input type="number" name="backgroundDeadShrub" id="backgroundDeadShrub" class="background ch1 DEAD_SHRUB_COLOR" min="0" max="7" value="0" 
+                title="The background color of this plant when it is growing in the wild but has died">
+                <input type="number" name="brightnessDeadShrub" id="brightnessDeadShrub" class="brightness ch1 DEAD_SHRUB_COLOR" min="0" max="1" value="0" 
+                title="The brightness of this plant when it is growing in the wild but has died">
             </p>
             <p>
                 <label for="SHRUB_DROWN_LEVEL">SHRUB_DROWN_LEVEL</label>
@@ -501,7 +531,7 @@
             <legend>Extracts:</legend>
             <p>
                 <input type="checkbox" name="drinkMat" id="drinkMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('drinkMat'), 'drinkMatParagraph');">
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('drinkMat'), id:'drinkMatParagraph'});">
                 <label for="drinkMat">Enable Drink Material</label>
             </p>
             <p id="drinkMatParagraph" hidden>
@@ -550,7 +580,7 @@
             </p>
             <p>
                 <input type="checkbox" name="millMat" id="millMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('millMat'), 'millMatParagraph');">
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('millMat'), id:'millMatParagraph'});">
                 <label for="millMat">Enable Milled Material</label>
             </p>
             <p id="millMatParagraph" hidden>
@@ -599,10 +629,10 @@
             </p>
             <p>
                 <input type="checkbox" name="threadMat" id="threadMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('threadMat'), 'threadMatParagraph');">
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('threadMat'), id:'threadMatParagraph'});">
                 <label for="threadMat">Enable Thread Material</label>
             </p>
-            <p id="threadMatParagraph">
+            <p id="threadMatParagraph" hidden>
                 THREAD:
                 <select name="threadMaterial" id="threadMaterial" class="productMaterials" onchange="checkProductMaterial('thread');"
                 title="The type of material used for threads made from this plant">
@@ -648,7 +678,7 @@
             </p>
             <p>
                 <input type="checkbox" name="stillVialMat" id="stillVialMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('stillVialMat'), 'stillVialMatParagraph');">
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('stillVialMat'), id:'stillVialMatParagraph'});">
                 <label for="stillVialMat">Enable Still Vial Material</label>
             </p>
             <p id="stillVialMatParagraph" hidden>
@@ -697,7 +727,7 @@
             </p>
             <p>
                 <input type="checkbox" name="vialMat" id="vialMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('vialMat'), 'vialMatParagraph');">
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('vialMat'), id:'vialMatParagraph'});">
                 <label for="vialMat">Enable Vial Material</label>
             </p>
             <p id="vialMatParagraph" hidden>
@@ -746,7 +776,7 @@
             </p>
             <p>
                 <input type="checkbox" name="barrelMat" id="barrelMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('barrelMat'), 'barrelMatParagraph');">
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('barrelMat'), id:'barrelMatParagraph'});">
                 <label for="barrelMat">Enable Barrel Material</label>
             </p>
             <p id="barrelMatParagraph" hidden>
@@ -796,13 +826,22 @@
 
             <p>
                 <input type="checkbox" name="seedMat" id="seedMat" 
-                onchange="hideOrUnhideSingleElement(getCheckBoxIsChecked('seedMat'), 'seedMatParagraph');">
-                <label for="seedMat">Enable Thread Material</label>
+                onchange="hideOrUnhideSingleElement({hide:!getCheckBoxIsChecked('seedMat'), id:'seedMatParagraph'});">
+                <label for="seedMat">Enable Seed Material</label>
             </p>
-            <p id="seedMatParagraph">
+            <p id="seedMatParagraph" hidden>
                 SEED:
-                <input type="text" name="seedName" id="seedName" >
-                <input type="text" name="seedPluralName" id="seedPluralName">
+                <input type="text" name="seedName" id="seedName" title="The name of the seed">
+                <input type="text" name="seedPluralName" id="seedPluralName" title="The plural name of the seed" 
+                onchange="ifInputElementValueIsBlankSetValue('seedPluralName', 'STP');">
+
+                <input type="number" name="foregroundSeed" id="foregroundSeed" class="foreground ch1 SEED" min="0" max="7" value="6" 
+                title="The foreground color of the seed for this plant">
+                <input type="number" name="backgroundSeed" id="backgroundSeed" class="background ch1 SEED" min="0" max="7" value="0" 
+                title="The background color of the seed for this plant">
+                <input type="number" name="brightnessSeed" id="brightnessSeed" class="brightness ch1 SEED" min="0" max="1" value="0" 
+                title="The brightness of the seed for this plant">
+
                 <select name="seedMaterial" id="seedMaterial" class="productMaterials" onchange="checkProductMaterial('seed');"
                 title="The type of material used for seeds made from this plant">
                     <option value="INORGANIC">INORGANIC</option>
@@ -845,16 +884,15 @@
                     <option value="GRIME">GRIME</option>
                 </select>
             </p>
-
         </fieldset>
         <fieldset id="GRASS_TYPE" hidden>
             <legend>Grass:</legend>
             <p>
                 GRASS_TILES:
-                <input type="number" name="gt1" id="gt1" min="0" step="1" value="46" class="GRASS_TILES ch3">
-                <input type="number" name="gt2" id="gt2" min="0" step="1" value="44" class="GRASS_TILES ch3">
-                <input type="number" name="gt3" id="gt3" min="0" step="1" value="96" class="GRASS_TILES ch3">
-                <input type="number" name="gt4" id="gt4" min="0" step="1" value="39" class="GRASS_TILES ch3">
+                <input type="number" name="gt1" id="gt1" min="0" max="255" step="1" value="46" class="GRASS_TILES ch3">
+                <input type="number" name="gt2" id="gt2" min="0" max="255" step="1" value="44" class="GRASS_TILES ch3">
+                <input type="number" name="gt3" id="gt3" min="0" max="255" step="1" value="96" class="GRASS_TILES ch3">
+                <input type="number" name="gt4" id="gt4" min="0" max="255" step="1" value="39" class="GRASS_TILES ch3">
             </p>
             <p>
                 ALT_PERIOD:
@@ -863,10 +901,10 @@
             </p>
             <p>
                 ALT_GRASS_TILES:
-                <input type="number" name="agt1" id="agt1" min="0" step="1" value="46" class="ALT_GRASS_TILES ch3">
-                <input type="number" name="agt2" id="agt2" min="0" step="1" value="44" class="ALT_GRASS_TILES ch3">
-                <input type="number" name="agt3" id="agt3" min="0" step="1" value="96" class="ALT_GRASS_TILES ch3">
-                <input type="number" name="agt4" id="agt4" min="0" step="1" value="39" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt1" id="agt1" min="0" max="255" step="1" value="46" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt2" id="agt2" min="0" max="255" step="1" value="44" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt3" id="agt3" min="0" max="255" step="1" value="96" class="ALT_GRASS_TILES ch3">
+                <input type="number" name="agt4" id="agt4" min="0" max="255" step="1" value="39" class="ALT_GRASS_TILES ch3">
             </p>
             <p>
                 GRASS_COLORS:
