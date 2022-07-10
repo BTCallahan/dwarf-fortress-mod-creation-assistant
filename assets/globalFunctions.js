@@ -103,9 +103,12 @@ function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elem
     conArea.required = required;
     return conArea;
 }
-function removeLastChild(parentElementId) {
+function removeLastChild(parentElementId, dontRemoveIfOnlyOne) {
     let parentElement = document.getElementById(parentElementId);
-    parentElement.children[-1].remove();
+    let children = parentElement.children.length;
+    if (children > (dontRemoveIfOnlyOne ? 1 : 0)) {
+        parentElement.children[children - 1].remove();
+    }
 }
 function getArrayOfElements({ parentElement, className }) {
     let elements = (valueIsValid(parentElement) ? parentElement === null || parentElement === void 0 ? void 0 : parentElement.getElementsByClassName(className) : document.getElementsByClassName(className));
@@ -888,7 +891,7 @@ function createColor({ className, prefText, foregroundId, backgroundId, brightne
         ] });
     return par;
 }
-function getColor({ colorContainterId, numberOfTabObjects, itemOrder = 0 }) {
+function getColorByContainerId({ colorContainterId, numberOfTabObjects, itemOrder = 0 }) {
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
     let p = document.getElementById(colorContainterId);
     let fg = p.getElementsByClassName("foreground");
@@ -900,6 +903,15 @@ function getColor({ colorContainterId, numberOfTabObjects, itemOrder = 0 }) {
     if (fg2.value !== "" && bg2.value !== "" && br2.value !== "") {
         pushObject.pushTo.push(tabs, "[", colorContainterId, ":", fg2.value, ":", bg2.value, ":", br2.value, "]\n");
     }
+}
+/**
+ * Do not use
+ * @param param0
+ */
+function getColorByClassName({ parentElement, className, numberOfTabObjects, itemOrder = 0 }) {
+    let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
+    let doc = parentElement || document;
+    let c = doc.getElementsByClassName(className);
 }
 function isCheckboxChecked(inputId) {
     let input_ = document.getElementById(inputId);

@@ -147,11 +147,16 @@ function createNumberInput({
     return conArea;
 }
 
-function removeLastChild<T extends HTMLElement>(parentElementId:string)
+function removeLastChild<T extends HTMLElement>(parentElementId:string, dontRemoveIfOnlyOne:boolean)
 {
     let parentElement = <T><any> document.getElementById(parentElementId);
 
-    parentElement.children[-1].remove();
+    let children = parentElement.children.length;
+
+    if (children > (dontRemoveIfOnlyOne ? 1 : 0))
+    {
+        parentElement.children[children - 1].remove();
+    }
 }
 
 function getArrayOfElements<T extends HTMLElement>({parentElement, className}:{parentElement?:HTMLElement, className:string})
@@ -1273,7 +1278,7 @@ function createColor({
     return par;
 }
 
-function getColor({
+function getColorByContainerId({
     colorContainterId, numberOfTabObjects, itemOrder=0
 }:{colorContainterId:string, numberOfTabObjects:number, itemOrder?:number
 }){
@@ -1295,6 +1300,23 @@ function getColor({
             tabs, "[", colorContainterId, ":", fg2.value, ":", bg2.value, ":", br2.value, "]\n"
         );
     }
+}
+
+/**
+ * Do not use
+ * @param param0 
+ */
+function getColorByClassName({
+    parentElement, className, numberOfTabObjects, itemOrder=0
+}:{parentElement?:HTMLElement, className:string, numberOfTabObjects:number, itemOrder?:number
+}){
+    let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
+
+    let doc = parentElement || document;
+
+    let c = doc.getElementsByClassName(className);
+
+    
 }
 
 function isCheckboxChecked(inputId:string)
