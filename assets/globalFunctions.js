@@ -103,6 +103,10 @@ function createNumberInput({ defaultValue, inputMin, inputMax, elementName, elem
     conArea.required = required;
     return conArea;
 }
+function removeLastChild(parentElementId) {
+    let parentElement = document.getElementById(parentElementId);
+    parentElement.children[-1].remove();
+}
 function getArrayOfElements({ parentElement, className }) {
     let elements = (valueIsValid(parentElement) ? parentElement === null || parentElement === void 0 ? void 0 : parentElement.getElementsByClassName(className) : document.getElementsByClassName(className));
     return Array.from(elements);
@@ -437,6 +441,10 @@ function enableOrDisableElements({ disable, className, parentElement, parentElem
     ranged2.forEach(element => {
         element.disabled = disable;
     });
+}
+function hideOrUnhideSingleElement({ hide, id }) {
+    let toHide = document.getElementById(id);
+    toHide.hidden = hide;
 }
 function hideOrUnhideElements({ hide, className, parentElement, parentElementId }) {
     let doc = (parentElement || document.getElementById(parentElementId)) || document;

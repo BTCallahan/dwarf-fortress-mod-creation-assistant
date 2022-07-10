@@ -147,6 +147,13 @@ function createNumberInput({
     return conArea;
 }
 
+function removeLastChild<T extends HTMLElement>(parentElementId:string)
+{
+    let parentElement = <T><any> document.getElementById(parentElementId);
+
+    parentElement.children[-1].remove();
+}
+
 function getArrayOfElements<T extends HTMLElement>({parentElement, className}:{parentElement?:HTMLElement, className:string})
 {
     let elements = (valueIsValid(parentElement) ? parentElement?.getElementsByClassName(className) : document.getElementsByClassName(className));
@@ -635,6 +642,13 @@ function enableOrDisableElements({
     ranged2.forEach(element => {
         element.disabled = disable;
     });
+}
+
+function hideOrUnhideSingleElement<T extends HTMLElement>({hide, id}:{hide:boolean, id:string})
+{
+    let toHide = <T><any> document.getElementById(id);
+
+    toHide.hidden = hide;
 }
 
 function hideOrUnhideElements({
