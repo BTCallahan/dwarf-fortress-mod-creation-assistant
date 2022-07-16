@@ -1,6 +1,6 @@
-function createNewAttack(hasPrepRecoveryAndFlags:boolean, classesToAdd="") 
+function createNewAttack(tableId:string, hasPrepRecoveryAndFlags:boolean, classesToAdd="") 
 {
-    let attackTable = <HTMLTableElement><any> document.getElementById("attacks");
+    let attackTable = <HTMLTableElement><any> document.getElementById(tableId);
 
     let tableBody = attackTable.tBodies[0];
 
@@ -97,9 +97,9 @@ function createNewAttack(hasPrepRecoveryAndFlags:boolean, classesToAdd="")
     }
 }
 
-function deleteLastAttack()
+function deleteLastAttack(tableId:string)
 {
-    let attackTable = <HTMLTableElement><any> document.getElementById("attacks");
+    let attackTable = <HTMLTableElement><any> document.getElementById(tableId);
 
     let tableBody = attackTable.tBodies[0];
 
@@ -111,9 +111,9 @@ function deleteLastAttack()
     }
 }
 
-function addUpAttacks(numberOfTabObjects:number, hasPrepRecoveryAndFlags:boolean)
+function addUpAttacks(tableId:string, numberOfTabObjects:number, hasPrepRecoveryAndFlags:boolean)
 {
-    let attackTable = <HTMLTableElement><any> document.getElementById("attacks");
+    let attackTable = <HTMLTableElement><any> document.getElementById(tableId);
 
     let tableBody = attackTable.tBodies[0];
 

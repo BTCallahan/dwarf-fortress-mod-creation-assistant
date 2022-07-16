@@ -1,6 +1,6 @@
 "use strict";
-function createNewAttack(hasPrepRecoveryAndFlags, classesToAdd = "") {
-    let attackTable = document.getElementById("attacks");
+function createNewAttack(tableId, hasPrepRecoveryAndFlags, classesToAdd = "") {
+    let attackTable = document.getElementById(tableId);
     let tableBody = attackTable.tBodies[0];
     let rows = tableBody.rows.length;
     let newRow = tableBody.insertRow();
@@ -60,16 +60,16 @@ function createNewAttack(hasPrepRecoveryAndFlags, classesToAdd = "") {
         cell10.appendChild(sel2);
     }
 }
-function deleteLastAttack() {
-    let attackTable = document.getElementById("attacks");
+function deleteLastAttack(tableId) {
+    let attackTable = document.getElementById(tableId);
     let tableBody = attackTable.tBodies[0];
     let rows = tableBody.rows.length;
     if (rows > 1) {
         tableBody.deleteRow(-1);
     }
 }
-function addUpAttacks(numberOfTabObjects, hasPrepRecoveryAndFlags) {
-    let attackTable = document.getElementById("attacks");
+function addUpAttacks(tableId, numberOfTabObjects, hasPrepRecoveryAndFlags) {
+    let attackTable = document.getElementById(tableId);
     let tableBody = attackTable.tBodies[0];
     let tableRows = Array.from(tableBody.rows);
     let tabs = pushObject.tabObject.repeat(numberOfTabObjects);
