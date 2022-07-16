@@ -112,7 +112,7 @@ function createTool()
 
         getSingleInput({inputId:"SKILL", numberOfTabObjects:2, ignoreIfDisabled:false, ignoreIfBlank:false});
 
-        addUpAttacks(2, true);
+        addUpAttacks("attacks", 2, true);
     }
     printResults();
 }

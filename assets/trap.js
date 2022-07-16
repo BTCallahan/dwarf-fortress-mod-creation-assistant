@@ -16,7 +16,7 @@ function createTrap() {
     pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", singular, ":", plural, "]\n");
     getMultipleInputsById({ inputIds: ["ADJECTIVE", "SIZE", "MATERIAL_SIZE", "HITS"], numberOfTabObjects: 2 });
     getMultipleCheckBoxesByClass({ inputClass: "checks", numberOfTabObjects: 2 });
-    addUpAttacks(2, false);
+    addUpAttacks("attacks", 2, false);
     printResults();
 }
 //# sourceMappingURL=trap.js.map

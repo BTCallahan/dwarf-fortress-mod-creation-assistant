@@ -69,7 +69,7 @@ function createWeapon()
         getSingleInput({inputId:"SHOOT_MAXVEL", numberOfTabObjects:2, ignoreIfDisabled:false, ignoreIfBlank:false});
     }
 
-    addUpAttacks(2, true);
+    addUpAttacks("attacks", 2, true);
 
     printResults();
 }

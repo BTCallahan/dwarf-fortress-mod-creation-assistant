@@ -26,7 +26,7 @@ function createTrap() {
 
     getMultipleCheckBoxesByClass({inputClass:"checks", numberOfTabObjects:2});
 
-    addUpAttacks(2, false);
+    addUpAttacks("attacks", 2, false);
     
     printResults();
 }

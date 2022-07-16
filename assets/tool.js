@@ -67,7 +67,7 @@ function createTool() {
     if (isWeapon) {
         getMultipleInputsById({ inputIds: ["TWO_HANDED", "MINIMUM_SIZE", "MATERIAL_SIZE"], numberOfTabObjects: 2 });
         getSingleInput({ inputId: "SKILL", numberOfTabObjects: 2, ignoreIfDisabled: false, ignoreIfBlank: false });
-        addUpAttacks(2, true);
+        addUpAttacks("attacks", 2, true);
     }
     printResults();
 }
