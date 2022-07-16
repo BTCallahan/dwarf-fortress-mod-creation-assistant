@@ -16,7 +16,7 @@ var pushObject = {
     {
         let spaces = <HTMLInputElement><any> document.getElementById(elementName);
 
-        let numberOfSpaces = ((spaces.value as unknown) as number);
+        let numberOfSpaces = Number.parseInt(spaces.value);
 
         this.tabObject = (spaces.value == "0" ? "\t" : " ".repeat(numberOfSpaces));
     },

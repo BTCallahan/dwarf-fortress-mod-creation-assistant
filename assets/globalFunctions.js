@@ -9,7 +9,7 @@ var pushObject = {
     tabObject: "",
     setTabObject(elementName) {
         let spaces = document.getElementById(elementName);
-        let numberOfSpaces = spaces.value;
+        let numberOfSpaces = Number.parseInt(spaces.value);
         this.tabObject = (spaces.value == "0" ? "\t" : " ".repeat(numberOfSpaces));
     },
     setText() {
