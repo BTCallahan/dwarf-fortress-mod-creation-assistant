@@ -63,7 +63,7 @@ function printResults()
 
     warning.innerText = (errorObject.errorThrown ? errorObject.errorMessages.join("\n") : "");
 
-    let div = <HTMLParagraphElement><any> document.getElementById("result");
+    let div = <HTMLPreElement><any> document.getElementById("result");
 
     div.innerText = pushObject.pushTo.join("");
 }
