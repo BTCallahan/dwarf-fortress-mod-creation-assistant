@@ -17,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="assets/styling.css">
     </head>
-    <body onload="createNewAttack(true);">
+    <body onload="createNewAttack('attacks', true);">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -156,8 +156,8 @@
                 <tbody>
                 </tbody>
             </table>
-            <button onclick="createNewAttack(true);">Add New Attack</button>
-            <button onclick="deleteLastAttack();">Delete Last Attack</button>
+            <button onclick="createNewAttack('attacks', true);">Add New Attack</button>
+            <button onclick="deleteLastAttack('attacks');">Delete Last Attack</button>
         </fieldset>
         <button onclick="createWeapon();">Create Weapon</button>
         <fieldset>
