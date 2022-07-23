@@ -21,12 +21,10 @@ input.DESCRIPTION[type="text"]{
 }
 
 input.singular_name[type="text"]{
-    position: fixed;
     margin-left: 350px;
 }
 
 input.plural_name[type="text"]{
-    position: fixed;
     margin-left: 700px;
 }
 
