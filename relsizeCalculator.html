@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Relsize Calculator</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/relsizeCalculator.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="main.html">Main Page</a>
+                <a href="trap.html">Traps</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="armor.html">Armor and Clothing</a>
+                <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
+                <a href="tool.html">Tools</a>
+                <a href="plant.html">Plants and Crops</a>
+                <a href="shape.html">Shapes</a>
+                <a href="pattern.html">Descriptor Patterns</a>
+            </div>
+            <div>
+                <a href="relsizeCalculator.html">Body Part Relsize Calculator</a>
+            </div>
+        </header>
+        <h1>Utility: Relsize Calculator</h1>
+        <p>
+            This is a utility to caclulate the 'actual' sizes of a body part. To use it, enter the size of the creature at the top, and add however many new bodyparts that you need. Next 
+            enter the sizes of the body parts and how many of each body part they have. When you are done, click the button at the bottom to caclulate the actual size of each body part. 
+            For added convenience, each row has a drop down menu that can be used to select a template that will be applied to the row
+        </p>
+        <input type="number" name="relsize" id="relsize" min="1" value="50000" step="1">
+        <label for="relsize">Creature Size:</label>
+        <table id="relsizeTable">
+            <thead>
+                <tr>
+                    <th>Preset</th>
+                    <th>Name</th>
+                    <th>Number of Instances</th>
+                    <th>Relsize Amount</th>
+                    <th>Actual BP Size (Combined)</th>
+                    <th>Actual BP Size (per BP)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p>
+            <button onclick="addNewBodyPart();">Add New Body Part</button>
+            <button onclick="removeLastBodyPart();">Remove Last Body Part</button>
+        </p>
+        <p>
+            <button onclick="calcRelsize();">Calculate Body Part Sizes</button>
+        </p>
+    </body>
+</html>
