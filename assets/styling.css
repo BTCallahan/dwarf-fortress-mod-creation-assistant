@@ -57,7 +57,7 @@ input:disabled + label{
 }
 
 select:disabled + label{
-    color:slategrey;
+    color: slategrey;
 }
 
 input:disabled{

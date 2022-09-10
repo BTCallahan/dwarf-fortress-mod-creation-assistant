@@ -1005,7 +1005,7 @@ function getMultipleInputsByClass({
         {
             if (appendClassInFrontOfId)
             {  
-                pushObject.pushTo.push(tabs, "[", inputClass, prefixes.join(":"), "]\n");
+                pushObject.pushTo.push(tabs, "[", inputClass, ":", prefixes.join(":"), "]\n");
             }
             else
             {
