@@ -45,14 +45,15 @@ function removeCategory() {
 }
 function createShape() {
     clearPastResults("spaces");
-    getSingleInput({ inputId: "SHAPE", numberOfTabObjects: 1, ignoreIfBlank: false, ignoreIfDisabled: false });
-    pushObject.pushTo.push(pushObject.tabObject, pushObject.tabObject, "[NAME:", getInputElementValue("singular"), ":", getInputElementValue("plural"), "]\n");
-    getSingleInput({ inputId: "WORD", ignoreIfBlank: true, numberOfTabObjects: 2 });
-    getSingleInput({ inputId: "TILE", ignoreIfBlank: false, numberOfTabObjects: 2 });
-    getSingleInput({ inputId: "FACES", valueThatWillBeIgnored: "0", numberOfTabObjects: 2, ignoreIfBlank: true });
-    getMultipleInputsByClass({ inputClass: "ADJ", numberOfTabObjects: 2, ignoreIfBlank: true, prefixType: PrefixValueType.class });
-    getMultipleInputsByClass({ inputClass: "CATEGORY", numberOfTabObjects: 2, ignoreIfBlank: true, prefixType: PrefixValueType.class });
-    getMultipleCheckBoxesByClass({ inputClass: "GEM", numberOfTabObjects: 2, ignoreIfDisabled: true });
+    pushObject.pushTo.push("[OBJECT:DESCRIPTOR_SHAPE]\n\n");
+    getSingleInput({ inputId: "SHAPE", numberOfTabObjects: 0, ignoreIfBlank: false, ignoreIfDisabled: false });
+    pushObject.pushTo.push(pushObject.tabObject, "[NAME:", getInputElementValue("singular"), ":", getInputElementValue("plural"), "]\n");
+    getSingleInput({ inputId: "WORD", ignoreIfBlank: true, numberOfTabObjects: 1 });
+    getSingleInput({ inputId: "TILE", ignoreIfBlank: false, numberOfTabObjects: 1 });
+    getSingleInput({ inputId: "FACES", valueThatWillBeIgnored: "0", numberOfTabObjects: 1, ignoreIfBlank: true });
+    getMultipleInputsByClass({ inputClass: "ADJ", numberOfTabObjects: 1, ignoreIfBlank: true, prefixType: PrefixValueType.class });
+    getMultipleInputsByClass({ inputClass: "CATEGORY", numberOfTabObjects: 1, ignoreIfBlank: true, prefixType: PrefixValueType.class });
+    getMultipleCheckBoxesByClass({ inputClass: "GEM", numberOfTabObjects: 1, ignoreIfDisabled: true });
     printResults();
 }
 //# sourceMappingURL=shape.js.map

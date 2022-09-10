@@ -20,10 +20,11 @@ function deletePatternColor() {
 }
 function createPattern() {
     clearPastResults("spaces");
-    getSingleInput({ inputId: "COLOR_PATTERN", numberOfTabObjects: 2, ignoreIfDisabled: false, ignoreIfBlank: false });
-    getSingleInput({ inputId: "PATTERN", numberOfTabObjects: 2, ignoreIfDisabled: false, ignoreIfBlank: false });
+    pushObject.pushTo.push("[OBJECT:DESCRIPTOR_PATTERN]\n\n");
+    getSingleInput({ inputId: "COLOR_PATTERN", numberOfTabObjects: 0, ignoreIfDisabled: false, ignoreIfBlank: false });
+    getSingleInput({ inputId: "PATTERN", numberOfTabObjects: 1, ignoreIfDisabled: false, ignoreIfBlank: false });
     getMultipleInputsByClass({
-        inputClass: "COLOR", numberOfTabObjects: 3, ignoreIfDisabled: true, prefixType: PrefixValueType.class
+        inputClass: "COLOR", numberOfTabObjects: 1, ignoreIfDisabled: true, prefixType: PrefixValueType.class
     });
     printResults();
 }
