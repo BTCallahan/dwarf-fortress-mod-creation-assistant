@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Color</title>
+        <script type="text/javascript" src="assets/globalFunctions.js"></script>
+        <script type="text/javascript" src="assets/color.js"></script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+            <div>
+                <a href="index.html">Main Page</a>
+                <a href="trap.html">Traps</a>
+                <a href="weapon.html">Weapons</a>
+                <a href="armor.html">Armor and Clothing</a>
+                <a href="item.html">Misc. Items (Food, Toys, Seige Ammo)</a>
+                <a href="tool.html">Tools</a>
+                <a href="plant.html">Plants and Crops</a>
+                <a href="shape.html">Shapes</a>
+                <a href="pattern.html">Descriptor Patterns</a>
+                <a href="color.html">Descriptor Colors</a>
+            </div>
+            <div>
+                <a href="relsizeCalculator.html">Body Part Relsize Calculator</a>
+            </div>
+        </header>
+        <p>
+            <label for="spaces">Tab spaces:</label>
+            <input type="number" name="spaces" id="spaces" min="0" value="4" step="1" 
+            title="The number of spaces in each tab. If this is 0, then actual tab characters will be used.">
+        </p>
+        <p>
+            <label for="COLOR">COLOR:</label>
+            <input type="text" name="COLOR" id="COLOR" pattern="/[A-Z0-9_ ,]/" required
+            title="The identifer of the color. This should have only capital letters and underscores">
+        </p>
+        <p>
+            <label for="NAME">NAME:</label>
+            <input type="text" name="NAME" id="NAME" pattern="/[A-Za-z0-9_ ,]/" required
+            title="The name of the color">
+        </p>
+        <p>
+            <label for="WORD">WORD:</label>
+            <input type="text" name="WORD" id="WORD" pattern="/[A-Z0-9_ ,]/" required
+            title="The word assocated with this color. This shold e a symbol defined in 'language_SYM.txt' or a similar file">
+        </p>
+        <p>
+            RGB:
+            <input type="number" name="R" id="R" min="0" max="255" step="1" value="0" class="ch3 RGB" required 
+            title="The red color value"
+            onchange="setColorElement();">
+            <input type="number" name="G" id="G" min="0" max="255" step="1" value="0" class="ch3 RGB" required 
+            title="The green color value"
+            onchange="setColorElement();">
+            <input type="number" name="B" id="B" min="0" max="255" step="1" value="0" class="ch3 RGB" required 
+            title="The blue color value"
+            onchange="setColorElement();">
+        </p>
+        <p>
+            <input type="color" name="col" id="col" value="#000000" 
+            title="In place of manunaly entering in the RGB values, you may want to use this color picker" 
+            onchange="setIndividualElements();"> 
+        </p>
+        <button onclick="createDesColor();">Create Color</button>
+        <fieldset>
+            <legend>Warnings:</legend>
+            <p id="warnings"></p>
+        </fieldset>
+        <fieldset>
+            <legend>Trap Data:</legend>
+            <pre id="result"></pre>
+        </fieldset>
+    </body>
+</html>
